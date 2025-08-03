@@ -157,34 +157,31 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @forelse($recentTransactions as $transaction)
                             <tr>
-                                <td>2024-01-15</td>
-                                <td><span class="badge badge-success">Pemasukan</span></td>
-                                <td>Penjualan produk desa</td>
-                                <td><span class="text-success font-weight-bold">{{ format_currency(2500000) }}</span></td>
-                                <td><span class="badge badge-success">Selesai</span></td>
+                                <td>{{ $transaction->transaction_date->format('d-m-Y') }}</td>
+                                <td>
+                                    <span class="badge {{ $transaction->transaction_type === 'income' ? 'badge-success' : 'badge-danger' }}">
+                                        {{ $transaction->getTypeLabel() }}
+                                    </span>
+                                </td>
+                                <td>{{ $transaction->description }}</td>
+                                <td>
+                                    <span class="{{ $transaction->transaction_type === 'income' ? 'text-success' : 'text-danger' }} font-weight-bold">
+                                        {{ format_currency($transaction->amount) }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge {{ $transaction->getStatusBadgeClass() }}">
+                                        {{ $transaction->getStatusLabel() }}
+                                    </span>
+                                </td>
                             </tr>
+                            @empty
                             <tr>
-                                <td>2024-01-14</td>
-                                <td><span class="badge badge-danger">Pengeluaran</span></td>
-                                <td>Pembelian bahan baku</td>
-                                <td><span class="text-danger font-weight-bold">{{ format_currency(1200000) }}</span></td>
-                                <td><span class="badge badge-success">Selesai</span></td>
+                                <td colspan="5" class="text-center">Belum ada transaksi</td>
                             </tr>
-                            <tr>
-                                <td>2024-01-13</td>
-                                <td><span class="badge badge-success">Pemasukan</span></td>
-                                <td>Jasa konsultasi</td>
-                                <td><span class="text-success font-weight-bold">{{ format_currency(800000) }}</span></td>
-                                <td><span class="badge badge-success">Selesai</span></td>
-                            </tr>
-                            <tr>
-                                <td>2024-01-12</td>
-                                <td><span class="badge badge-danger">Pengeluaran</span></td>
-                                <td>Biaya operasional</td>
-                                <td><span class="text-danger font-weight-bold">{{ format_currency(500000) }}</span></td>
-                                <td><span class="badge badge-warning">Pending</span></td>
-                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

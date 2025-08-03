@@ -5,9 +5,14 @@
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
         <h1>Pengaturan Sistem</h1>
-        <a href="{{ route('system-settings.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Tambah Pengaturan
-        </a>
+        <div>
+            <button type="button" class="btn btn-warning me-2" onclick="clearSystemCache()">
+                <i class="fas fa-broom"></i> Clear Cache
+            </button>
+            <a href="{{ route('system-settings.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Tambah Pengaturan
+            </a>
+        </div>
     </div>
 @stop
 
@@ -207,6 +212,50 @@
         });
 
 
+
+        // Clear system cache function
+        function clearSystemCache() {
+            if (confirm('Apakah Anda yakin ingin membersihkan cache sistem?')) {
+                const btn = event.target.closest('button');
+                const originalText = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Membersihkan...';
+                
+                fetch('{{ route("system-settings.clear-cache") }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Show success message
+                        const alertDiv = document.createElement('div');
+                        alertDiv.className = 'alert alert-success alert-dismissible fade show';
+                        alertDiv.innerHTML = `
+                            ${data.message}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        `;
+                        document.querySelector('.card-body').insertBefore(alertDiv, document.querySelector('.card-body').firstChild);
+                        
+                        // Auto hide after 5 seconds
+                        setTimeout(() => alertDiv.remove(), 5000);
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat membersihkan cache');
+                })
+                .finally(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                });
+            }
+        }
 
         // Auto-hide alerts after 5 seconds
         $(document).ready(function() {

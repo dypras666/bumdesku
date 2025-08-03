@@ -9,6 +9,7 @@ use App\Http\Controllers\MasterAccountController;
 use App\Http\Controllers\MasterUnitController;
 use App\Http\Controllers\MasterInventoryController;
 use App\Http\Controllers\SystemSettingController;
+use App\Http\Controllers\TransactionController;
 
 Route::get('/', function () {
     return redirect('/dashboard');
@@ -34,3 +35,9 @@ Route::resource('master-inventories', MasterInventoryController::class);
 // System Settings routes
 Route::resource('system-settings', SystemSettingController::class);
 Route::put('system-settings-batch', [SystemSettingController::class, 'updateBatch'])->name('system-settings.update-batch');
+Route::post('system-settings/clear-cache', [SystemSettingController::class, 'clearCache'])->name('system-settings.clear-cache');
+
+// Transaction routes
+Route::resource('transactions', TransactionController::class);
+Route::post('transactions/{transaction}/approve', [TransactionController::class, 'approve'])->name('transactions.approve');
+Route::post('transactions/{transaction}/reject', [TransactionController::class, 'reject'])->name('transactions.reject');
