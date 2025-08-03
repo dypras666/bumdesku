@@ -203,53 +203,46 @@
 
 @section('js')
     <script>
-        // Chart configuration for AdminLTE
         $(function () {
+            // Chart keuangan bulanan
             var ctx = document.getElementById('monthlyChart').getContext('2d');
+            var monthlyData = @json($monthlyData);
+            
             var monthlyChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    labels: monthlyData.labels,
                     datasets: [{
                         label: 'Pemasukan',
-                        data: [12000000, 19000000, 15000000, 25000000, 22000000, 30000000],
-                        borderColor: '#28a745',
-                        backgroundColor: 'rgba(40, 167, 69, 0.1)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.4
+                        data: monthlyData.income,
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        tension: 0.1
                     }, {
                         label: 'Pengeluaran',
-                        data: [8000000, 12000000, 10000000, 18000000, 15000000, 20000000],
-                        borderColor: '#dc3545',
-                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.4
+                        data: monthlyData.expenses,
+                        borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        tension: 0.1
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false,
                     plugins: {
-                        legend: {
+                        title: {
                             display: true,
-                            position: 'top'
+                            text: 'Grafik Keuangan Bulanan'
                         }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                callback: function(value) {
+                                callback: function(value, index, values) {
                                     return 'Rp ' + value.toLocaleString('id-ID');
                                 }
                             }
                         }
-                    },
-                    interaction: {
-                        intersect: false,
-                        mode: 'index'
                     }
                 }
             });
