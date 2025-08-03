@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MasterAccount extends Model
 {
@@ -22,6 +23,17 @@ class MasterAccount extends Model
         'is_active' => 'boolean',
     ];
 
+    // Relationships
+    public function generalLedgerEntries(): HasMany
+    {
+        return $this->hasMany(GeneralLedger::class, 'account_id');
+    }
+
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class, 'account_id');
+    }
+
     // Scope untuk akun aktif
     public function scopeActive($query)
     {
@@ -32,5 +44,35 @@ class MasterAccount extends Model
     public function scopeByCategory($query, $category)
     {
         return $query->where('kategori_akun', $category);
+    }
+
+    // Helper methods
+    public function getAccountCodeAttribute()
+    {
+        return $this->kode_akun;
+    }
+
+    public function getAccountNameAttribute()
+    {
+        return $this->nama_akun;
+    }
+
+    public function getAccountCategoryAttribute()
+    {
+        return $this->kategori_akun;
+    }
+
+    public function getCurrentBalance()
+    {
+        $totalDebit = $this->generalLedgerEntries()->sum('debit');
+        $totalCredit = $this->generalLedgerEntries()->sum('credit');
+        
+        // For asset and expense accounts, debit increases balance
+        // For liability, equity, and revenue accounts, credit increases balance
+        if (in_array($this->kategori_akun, ['Asset', 'Expense'])) {
+            return $totalDebit - $totalCredit;
+        } else {
+            return $totalCredit - $totalDebit;
+        }
     }
 }

@@ -10,6 +10,8 @@ use App\Http\Controllers\MasterUnitController;
 use App\Http\Controllers\MasterInventoryController;
 use App\Http\Controllers\SystemSettingController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\GeneralLedgerController;
+use App\Http\Controllers\FinancialReportController;
 
 Route::get('/', function () {
     return redirect('/dashboard');
@@ -41,3 +43,20 @@ Route::post('system-settings/clear-cache', [SystemSettingController::class, 'cle
 Route::resource('transactions', TransactionController::class);
 Route::post('transactions/{transaction}/approve', [TransactionController::class, 'approve'])->name('transactions.approve');
 Route::post('transactions/{transaction}/reject', [TransactionController::class, 'reject'])->name('transactions.reject');
+
+// General Ledger routes
+Route::resource('general-ledger', GeneralLedgerController::class);
+Route::post('general-ledger/{generalLedger}/post', [GeneralLedgerController::class, 'post'])->name('general-ledger.post');
+Route::get('general-ledger/account-balance', [GeneralLedgerController::class, 'accountBalance'])->name('general-ledger.account-balance');
+Route::get('trial-balance', [GeneralLedgerController::class, 'trialBalance'])->name('trial-balance');
+
+// Financial Report routes
+Route::resource('financial-reports', FinancialReportController::class);
+Route::post('financial-reports/{financialReport}/finalize', [FinancialReportController::class, 'finalize'])->name('financial-reports.finalize');
+Route::post('financial-reports/{financialReport}/regenerate', [FinancialReportController::class, 'regenerate'])->name('financial-reports.regenerate');
+Route::get('financial-reports/{financialReport}/export-pdf', [FinancialReportController::class, 'exportPdf'])->name('financial-reports.export-pdf');
+
+// Financial Report Views
+Route::get('reports/income-statement', [FinancialReportController::class, 'incomeStatement'])->name('reports.income-statement');
+Route::get('reports/balance-sheet', [FinancialReportController::class, 'balanceSheet'])->name('reports.balance-sheet');
+Route::get('reports/cash-flow', [FinancialReportController::class, 'cashFlow'])->name('reports.cash-flow');

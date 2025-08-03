@@ -327,38 +327,59 @@ return [
             'submenu' => [
                 [
                     'text' => 'Input Transaksi',
-                    'url' => 'transaksi/create',
+                    'route' => 'transactions.create',
                     'icon' => 'fas fa-fw fa-plus',
                 ],
                 [
                     'text' => 'Daftar Transaksi',
-                    'url' => 'transaksi',
+                    'route' => 'transactions.index',
                     'icon' => 'fas fa-fw fa-list',
                 ],
             ],
         ],
         [
             'text' => 'Buku Besar',
-            'url' => 'buku-besar',
             'icon' => 'fas fa-fw fa-book',
+            'submenu' => [
+                [
+                    'text' => 'Daftar Buku Besar',
+                    'route' => 'general-ledger.index',
+                    'icon' => 'fas fa-fw fa-list',
+                ],
+                [
+                    'text' => 'Input Jurnal',
+                    'route' => 'general-ledger.create',
+                    'icon' => 'fas fa-fw fa-plus',
+                ],
+                [
+                    'text' => 'Neraca Saldo',
+                    'route' => 'trial-balance',
+                    'icon' => 'fas fa-fw fa-balance-scale',
+                ],
+            ],
         ],
         [
             'text' => 'Laporan Keuangan',
             'icon' => 'fas fa-fw fa-chart-line',
             'submenu' => [
                 [
+                    'text' => 'Daftar Laporan',
+                    'route' => 'financial-reports.index',
+                    'icon' => 'fas fa-fw fa-list',
+                ],
+                [
                     'text' => 'Laporan Laba Rugi',
-                    'url' => 'laporan/laba-rugi',
+                    'route' => 'reports.income-statement',
                     'icon' => 'fas fa-fw fa-chart-bar',
                 ],
                 [
                     'text' => 'Neraca',
-                    'url' => 'laporan/neraca',
+                    'route' => 'reports.balance-sheet',
                     'icon' => 'fas fa-fw fa-balance-scale',
                 ],
                 [
                     'text' => 'Arus Kas',
-                    'url' => 'laporan/arus-kas',
+                    'route' => 'reports.cash-flow',
                     'icon' => 'fas fa-fw fa-money-bill-wave',
                 ],
             ],
