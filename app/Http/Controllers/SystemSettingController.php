@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\SystemSetting;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
+use App\Helpers\SystemSettingHelper;
 
 class SystemSettingController extends Controller
 {
@@ -154,8 +155,31 @@ class SystemSettingController extends Controller
 
         $systemSetting->delete();
 
+        // Auto clear cache after deleting settings
+        Artisan::call('optimize:clear');
+
         return redirect()->route('system-settings.index')
             ->with('success', 'Pengaturan berhasil dihapus.');
+    }
+
+    /**
+     * Clear system cache manually
+     */
+    public function clearCache()
+    {
+        try {
+            SystemSettingHelper::clearSystemCache();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Cache sistem berhasil dibersihkan!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal membersihkan cache: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -235,6 +259,9 @@ class SystemSettingController extends Controller
                 $setting->update(['value' => $path]);
             }
         }
+
+        // Auto clear cache after batch updating settings
+        Artisan::call('optimize:clear');
 
         return redirect()->route('system-settings.index')
             ->with('success', 'Pengaturan berhasil diperbarui.');

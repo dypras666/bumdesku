@@ -349,3 +349,297 @@ Route::post('/transactions/approve/{id}', [TransactionController::class, 'approv
 - **API Routes**: Prefix with `/api/v1/` for API endpoints
 - **Admin Routes**: Group admin routes under `/admin/` prefix
 - **Public Routes**: Keep public routes at root level
+
+## System Settings Integration Guidelines
+
+### Overview
+The BUMDES system includes a comprehensive system settings module that manages configurable parameters across the entire application. When developing new features, **ALWAYS** check if the feature requires configurable settings and integrate with the system settings module accordingly.
+
+### System Settings Structure
+
+#### Available Setting Groups
+1. **Company Settings** (`company` group)
+   - Company name, address, contact information
+   - Logo, letterhead, and branding assets
+   - Legal information and registration details
+
+2. **Financial Settings** (`financial` group)
+   - Default currency and formatting
+   - Tax rates and calculation methods
+   - Account numbering schemes
+   - Financial year settings
+
+3. **Journal Settings** (`journal` group)
+   - Journal entry templates
+   - Approval workflows
+   - Posting rules and validations
+
+4. **Report Settings** (`report` group)
+   - Report headers and footers
+   - Default report formats
+   - Logo and branding for reports
+
+5. **System Settings** (`system` group)
+   - Application behavior settings
+   - User interface preferences
+   - Performance and caching options
+
+### Integration Requirements
+
+#### When to Use System Settings
+**MANDATORY** integration with system settings for:
+- Any configurable business rules or parameters
+- User interface customization options
+- Company branding and identity elements
+- Financial calculation parameters
+- Report formatting and templates
+- Email templates and notifications
+- Default values for forms and processes
+
+#### How to Integrate System Settings
+
+##### 1. Using Helper Functions
+```php
+// Get company information
+$companyName = company_info('name');
+$companyLogo = company_info('logo');
+$allCompanyInfo = company_info(); // Returns all company settings
+
+// Get specific settings
+$currency = setting('default_currency');
+$taxRate = setting('default_tax_rate');
+
+// Get formatted settings
+$formattedCurrency = setting_formatted('default_currency');
+$formattedAmount = format_currency(1000); // Uses system currency settings
+
+// Get financial settings
+$financialSettings = financial_settings();
+
+// Get journal settings
+$journalSettings = journal_settings();
+```
+
+##### 2. Using SystemSettingHelper Class
+```php
+use App\Helpers\SystemSettingHelper;
+
+// Get settings by group
+$companySettings = SystemSettingHelper::getCompanyInfo();
+$financialSettings = SystemSettingHelper::getFinancialSettings();
+$journalSettings = SystemSettingHelper::getJournalSettings();
+
+// Get individual settings
+$setting = SystemSettingHelper::get('setting_key');
+$settingWithDefault = SystemSettingHelper::get('setting_key', 'default_value');
+
+// Set settings programmatically
+SystemSettingHelper::set('setting_key', 'new_value');
+
+// Clear cache after changes
+SystemSettingHelper::clearSystemCache();
+```
+
+##### 3. In Blade Templates
+```blade
+{{-- Company information --}}
+<h1>{{ company_info('name') }}</h1>
+<img src="{{ asset('storage/' . company_info('logo')) }}" alt="Logo">
+
+{{-- Financial formatting --}}
+<span>{{ format_currency($amount) }}</span>
+
+{{-- Settings with defaults --}}
+<p>Records per page: {{ setting('records_per_page', 25) }}</p>
+```
+
+### Development Workflow for Settings-Dependent Features
+
+#### Step 1: Identify Configurable Elements
+Before implementing any feature, identify:
+- What parameters should be configurable by administrators?
+- What default values make sense for the business?
+- What branding or formatting elements are needed?
+- What business rules might vary between installations?
+
+#### Step 2: Create Settings Entries
+Add new settings to the SystemSettingSeeder:
+```php
+// In database/seeders/SystemSettingSeeder.php
+[
+    'key' => 'feature_setting_name',
+    'value' => 'default_value',
+    'type' => 'text', // text, number, boolean, file
+    'group' => 'appropriate_group',
+    'description' => 'Human-readable description',
+    'is_protected' => false // true for system-critical settings
+]
+```
+
+#### Step 3: Implement Feature Logic
+Use the helper functions throughout your feature implementation:
+```php
+// In Controllers
+public function index()
+{
+    $perPage = setting('records_per_page', 25);
+    $data = Model::paginate($perPage);
+    return view('feature.index', compact('data'));
+}
+
+// In Models
+public function getFormattedAmountAttribute()
+{
+    return format_currency($this->amount);
+}
+
+// In Services
+public function calculateTax($amount)
+{
+    $taxRate = setting('default_tax_rate', 0);
+    return $amount * ($taxRate / 100);
+}
+```
+
+#### Step 4: Update Settings Interface
+Ensure new settings appear in the system settings interface by:
+- Running the seeder to populate new settings
+- Verifying settings appear in the appropriate group
+- Testing the settings update functionality
+
+### Cache Management
+
+#### Automatic Cache Clearing
+The system automatically clears cache when settings are updated through:
+- `SystemSettingController::store()` - New settings
+- `SystemSettingController::update()` - Individual updates
+- `SystemSettingController::updateBatch()` - Batch updates
+- `SystemSettingController::destroy()` - Setting deletion
+
+#### Manual Cache Clearing
+```php
+// Clear all system caches
+clear_system_cache();
+
+// Or using the helper class
+SystemSettingHelper::clearSystemCache();
+
+// Via Artisan command
+php artisan optimize:clear
+```
+
+### Best Practices
+
+#### 1. Setting Key Naming
+- Use snake_case for setting keys
+- Group related settings with prefixes (e.g., `email_smtp_host`, `email_smtp_port`)
+- Use descriptive names that indicate purpose
+
+#### 2. Default Values
+- Always provide sensible default values
+- Consider the most common use case for defaults
+- Document why specific defaults were chosen
+
+#### 3. Setting Types
+- Use appropriate types: `text`, `number`, `boolean`, `file`
+- Validate input based on type
+- Handle file uploads properly for `file` type settings
+
+#### 4. Performance Considerations
+- Settings are cached for performance
+- Avoid frequent setting updates in loops
+- Use batch updates when changing multiple settings
+
+#### 5. Security
+- Mark sensitive settings as protected (`is_protected = true`)
+- Validate all setting inputs
+- Sanitize file uploads for security
+
+### Examples of Good Integration
+
+#### Financial Report Generation
+```php
+public function generateReport()
+{
+    $report = new FinancialReport();
+    
+    // Use company settings for headers
+    $report->setCompanyName(company_info('name'));
+    $report->setCompanyLogo(company_info('logo'));
+    
+    // Use financial settings for formatting
+    $report->setCurrency(setting('default_currency'));
+    $report->setDateFormat(setting('date_format'));
+    
+    // Use report settings for layout
+    $report->setHeaderText(setting('report_header_text'));
+    $report->setFooterText(setting('report_footer_text'));
+    
+    return $report->generate();
+}
+```
+
+#### Email Notifications
+```php
+public function sendNotification($user, $data)
+{
+    $notification = new EmailNotification();
+    
+    // Use company settings for sender info
+    $notification->setFromName(company_info('name'));
+    $notification->setFromEmail(setting('notification_email'));
+    
+    // Use system settings for templates
+    $template = setting('email_template_' . $data['type']);
+    $notification->setTemplate($template);
+    
+    return $notification->send($user);
+}
+```
+
+### Testing Settings Integration
+
+#### Unit Tests
+```php
+public function test_feature_uses_system_settings()
+{
+    // Set test setting
+    SystemSettingHelper::set('test_setting', 'test_value');
+    
+    // Test feature behavior
+    $result = $this->service->processWithSettings();
+    
+    // Assert setting was used
+    $this->assertEquals('expected_result', $result);
+}
+```
+
+#### Feature Tests
+```php
+public function test_settings_affect_feature_output()
+{
+    // Update setting via HTTP
+    $this->put('/system-settings/batch', [
+        'settings' => ['feature_setting' => 'new_value']
+    ]);
+    
+    // Test feature reflects new setting
+    $response = $this->get('/feature');
+    $response->assertSee('new_value');
+}
+```
+
+### Migration and Deployment
+
+#### Adding New Settings
+1. Add settings to `SystemSettingSeeder`
+2. Run seeder in production: `php artisan db:seed --class=SystemSettingSeeder`
+3. Clear cache: `php artisan optimize:clear`
+
+#### Removing Settings
+1. Remove from seeder
+2. Create migration to remove from database if needed
+3. Update code to remove references
+4. Clear cache after deployment
+
+This integration ensures that all features are properly configurable and maintainable through the centralized system settings interface.

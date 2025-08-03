@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\SystemSetting;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Artisan;
 
 class SystemSettingHelper
 {
@@ -130,5 +131,19 @@ class SystemSettingHelper
         foreach ($groups as $group) {
             Cache::forget("system_settings_group_{$group}");
         }
+    }
+
+    /**
+     * Clear all system cache (settings cache + Laravel optimize:clear)
+     */
+    public static function clearSystemCache()
+    {
+        // Clear settings cache first
+        self::clearCache();
+        
+        // Run Laravel optimize:clear command
+        Artisan::call('optimize:clear');
+        
+        return true;
     }
 }

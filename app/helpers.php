@@ -38,3 +38,9 @@ if (!function_exists('journal_settings')) {
         return SystemSettingHelper::getJournalSettings();
     }
 }
+
+if (!function_exists('clear_system_cache')) {
+    function clear_system_cache() {
+        return SystemSettingHelper::clearSystemCache();
+    }
+}
