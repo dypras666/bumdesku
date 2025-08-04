@@ -79,10 +79,10 @@
                 <td>ARUS KAS DARI AKTIVITAS OPERASI</td>
                 <td class="amount"></td>
             </tr>
-            @foreach($reportData['operating_activities'] as $accountName => $amount)
+            @foreach($reportData['operating_activities'] as $activity)
             <tr>
-                <td>{{ $accountName }}</td>
-                <td class="amount">{{ number_format($amount, 0, ',', '.') }}</td>
+                <td>{{ $activity['description'] }}</td>
+                <td class="amount">{{ number_format($activity['amount'], 0, ',', '.') }}</td>
             </tr>
             @endforeach
             <tr class="total-row">
@@ -95,10 +95,10 @@
                 <td>ARUS KAS DARI AKTIVITAS INVESTASI</td>
                 <td class="amount"></td>
             </tr>
-            @foreach($reportData['investing_activities'] as $accountName => $amount)
+            @foreach($reportData['investing_activities'] as $activity)
             <tr>
-                <td>{{ $accountName }}</td>
-                <td class="amount">{{ number_format($amount, 0, ',', '.') }}</td>
+                <td>{{ $activity['description'] }}</td>
+                <td class="amount">{{ number_format($activity['amount'], 0, ',', '.') }}</td>
             </tr>
             @endforeach
             <tr class="total-row">
@@ -111,10 +111,10 @@
                 <td>ARUS KAS DARI AKTIVITAS PENDANAAN</td>
                 <td class="amount"></td>
             </tr>
-            @foreach($reportData['financing_activities'] as $accountName => $amount)
+            @foreach($reportData['financing_activities'] as $activity)
             <tr>
-                <td>{{ $accountName }}</td>
-                <td class="amount">{{ number_format($amount, 0, ',', '.') }}</td>
+                <td>{{ $activity['description'] }}</td>
+                <td class="amount">{{ number_format($activity['amount'], 0, ',', '.') }}</td>
             </tr>
             @endforeach
             <tr class="total-row">
@@ -125,7 +125,7 @@
             <!-- Net Cash Flow -->
             <tr class="net-cash">
                 <td>KENAIKAN (PENURUNAN) BERSIH KAS</td>
-                <td class="amount">{{ number_format($reportData['net_cash_flow'], 0, ',', '.') }}</td>
+                <td class="amount">{{ number_format($reportData['net_cash_change'], 0, ',', '.') }}</td>
             </tr>
 
             <!-- Cash Beginning and Ending -->

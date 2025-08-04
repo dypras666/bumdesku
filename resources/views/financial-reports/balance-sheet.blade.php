@@ -113,7 +113,7 @@
                     <!-- Company Header -->
                     <div class="text-center mb-4">
                         @if(company_info('logo'))
-                            <img src="{{ asset('storage/' . company_info('logo')) }}" alt="Logo" style="height: 60px;" class="mb-2">
+                            <img src="{{ company_info('logo') }}" alt="Logo" style="height: 60px;" class="mb-2">
                         @endif
                         <h4 class="mb-1">{{ company_info('name') }}</h4>
                         <p class="text-muted mb-1">{{ company_info('address') }}</p>
