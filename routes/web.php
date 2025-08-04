@@ -15,6 +15,7 @@ use App\Http\Controllers\FinancialReportController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\BackupController;
+use App\Http\Controllers\DataManagementController;
 
 // Public routes (before authentication)
 Route::get('/', [GuideController::class, 'publicIndex'])->name('guides.public.index');
@@ -104,3 +105,8 @@ Route::get('backups', [BackupController::class, 'index'])->name('backups.index')
 Route::post('backups/create', [BackupController::class, 'create'])->name('backups.create');
 Route::get('backups/download/{filename}', [BackupController::class, 'download'])->name('backups.download');
 Route::delete('backups/{filename}', [BackupController::class, 'destroy'])->name('backups.destroy');
+
+// Data Management routes (Super Admin only)
+Route::get('data-management', [DataManagementController::class, 'index'])->name('data-management.index');
+Route::get('data-management/confirm-reset', [DataManagementController::class, 'confirmReset'])->name('data-management.confirm-reset');
+Route::post('data-management/reset-transaction-data', [DataManagementController::class, 'resetTransactionData'])->name('data-management.reset-transaction-data');

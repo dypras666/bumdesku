@@ -437,6 +437,12 @@ return [
             'route' => 'backups.index',
             'icon' => 'fas fa-fw fa-database',
         ],
+        [
+            'text' => 'Manajemen Data',
+            'route' => 'data-management.index',
+            'icon' => 'fas fa-fw fa-trash-alt',
+            'can' => 'super_admin',
+        ],
     ],
 
     /*
