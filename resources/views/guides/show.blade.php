@@ -231,7 +231,7 @@
                             <i class="fas fa-external-link-alt"></i> Lihat Publik
                         </a>
 
-                        <button type="button" class="btn btn-danger" onclick="deleteGuide({{ $guide->id }}, {{ json_encode($guide->title) }})">
+                        <button type="button" class="btn btn-danger delete-guide-btn" data-guide-id="{{ $guide->id }}" data-guide-title="{{ $guide->title }}">
                             <i class="fas fa-trash"></i> Hapus Panduan
                         </button>
                     </div>
@@ -369,14 +369,18 @@
 
 @section('js')
 <script>
-function deleteGuide(id, title) {
-    document.getElementById('guideTitle').textContent = title;
-    document.getElementById('deleteForm').action = '/guides/' + id;
-    $('#deleteModal').modal('show');
-}
-
-// Auto-hide alerts after 5 seconds
+// Delete guide functionality
 $(document).ready(function() {
+    $('.delete-guide-btn').on('click', function() {
+        var guideId = $(this).data('guide-id');
+        var guideTitle = $(this).data('guide-title');
+        
+        $('#guideTitle').text(guideTitle);
+        $('#deleteForm').attr('action', '/guides/' + guideId);
+        $('#deleteModal').modal('show');
+    });
+
+    // Auto-hide alerts after 5 seconds
     setTimeout(function() {
         $('.alert').fadeOut('slow');
     }, 5000);
