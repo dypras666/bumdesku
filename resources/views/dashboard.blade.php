@@ -6,6 +6,7 @@
     <div class="row">
         <div class="col-sm-6">
             <h1>Dashboard {{ company_info('name') }}</h1>
+            <p class="text-muted">Periode: {{ $stats['period_name'] }}</p>
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -21,13 +22,89 @@
 @stop
 
 @section('content')
+    <!-- Period Selection -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-calendar mr-1"></i>
+                        Pilih Periode
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form method="GET" action="{{ route('dashboard') }}" class="form-inline">
+                        <div class="form-group mr-3">
+                            <label for="month" class="mr-2">Bulan:</label>
+                            <select name="month" id="month" class="form-control">
+                                @for($i = 1; $i <= 12; $i++)
+                                    <option value="{{ $i }}" {{ $stats['selected_month'] == $i ? 'selected' : '' }}>
+                                        {{ Carbon\Carbon::create(null, $i, 1)->format('F') }}
+                                    </option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div class="form-group mr-3">
+                            <label for="year" class="mr-2">Tahun:</label>
+                            <select name="year" id="year" class="form-control">
+                                @for($year = 2020; $year <= 2030; $year++)
+                                    <option value="{{ $year }}" {{ $stats['selected_year'] == $year ? 'selected' : '' }}>
+                                        {{ $year }}
+                                    </option>
+                                @endfor
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Tampilkan
+                        </button>
+                        <a href="{{ route('dashboard') }}" class="btn btn-secondary ml-2">
+                            <i class="fas fa-refresh"></i> Reset
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Statistics Cards -->
+    <!-- Baris Pertama: Saldo Awal -->
     <div class="row">
-        <div class="col-lg-3 col-6">
+        <div class="col-lg-4 col-6">
+            <div class="small-box bg-primary">
+                <div class="inner">
+                    <h4>{{ format_currency($stats['initial_cash_balance']) }}</h4>
+                    <p>Saldo Awal Kas</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <a href="#" class="small-box-footer">
+                    Lihat Detail <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-6">
+            <div class="small-box bg-secondary">
+                <div class="inner">
+                    <h4>{{ format_currency($stats['current_modal_balance']) }}</h4>
+                    <p>Modal Awal BUMDES</p>
+                    <small class="text-light">Saldo Awal: {{ format_currency($stats['initial_modal_balance']) }}</small>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-university"></i>
+                </div>
+                <a href="#" class="small-box-footer">
+                    Lihat Detail <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-6">
             <div class="small-box bg-info">
                 <div class="inner">
                     <h3>{{ $stats['total_transactions'] }}</h3>
-                    <p>Total Transaksi</p>
+                    <p>Transaksi {{ $stats['period_name'] }}</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-exchange-alt"></i>
@@ -37,12 +114,15 @@
                 </a>
             </div>
         </div>
+    </div>
 
-        <div class="col-lg-3 col-6">
+    <!-- Baris Kedua: Transaksi dan Saldo Akhir -->
+    <div class="row">
+        <div class="col-lg-4 col-6">
             <div class="small-box bg-success">
                 <div class="inner">
-                    <h3>{{ format_currency($stats['total_income']) }}</h3>
-                    <p>Total Pemasukan</p>
+                    <h4>{{ format_currency($stats['total_income']) }}</h4>
+                    <p>Pemasukan {{ $stats['period_name'] }}</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-arrow-up"></i>
@@ -53,11 +133,11 @@
             </div>
         </div>
 
-        <div class="col-lg-3 col-6">
+        <div class="col-lg-4 col-6">
             <div class="small-box bg-warning">
                 <div class="inner">
-                    <h3>{{ format_currency($stats['total_expenses']) }}</h3>
-                    <p>Total Pengeluaran</p>
+                    <h4>{{ format_currency($stats['total_expenses']) }}</h4>
+                    <p>Pengeluaran {{ $stats['period_name'] }}</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-arrow-down"></i>
@@ -68,11 +148,11 @@
             </div>
         </div>
 
-        <div class="col-lg-3 col-6">
+        <div class="col-lg-4 col-6">
             <div class="small-box bg-danger">
                 <div class="inner">
-                    <h3>{{ format_currency($stats['cash_balance']) }}</h3>
-                    <p>Saldo Kas</p>
+                    <h4>{{ format_currency($stats['final_cash_balance']) }}</h4>
+                    <p>Saldo Kas {{ $stats['period_name'] }}</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-wallet"></i>
@@ -107,7 +187,7 @@
                 <div class="card-header">
                     <h3 class="card-title">
                         <i class="fas fa-info-circle mr-1"></i>
-                        Informasi Perusahaan
+                        Informasi 
                     </h3>
                 </div>
                 <div class="card-body">
@@ -119,7 +199,7 @@
                     />
                     <hr>
                     <div class="progress-group">
-                        <span class="progress-text">Transaksi Bulan Ini</span>
+                        <span class="progress-text">Transaksi {{ $stats['period_name'] }}</span>
                         <span class="float-right"><b>{{ $stats['total_transactions'] }}</b>/100</span>
                         <div class="progress progress-sm">
                             <div class="progress-bar bg-primary" style="width: {{ min(($stats['total_transactions'] / 100) * 100, 100) }}%"></div>
@@ -137,7 +217,7 @@
                 <div class="card-header">
                     <h3 class="card-title">
                         <i class="fas fa-list mr-1"></i>
-                        Transaksi Terbaru
+                        Transaksi {{ $stats['period_name'] }}
                     </h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">

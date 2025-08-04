@@ -68,11 +68,9 @@ class GeneralLedgerController extends Controller
     public function create()
     {
         $accounts = MasterAccount::orderBy('nama_akun')->get();
-        $transactions = Transaction::where('status', 'approved')
-                                 ->orderBy('transaction_date', 'desc')
-                                 ->get();
-
-        return view('general-ledger.create', compact('accounts', 'transactions'));
+        // Tidak perlu mengirim semua transaksi karena menggunakan pencarian dengan Axios
+        
+        return view('general-ledger.create', compact('accounts'));
     }
 
     /**

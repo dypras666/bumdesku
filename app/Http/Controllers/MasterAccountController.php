@@ -110,4 +110,48 @@ class MasterAccountController extends Controller
                 ->with('error', 'Gagal menghapus Master Akun. Data mungkin sedang digunakan.');
         }
     }
+
+    /**
+     * API method for searching accounts
+     */
+    public function apiSearch(Request $request)
+    {
+        $query = $request->get('q', '');
+        $limit = $request->get('limit', 10);
+
+        if (strlen($query) < 2) {
+            return response()->json([
+                'success' => true,
+                'data' => [],
+                'message' => 'Query minimal 2 karakter'
+            ]);
+        }
+
+        $accounts = MasterAccount::where('is_active', true)
+            ->where(function ($q) use ($query) {
+                $q->where('kode_akun', 'LIKE', "%{$query}%")
+                  ->orWhere('nama_akun', 'LIKE', "%{$query}%");
+            })
+            ->orderBy('kode_akun')
+            ->limit($limit)
+            ->get()
+            ->map(function ($account) {
+                $currentBalance = $account->getCurrentBalance();
+                return [
+                    'id' => $account->id,
+                    'kode_akun' => $account->kode_akun,
+                    'nama_akun' => $account->nama_akun,
+                    'kategori_akun' => $account->kategori_akun,
+                    'saldo_akhir' => $currentBalance,
+                    'text' => $account->kode_akun . ' - ' . $account->nama_akun,
+                    'saldo_formatted' => 'Rp ' . number_format($currentBalance, 0, ',', '.')
+                ];
+            });
+
+        return response()->json([
+            'success' => true,
+            'data' => $accounts,
+            'total' => $accounts->count()
+        ]);
+    }
 }

@@ -260,8 +260,8 @@
 @stop
 
 @section('js')
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="{{ asset('vendor/vue/vue.min.js') }}"></script>
+<script src="{{ asset('vendor/axios/axios.min.js') }}"></script>
 <script>
 // Setup CSRF token directly from Laravel
 axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrf_token() }}';

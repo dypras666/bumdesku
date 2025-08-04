@@ -363,6 +363,44 @@ class TransactionController extends Controller
     }
 
     /**
+     * API endpoint untuk pencarian transaksi (untuk dropdown dengan search)
+     */
+    public function apiSearch(Request $request)
+    {
+        $query = Transaction::with(['account'])
+                           ->where('status', 'approved'); // Hanya transaksi yang sudah approved
+
+        // Search berdasarkan kode transaksi atau deskripsi
+        if ($request->filled('q')) {
+            $search = $request->q;
+            $query->where(function($q) use ($search) {
+                $q->where('transaction_code', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        $limit = $request->get('limit', 10); // Default 10 hasil
+        $transactions = $query->orderBy('transaction_date', 'desc')
+                             ->limit($limit)
+                             ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $transactions->map(function($transaction) {
+                return [
+                    'id' => $transaction->id,
+                    'text' => $transaction->transaction_code . ' - ' . $transaction->description,
+                    'transaction_code' => $transaction->transaction_code,
+                    'description' => $transaction->description,
+                    'amount' => $transaction->amount,
+                    'transaction_date' => $transaction->transaction_date,
+                    'account_name' => $transaction->account->nama_akun ?? ''
+                ];
+            })
+        ]);
+    }
+
+    /**
      * API endpoint untuk approve transaksi
      */
     public function apiApprove(Transaction $transaction)

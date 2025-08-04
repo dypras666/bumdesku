@@ -1,7 +1,7 @@
 <div class="company-info company-info-{{ $size }}">
     @if($showLogo && !empty($companyInfo['logo']))
         <div class="company-logo mb-2">
-            <img src="{{ asset('storage/' . $companyInfo['logo']) }}" 
+            <img src="{{ $companyInfo['logo'] }}" 
                  alt="{{ $companyInfo['name'] }}" 
                  class="img-fluid 
                     @if($size === 'small') max-height-50
@@ -60,7 +60,7 @@
         @if(!empty($companyInfo['director_name']))
             <div class="director-info mt-2">
                 <small class="text-muted">
-                    <strong>Direktur:</strong> {{ $companyInfo['director_name'] }}
+                    <strong>Kepala Bumdes:</strong> {{ $companyInfo['director_name'] }}
                     @if(!empty($companyInfo['director_nip']))
                         <br><strong>NIP:</strong> {{ $companyInfo['director_nip'] }}
                     @endif
