@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $guide->title }} - Panduan BUMDES</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" rel="stylesheet">
+    <link href="{{ asset('vendor/bootstrap5/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/prism/prism.min.css') }}" rel="stylesheet">
     <style>
         .navbar-brand {
             font-weight: bold;
@@ -318,9 +318,9 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="{{ asset('vendor/bootstrap5/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('vendor/prism/prism-core.min.js') }}"></script>
+    <!-- Prism autoloader removed - using local core files only -->
     <script src="{{ asset('vendor/marked/marked.min.js') }}"></script>
     <script>
         // Convert Markdown to HTML if needed

@@ -284,7 +284,7 @@ Code block
 
 @section('css')
 <!-- Summernote CSS -->
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+<link href="{{ asset('vendor/summernote/summernote-bs4.min.css') }}" rel="stylesheet">
 <style>
 .required::after {
     content: " *";
@@ -316,7 +316,7 @@ pre {
 
 @section('js')
 <!-- Summernote JS -->
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+<script src="{{ asset('vendor/summernote/summernote-bs4.min.js') }}"></script>
 <script>
 $(document).ready(function() {
     // Initialize Summernote
