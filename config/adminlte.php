@@ -432,6 +432,11 @@ return [
             'route' => 'system-settings.index',
             'icon' => 'fas fa-fw fa-cogs',
         ],
+        [
+            'text' => 'Backup Database',
+            'route' => 'backups.index',
+            'icon' => 'fas fa-fw fa-database',
+        ],
     ],
 
     /*

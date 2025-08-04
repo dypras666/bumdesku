@@ -14,6 +14,7 @@ use App\Http\Controllers\GeneralLedgerController;
 use App\Http\Controllers\FinancialReportController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\UploadController;
+use App\Http\Controllers\BackupController;
 
 // Public routes (before authentication)
 Route::get('/', [GuideController::class, 'publicIndex'])->name('guides.public.index');
@@ -97,3 +98,9 @@ Route::get('trial-balance/export-excel', [FinancialReportController::class, 'exp
 // Annual Report routes
 Route::get('financial-reports/annual/create', [FinancialReportController::class, 'annualReport'])->name('financial-reports.annual');
 Route::post('financial-reports/annual/generate', [FinancialReportController::class, 'generateAnnualReport'])->name('financial-reports.annual.generate');
+
+// Backup Database routes
+Route::get('backups', [BackupController::class, 'index'])->name('backups.index');
+Route::post('backups/create', [BackupController::class, 'create'])->name('backups.create');
+Route::get('backups/download/{filename}', [BackupController::class, 'download'])->name('backups.download');
+Route::delete('backups/{filename}', [BackupController::class, 'destroy'])->name('backups.destroy');
