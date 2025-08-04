@@ -53,6 +53,9 @@
     {{-- Extra Configured Plugins Stylesheets --}}
     @include('adminlte::plugins', ['type' => 'css'])
 
+    {{-- Custom Pagination Styles --}}
+    <link rel="stylesheet" href="{{ asset('css/pagination.css') }}">
+
     {{-- Livewire Styles --}}
     @if(config('adminlte.livewire'))
         @if(intval(app()->version()) >= 7)

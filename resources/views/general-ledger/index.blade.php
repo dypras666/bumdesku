@@ -172,9 +172,9 @@
                         </tbody>
                     </table>
                 </div>
-                @if($entries->hasPages())
-                    <div class="card-footer">
-                        {{ $entries->links() }}
+                @if($entries->hasPages() || $entries->total() > 0)
+                    <div class="card-footer bg-light">
+                        {{ $entries->appends(request()->query())->links('pagination.bootstrap-4') }}
                     </div>
                 @endif
             </div>
@@ -215,9 +215,91 @@
     <style>
         .table th {
             white-space: nowrap;
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
         }
         .btn-group .btn {
             margin-right: 2px;
+        }
+        
+        /* Pagination Styling */
+        .pagination-info {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+        
+        .pagination .page-link {
+            border-radius: 0.25rem;
+            margin: 0 2px;
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .pagination .page-link:hover {
+            background-color: #e9ecef;
+            border-color: #dee2e6;
+            transform: translateY(-1px);
+        }
+        
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+            box-shadow: 0 2px 4px rgba(0,123,255,0.25);
+        }
+        
+        .pagination .page-item.disabled .page-link {
+            background-color: #f8f9fa;
+            border-color: #dee2e6;
+            color: #6c757d;
+        }
+        
+        .card-footer {
+            padding: 1rem 1.25rem;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        /* Responsive pagination */
+        @media (max-width: 576px) {
+            .pagination-info {
+                text-align: center;
+                margin-bottom: 0.5rem;
+            }
+            
+            .pagination {
+                justify-content: center;
+            }
+            
+            .pagination .page-link {
+                padding: 0.375rem 0.5rem;
+                font-size: 0.875rem;
+            }
+        }
+        
+        /* Table responsive improvements */
+        .table-responsive {
+            border-radius: 0.25rem;
+        }
+        
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+        }
+        
+        /* Status badges */
+        .badge-success {
+            background-color: #28a745;
+        }
+        
+        .badge-warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        
+        .badge-secondary {
+            background-color: #6c757d;
         }
     </style>
 @stop

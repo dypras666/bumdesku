@@ -116,7 +116,37 @@ class GuideController extends Controller
             ->limit(5)
             ->get();
 
-        return view('guides.public.show', compact('guide', 'relatedGuides'));
+        // Get previous and next guides in the same category
+        $previousGuide = Guide::published()
+            ->byCategory($guide->category)
+            ->where('order', '<', $guide->order)
+            ->orderBy('order', 'desc')
+            ->first();
+
+        $nextGuide = Guide::published()
+            ->byCategory($guide->category)
+            ->where('order', '>', $guide->order)
+            ->orderBy('order', 'asc')
+            ->first();
+
+        // If no previous/next by order, try by ID as fallback
+        if (!$previousGuide) {
+            $previousGuide = Guide::published()
+                ->byCategory($guide->category)
+                ->where('id', '<', $guide->id)
+                ->orderBy('id', 'desc')
+                ->first();
+        }
+
+        if (!$nextGuide) {
+            $nextGuide = Guide::published()
+                ->byCategory($guide->category)
+                ->where('id', '>', $guide->id)
+                ->orderBy('id', 'asc')
+                ->first();
+        }
+
+        return view('guides.public.show', compact('guide', 'relatedGuides', 'previousGuide', 'nextGuide'));
     }
 
     /**

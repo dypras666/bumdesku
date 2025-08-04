@@ -164,35 +164,66 @@
                 </div>
                 
                 <!-- Pagination -->
-                <div class="d-flex justify-content-between align-items-center" v-if="pagination.total > 0">
-                    <div>
-                        Menampilkan @{{ pagination.from }} sampai @{{ pagination.to }} 
-                        dari @{{ pagination.total }} transaksi
+                <div class="d-flex justify-content-between align-items-center flex-wrap" v-if="pagination.total > 0">
+                    <div class="pagination-info mb-2 mb-md-0">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle"></i>
+                            Menampilkan @{{ pagination.from }} sampai @{{ pagination.to }} 
+                            dari @{{ pagination.total }} transaksi
+                        </small>
                     </div>
                     <div>
-                        <nav>
-                            <ul class="pagination pagination-sm">
-                                <li class="page-item" :class="{ disabled: pagination.current_page === 1 }">
-                                    <button class="page-link" @click="changePage(pagination.current_page - 1)" 
-                                            :disabled="pagination.current_page === 1">
-                                        &laquo; Sebelumnya
+                        <nav aria-label="Pagination Navigation">
+                            <ul class="pagination pagination-sm m-0">
+                                <!-- First Page Link -->
+                                <li v-if="pagination.current_page > 3" class="page-item">
+                                    <button class="page-link" @click="changePage(1)" title="Halaman Pertama">
+                                        <i class="fas fa-angle-double-left"></i>
                                     </button>
                                 </li>
                                 
-                                <li v-for="page in visiblePages" :key="page" 
-                                    class="page-item" :class="{ active: page === pagination.current_page }">
-                                    <button class="page-link" @click="changePage(page)">@{{ page }}</button>
+                                <!-- Previous Page Link -->
+                                <li class="page-item" :class="{ disabled: pagination.current_page === 1 }">
+                                    <button class="page-link" @click="changePage(pagination.current_page - 1)" 
+                                            :disabled="pagination.current_page === 1" title="Halaman Sebelumnya">
+                                        <i class="fas fa-angle-left"></i>
+                                    </button>
                                 </li>
                                 
+                                <!-- Page Numbers -->
+                                <li v-for="page in visiblePages" :key="page" 
+                                    class="page-item" :class="{ active: page === pagination.current_page, disabled: page === '...' }">
+                                    <button v-if="page !== '...'" class="page-link" @click="changePage(page)" :title="'Halaman ' + page">
+                                        @{{ page }}
+                                    </button>
+                                    <span v-else class="page-link">@{{ page }}</span>
+                                </li>
+                                
+                                <!-- Next Page Link -->
                                 <li class="page-item" :class="{ disabled: pagination.current_page === pagination.last_page }">
                                     <button class="page-link" @click="changePage(pagination.current_page + 1)" 
-                                            :disabled="pagination.current_page === pagination.last_page">
-                                        Selanjutnya &raquo;
+                                            :disabled="pagination.current_page === pagination.last_page" title="Halaman Selanjutnya">
+                                        <i class="fas fa-angle-right"></i>
+                                    </button>
+                                </li>
+                                
+                                <!-- Last Page Link -->
+                                <li v-if="pagination.current_page < pagination.last_page - 2" class="page-item">
+                                    <button class="page-link" @click="changePage(pagination.last_page)" title="Halaman Terakhir">
+                                        <i class="fas fa-angle-double-right"></i>
                                     </button>
                                 </li>
                             </ul>
                         </nav>
                     </div>
+                </div>
+                
+                <!-- No Data Info -->
+                <div v-else-if="!loading" class="pagination-info">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle"></i>
+                        Tidak ada data transaksi untuk ditampilkan
+                    </small>
                 </div>
             </div>
         </div>

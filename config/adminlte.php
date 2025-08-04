@@ -418,6 +418,11 @@ return [
             'icon' => 'fas fa-fw fa-users',
         ],
         [
+            'text' => 'Manajemen Panduan',
+            'route' => 'guides.index',
+            'icon' => 'fas fa-fw fa-book',
+        ],
+        [
             'text' => 'Profile',
             'url' => 'profile',
             'icon' => 'fas fa-fw fa-user',
