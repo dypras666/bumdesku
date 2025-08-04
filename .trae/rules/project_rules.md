@@ -350,6 +350,16 @@ Route::post('/transactions/approve/{id}', [TransactionController::class, 'approv
 - **Admin Routes**: Group admin routes under `/admin/` prefix
 - **Public Routes**: Keep public routes at root level
 
+### Frontend Testing Guidelines
+- **FORBIDDEN**: Using `curl` commands to test frontend pages or UI functionality
+- **REQUIRED**: Use browser preview and application logs for frontend testing
+- **PREFERRED METHODS**:
+  - Use `open_preview` tool to visually verify UI changes
+  - Check Laravel logs in `storage/logs/` for errors
+  - Use browser developer tools for debugging
+  - Test functionality through actual user interface
+- **RATIONALE**: Frontend testing should be done through proper UI testing methods, not command-line tools that don't represent actual user experience
+
 ## System Settings Integration Guidelines
 
 ### Overview

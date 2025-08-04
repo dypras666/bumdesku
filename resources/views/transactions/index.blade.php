@@ -6,6 +6,10 @@
     <h1>Daftar Transaksi</h1>
 @stop
 
+@section('css')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+@stop
+
 @section('content')
 <div class="container-fluid" id="transactionApp">
     <div class="row">
@@ -228,6 +232,12 @@
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
+// Setup CSRF token directly from Laravel
+axios.defaults.headers.common['X-CSRF-TOKEN'] = '{{ csrf_token() }}';
+console.log('CSRF token set:', '{{ csrf_token() }}');
+console.log('Axios defaults:', axios.defaults.headers.common);
+</script>
+<script>
 new Vue({
     el: '#transactionApp',
     data: {
@@ -278,6 +288,7 @@ new Vue({
     },
     methods: {
         loadTransactions(page = 1) {
+            console.log('=== STARTING LOAD TRANSACTIONS ===');
             this.loading = true;
             
             const params = {
@@ -285,16 +296,48 @@ new Vue({
                 ...this.filters
             };
             
+            console.log('Loading transactions with params:', params);
+            console.log('Axios headers:', axios.defaults.headers.common);
+            
             axios.get('/api/transactions', { params })
                 .then(response => {
-                    this.transactions = response.data.data;
-                    this.pagination = response.data.pagination;
+                    console.log('=== API SUCCESS ===');
+                    console.log('Full response:', response);
+                    console.log('Response data:', response.data);
+                    console.log('Response status:', response.status);
+                    
+                    if (response.data && response.data.data) {
+                        this.transactions = response.data.data;
+                        this.pagination = response.data.pagination;
+                        console.log('Transactions set:', this.transactions.length);
+                        console.log('Pagination set:', this.pagination);
+                    } else {
+                        console.error('Invalid response structure:', response.data);
+                    }
                 })
                 .catch(error => {
-                    console.error('Error loading transactions:', error);
-                    this.$toast.error('Gagal memuat data transaksi');
+                    console.log('=== API ERROR ===');
+                    console.error('Full error:', error);
+                    console.error('Error message:', error.message);
+                    console.error('Error response:', error.response);
+                    console.error('Error status:', error.response?.status);
+                    console.error('Error data:', error.response?.data);
+                    
+                    // Show detailed error message
+                    let errorMessage = 'Gagal memuat data transaksi';
+                    if (error.response) {
+                        errorMessage += ` (Status: ${error.response.status})`;
+                        if (error.response.data?.message) {
+                            errorMessage += `: ${error.response.data.message}`;
+                        }
+                    } else {
+                        errorMessage += `: ${error.message}`;
+                    }
+                    
+                    alert(errorMessage); // Use alert for debugging
                 })
                 .finally(() => {
+                    console.log('=== LOAD TRANSACTIONS FINISHED ===');
                     this.loading = false;
                 });
         },

@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             
             // 3. Reports (Final Output)
             FinancialReportSeeder::class,
+            DaftarLaporanKeuanganSeeder::class,
         ]);
     }
 }

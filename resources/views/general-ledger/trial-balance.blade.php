@@ -79,13 +79,37 @@
         <div class="row">
             <div class="col-12">
                 <div class="card" id="trial-balance-report">
-                    <div class="card-header text-center">
-                        <h3 class="card-title">
-                            <strong>{{ company_info('name') ?? 'BUMDES' }}</strong><br>
-                            <span class="h4">NERACA SALDO</span><br>
-                            <span class="h5">Periode: {{ request('start_date', date('Y-m-01')) ? \Carbon\Carbon::parse(request('start_date', date('Y-m-01')))->format('d F Y') : '' }} 
-                            s/d {{ request('end_date', date('Y-m-t')) ? \Carbon\Carbon::parse(request('end_date', date('Y-m-t')))->format('d F Y') : '' }}</span>
-                        </h3>
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col-md-8 text-center">
+                                <h3 class="card-title mb-0">
+                                    <strong>{{ company_info('name') ?? 'BUMDES' }}</strong><br>
+                                    <span class="h4">NERACA SALDO</span><br>
+                                    <span class="h5">Periode: {{ request('start_date', date('Y-m-01')) ? \Carbon\Carbon::parse(request('start_date', date('Y-m-01')))->format('d F Y') : '' }} 
+                                    s/d {{ request('end_date', date('Y-m-t')) ? \Carbon\Carbon::parse(request('end_date', date('Y-m-t')))->format('d F Y') : '' }}</span>
+                                </h3>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card-tools float-right">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-download"></i> Export
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="{{ route('trial-balance.export-pdf', request()->all()) }}">
+                                                <i class="fas fa-file-pdf text-danger"></i> Export PDF
+                                            </a>
+                                            <a class="dropdown-item" href="{{ route('trial-balance.export-docx', request()->all()) }}">
+                                                <i class="fas fa-file-word text-primary"></i> Export DOCX
+                                            </a>
+                                            <a class="dropdown-item" href="{{ route('trial-balance.export-excel', request()->all()) }}">
+                                                <i class="fas fa-file-excel text-success"></i> Export Excel
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -277,15 +301,27 @@
 
     <!-- Simple View -->
     <div id="simple-view" style="display: none;">
-        @include('reports.simple-trial-balance', [
+        @php
+            // Transform trial balance data for the simple view
+            $reportData = [
+                'accounts' => $trialBalance->map(function($item) {
+                    return [
+                        'code' => $item['account']->kode_akun,
+                        'name' => $item['account']->nama_akun,
+                        'debit' => $item['debit'],
+                        'credit' => $item['credit']
+                    ];
+                })->toArray()
+            ];
+        @endphp
+        @include('financial-reports.partials.simple-trial-balance', [
             'companyName' => company_info('name') ?? 'BUMDES',
             'reportTitle' => 'NERACA SALDO',
-            'reportPeriod' => request('start_date', date('Y-m-01')) . ' s/d ' . request('end_date', date('Y-m-t')),
-            'trialBalance' => $trialBalance,
+            'reportPeriod' => $startDate->format('d/m/Y') . ' s/d ' . $endDate->format('d/m/Y'),
+            'reportData' => $reportData,
+            'asOfDate' => $asOfDate,
             'totalDebit' => $totalDebit,
-            'totalCredit' => $totalCredit,
-            'startDate' => $startDate,
-            'endDate' => $endDate
+            'totalCredit' => $totalCredit
         ])
     </div>
 @stop

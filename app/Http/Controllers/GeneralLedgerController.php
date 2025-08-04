@@ -12,6 +12,11 @@ use Carbon\Carbon;
 
 class GeneralLedgerController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -247,7 +252,21 @@ class GeneralLedgerController extends Controller
      */
     public function trialBalance(Request $request)
     {
-        $asOfDate = $request->as_of_date ?? Carbon::today();
+        // Get date parameters
+        $startDate = $request->start_date ?? Carbon::today()->startOfMonth();
+        $endDate = $request->end_date ?? Carbon::today()->endOfMonth();
+        $asOfDate = $request->as_of_date ?? $endDate;
+
+        // Convert to Carbon instances if they're strings
+        if (is_string($startDate)) {
+            $startDate = Carbon::parse($startDate);
+        }
+        if (is_string($endDate)) {
+            $endDate = Carbon::parse($endDate);
+        }
+        if (is_string($asOfDate)) {
+            $asOfDate = Carbon::parse($asOfDate);
+        }
 
         $accounts = MasterAccount::with(['generalLedgerEntries' => function($query) use ($asOfDate) {
             $query->posted()->whereDate('posting_date', '<=', $asOfDate);
@@ -268,6 +287,17 @@ class GeneralLedgerController extends Controller
             return $item['debit'] > 0 || $item['credit'] > 0;
         });
 
-        return view('general-ledger.trial-balance', compact('trialBalance', 'asOfDate'));
+        // Calculate totals
+        $totalDebit = $trialBalance->sum('debit');
+        $totalCredit = $trialBalance->sum('credit');
+
+        return view('general-ledger.trial-balance', compact(
+            'trialBalance', 
+            'asOfDate', 
+            'startDate', 
+            'endDate', 
+            'totalDebit', 
+            'totalCredit'
+        ));
     }
 }

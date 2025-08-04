@@ -44,3 +44,21 @@ if (!function_exists('clear_system_cache')) {
         return SystemSettingHelper::clearSystemCache();
     }
 }
+
+if (!function_exists('terbilang')) {
+    function terbilang($angka) {
+        return \App\Helpers\TerbilangHelper::convert($angka);
+    }
+}
+
+if (!function_exists('terbilang_currency')) {
+    function terbilang_currency($amount, $currency = 'rupiah') {
+        return \App\Helpers\TerbilangHelper::currency($amount, $currency);
+    }
+}
+
+if (!function_exists('terbilang_official')) {
+    function terbilang_official($amount) {
+        return \App\Helpers\TerbilangHelper::official($amount);
+    }
+}

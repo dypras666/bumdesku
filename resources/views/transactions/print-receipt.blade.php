@@ -244,7 +244,7 @@
             <div class="amount-label">JUMLAH {{ $transaction->transaction_type === 'income' ? 'DITERIMA' : 'DIBAYARKAN' }}:</div>
             <div class="amount-value">{{ format_currency($transaction->amount) }}</div>
             <div class="amount-words">
-                Terbilang: {{ ucwords(terbilang($transaction->amount)) }} Rupiah
+                Terbilang: {{ terbilang_official($transaction->amount) }}
             </div>
         </div>
         

@@ -202,6 +202,24 @@
                     @endif
 
                     @if($report->status !== 'draft' && $report->report_data)
+                        <!-- Export Dropdown -->
+                        <div class="btn-group btn-block mb-2" role="group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="{{ route('financial-reports.export-pdf', $report) }}">
+                                    <i class="fas fa-file-pdf text-danger"></i> Export PDF
+                                </a>
+                                <a class="dropdown-item" href="{{ route('financial-reports.export-docx', $report) }}">
+                                    <i class="fas fa-file-word text-primary"></i> Export DOC
+                                </a>
+                                <a class="dropdown-item" href="{{ route('financial-reports.export-excel', $report) }}">
+                                    <i class="fas fa-file-excel text-success"></i> Export Excel
+                                </a>
+                            </div>
+                        </div>
+                        
                         <button type="button" class="btn btn-info btn-block mb-2" onclick="printReport()">
                             <i class="fas fa-print"></i> Cetak Laporan
                         </button>

@@ -82,6 +82,23 @@
                         <i class="fas fa-balance-scale"></i> Neraca
                     </h3>
                     <div class="card-tools">
+                        <!-- Export Dropdown -->
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-tool dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="{{ route('reports.balance-sheet.export-pdf', ['as_of_date' => request('as_of_date', $asOfDate->format('Y-m-d'))]) }}">
+                                    <i class="fas fa-file-pdf text-danger"></i> Export PDF
+                                </a>
+                                <a class="dropdown-item" href="{{ route('reports.balance-sheet.export-docx', ['as_of_date' => request('as_of_date', $asOfDate->format('Y-m-d'))]) }}">
+                                    <i class="fas fa-file-word text-primary"></i> Export DOC
+                                </a>
+                                <a class="dropdown-item" href="{{ route('reports.balance-sheet.export-excel', ['as_of_date' => request('as_of_date', $asOfDate->format('Y-m-d'))]) }}">
+                                    <i class="fas fa-file-excel text-success"></i> Export Excel
+                                </a>
+                            </div>
+                        </div>
                         <button type="button" class="btn btn-tool" onclick="window.print()">
                             <i class="fas fa-print"></i> Cetak
                         </button>

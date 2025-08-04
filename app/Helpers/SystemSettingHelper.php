@@ -68,6 +68,10 @@ class SystemSettingHelper
             'village_email' => self::get('village_email'),
             'director_name' => self::get('director_name'),
             'director_nip' => self::get('director_nip'),
+            // Alias untuk kompatibilitas dengan view
+            'address' => self::get('village_address'),
+            'phone' => self::get('village_phone'),
+            'email' => self::get('village_email'),
         ];
     }
 

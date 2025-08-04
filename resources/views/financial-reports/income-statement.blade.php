@@ -89,6 +89,23 @@
                         <i class="fas fa-chart-line"></i> Laporan Laba Rugi
                     </h3>
                     <div class="card-tools">
+                        <!-- Export Dropdown -->
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-tool dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="{{ route('reports.income-statement.export-pdf', ['period_start' => request('period_start', $periodStart->format('Y-m-d')), 'period_end' => request('period_end', $periodEnd->format('Y-m-d'))]) }}">
+                                    <i class="fas fa-file-pdf text-danger"></i> Export PDF
+                                </a>
+                                <a class="dropdown-item" href="{{ route('reports.income-statement.export-docx', ['period_start' => request('period_start', $periodStart->format('Y-m-d')), 'period_end' => request('period_end', $periodEnd->format('Y-m-d'))]) }}">
+                                    <i class="fas fa-file-word text-primary"></i> Export DOC
+                                </a>
+                                <a class="dropdown-item" href="{{ route('reports.income-statement.export-excel', ['period_start' => request('period_start', $periodStart->format('Y-m-d')), 'period_end' => request('period_end', $periodEnd->format('Y-m-d'))]) }}">
+                                    <i class="fas fa-file-excel text-success"></i> Export Excel
+                                </a>
+                            </div>
+                        </div>
                         <button type="button" class="btn btn-tool" onclick="window.print()">
                             <i class="fas fa-print"></i> Cetak
                         </button>

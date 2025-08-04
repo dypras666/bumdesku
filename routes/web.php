@@ -58,11 +58,34 @@ Route::get('trial-balance', [GeneralLedgerController::class, 'trialBalance'])->n
 
 // Financial Report routes
 Route::resource('financial-reports', FinancialReportController::class);
-Route::post('financial-reports/{financialReport}/finalize', [FinancialReportController::class, 'finalize'])->name('financial-reports.finalize');
-Route::post('financial-reports/{financialReport}/regenerate', [FinancialReportController::class, 'regenerate'])->name('financial-reports.regenerate');
-Route::get('financial-reports/{financialReport}/export-pdf', [FinancialReportController::class, 'exportPdf'])->name('financial-reports.export-pdf');
+Route::post('financial-reports/{financial_report}/finalize', [FinancialReportController::class, 'finalize'])->name('financial-reports.finalize');
+Route::post('financial-reports/{financial_report}/regenerate', [FinancialReportController::class, 'regenerate'])->name('financial-reports.regenerate');
+Route::get('financial-reports/{financial_report}/export-pdf', [FinancialReportController::class, 'exportPdf'])->name('financial-reports.export-pdf');
+Route::get('financial-reports/{financial_report}/export-docx', [FinancialReportController::class, 'exportDocx'])->name('financial-reports.export-docx');
+Route::get('financial-reports/{financial_report}/export-excel', [FinancialReportController::class, 'exportExcel'])->name('financial-reports.export-excel');
 
 // Financial Report Views
 Route::get('reports/income-statement', [FinancialReportController::class, 'incomeStatement'])->name('reports.income-statement');
 Route::get('reports/balance-sheet', [FinancialReportController::class, 'balanceSheet'])->name('reports.balance-sheet');
 Route::get('reports/cash-flow', [FinancialReportController::class, 'cashFlow'])->name('reports.cash-flow');
+
+// Export routes for individual reports
+Route::get('reports/income-statement/export-pdf', [FinancialReportController::class, 'exportIncomeStatementPdf'])->name('reports.income-statement.export-pdf');
+Route::get('reports/income-statement/export-docx', [FinancialReportController::class, 'exportIncomeStatementDocx'])->name('reports.income-statement.export-docx');
+Route::get('reports/income-statement/export-excel', [FinancialReportController::class, 'exportIncomeStatementExcel'])->name('reports.income-statement.export-excel');
+
+Route::get('reports/balance-sheet/export-pdf', [FinancialReportController::class, 'exportBalanceSheetPdf'])->name('reports.balance-sheet.export-pdf');
+Route::get('reports/balance-sheet/export-docx', [FinancialReportController::class, 'exportBalanceSheetDocx'])->name('reports.balance-sheet.export-docx');
+Route::get('reports/balance-sheet/export-excel', [FinancialReportController::class, 'exportBalanceSheetExcel'])->name('reports.balance-sheet.export-excel');
+
+Route::get('reports/cash-flow/export-pdf', [FinancialReportController::class, 'exportCashFlowPdf'])->name('reports.cash-flow.export-pdf');
+Route::get('reports/cash-flow/export-docx', [FinancialReportController::class, 'exportCashFlowDocx'])->name('reports.cash-flow.export-docx');
+Route::get('reports/cash-flow/export-excel', [FinancialReportController::class, 'exportCashFlowExcel'])->name('reports.cash-flow.export-excel');
+
+Route::get('trial-balance/export-pdf', [FinancialReportController::class, 'exportTrialBalancePdf'])->name('trial-balance.export-pdf');
+Route::get('trial-balance/export-docx', [FinancialReportController::class, 'exportTrialBalanceDocx'])->name('trial-balance.export-docx');
+Route::get('trial-balance/export-excel', [FinancialReportController::class, 'exportTrialBalanceExcel'])->name('trial-balance.export-excel');
+
+// Annual Report routes
+Route::get('financial-reports/annual/create', [FinancialReportController::class, 'annualReport'])->name('financial-reports.annual');
+Route::post('financial-reports/annual/generate', [FinancialReportController::class, 'generateAnnualReport'])->name('financial-reports.annual.generate');

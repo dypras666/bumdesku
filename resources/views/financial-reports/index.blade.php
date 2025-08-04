@@ -23,6 +23,9 @@
                 <div class="card-header">
                     <h3 class="card-title">Filter & Pencarian</h3>
                     <div class="card-tools">
+                        <a href="{{ route('financial-reports.annual') }}" class="btn btn-success btn-sm mr-2">
+                            <i class="fas fa-book"></i> Laporan Tahunan
+                        </a>
                         <a href="{{ route('financial-reports.create') }}" class="btn btn-primary btn-sm">
                             <i class="fas fa-plus"></i> Buat Laporan Baru
                         </a>
