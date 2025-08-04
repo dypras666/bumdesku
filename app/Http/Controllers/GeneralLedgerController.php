@@ -285,9 +285,21 @@ class GeneralLedgerController extends Controller
             return $item['debit'] > 0 || $item['credit'] > 0;
         });
 
-        // Calculate totals
+        // Calculate totals and check balance
         $totalDebit = $trialBalance->sum('debit');
         $totalCredit = $trialBalance->sum('credit');
+        $isBalanced = abs($totalDebit - $totalCredit) < 0.01; // Allow for small rounding differences
+        $difference = $totalDebit - $totalCredit;
+
+        // Log balance check for debugging
+        if (!$isBalanced) {
+            \Illuminate\Support\Facades\Log::warning('Trial Balance is not balanced', [
+                'as_of_date' => $asOfDate->format('Y-m-d'),
+                'total_debit' => $totalDebit,
+                'total_credit' => $totalCredit,
+                'difference' => $difference
+            ]);
+        }
 
         return view('general-ledger.trial-balance', compact(
             'trialBalance', 
@@ -295,7 +307,9 @@ class GeneralLedgerController extends Controller
             'startDate', 
             'endDate', 
             'totalDebit', 
-            'totalCredit'
+            'totalCredit',
+            'isBalanced',
+            'difference'
         ));
     }
 }
