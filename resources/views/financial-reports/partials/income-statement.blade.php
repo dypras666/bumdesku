@@ -35,12 +35,12 @@
                             <td></td>
                         </tr>
                         @php $totalRevenue = 0; @endphp
-                        @foreach($data['revenues'] ?? [] as $account)
+                        @foreach($data['revenues'] ?? [] as $accountName => $amount)
                             <tr>
-                                <td class="pl-4">{{ $account['account'] }}</td>
-                                <td class="text-right">{{ format_currency($account['amount']) }}</td>
+                                <td class="pl-4">{{ $accountName }}</td>
+                                <td class="text-right">{{ format_currency($amount) }}</td>
                             </tr>
-                            @php $totalRevenue += $account['amount']; @endphp
+                            @php $totalRevenue += $amount; @endphp
                         @endforeach
                         <tr class="font-weight-bold">
                             <td class="text-right">Total Pendapatan</td>
@@ -53,12 +53,12 @@
                             <td></td>
                         </tr>
                         @php $totalExpenses = 0; @endphp
-                        @foreach($data['expenses'] ?? [] as $account)
+                        @foreach($data['expenses'] ?? [] as $accountName => $amount)
                             <tr>
-                                <td class="pl-4">{{ $account['account'] }}</td>
-                                <td class="text-right">{{ format_currency($account['amount']) }}</td>
+                                <td class="pl-4">{{ $accountName }}</td>
+                                <td class="text-right">{{ format_currency($amount) }}</td>
                             </tr>
-                            @php $totalExpenses += $account['amount']; @endphp
+                            @php $totalExpenses += $amount; @endphp
                         @endforeach
                         <tr class="font-weight-bold">
                             <td class="text-right">Total Beban Operasional</td>

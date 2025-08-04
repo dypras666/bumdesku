@@ -164,6 +164,140 @@
         </div>
     </div>
 
+    <!-- Baris Ketiga: Statistik Pinjaman -->
+    <div class="row">
+        <div class="col-lg-6 col-6">
+            <div class="small-box bg-purple">
+                <div class="inner">
+                    <h4>{{ $loanStats['formatted_total_receivables'] }}</h4>
+                    <p>Total Piutang</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-hand-holding-usd"></i>
+                </div>
+                <a href="{{ route('loans.index') }}" class="small-box-footer">
+                    Lihat Detail <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-6">
+            <div class="small-box bg-maroon">
+                <div class="inner">
+                    <h4>{{ $loanStats['formatted_total_overdue_payments'] }}</h4>
+                    <p>Total Telat Bayar</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <a href="{{ route('loans.index', ['status' => 'overdue']) }}" class="small-box-footer">
+                    Lihat Detail <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Due Receivables Section -->
+    @if($dueReceivables['count'] > 0)
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-warning">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-exclamation-triangle mr-1"></i>
+                        Piutang Jatuh Tempo
+                    </h3>
+                    <div class="card-tools">
+                        <span class="badge badge-warning">{{ $dueReceivables['count'] }} Pinjaman</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="info-box bg-warning">
+                                <span class="info-box-icon"><i class="fas fa-money-bill-wave"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Total Piutang Jatuh Tempo</span>
+                                    <span class="info-box-number">{{ format_currency($dueReceivables['total_amount']) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-box bg-danger">
+                                <span class="info-box-icon"><i class="fas fa-clock"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Jumlah Pinjaman Terlambat</span>
+                                    <span class="info-box-number">{{ $dueReceivables['count'] }} Pinjaman</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Peminjam</th>
+                                    <th>Jenis Pinjaman</th>
+                                    <th>Sisa Pinjaman</th>
+                                    <th>Cicilan Bulanan</th>
+                                    <th>Hari Terlambat</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($dueReceivables['items'] as $receivable)
+                                <tr>
+                                    <td>
+                                        <strong>{{ $receivable['borrower_name'] }}</strong>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-info">
+                                            {{ ucfirst(str_replace('_', ' ', $receivable['loan_type'])) }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="text-danger font-weight-bold">
+                                            {{ format_currency($receivable['remaining_amount']) }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="text-warning font-weight-bold">
+                                            {{ format_currency($receivable['monthly_payment']) }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-danger">
+                                            {{ $receivable['days_overdue'] }} hari
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('loans.show', $receivable['loan']->id) }}" 
+                                           class="btn btn-sm btn-primary">
+                                            <i class="fas fa-eye"></i> Detail
+                                        </a>
+                                        <a href="{{ route('loan-payments.create', ['loan_id' => $receivable['loan']->id]) }}" 
+                                           class="btn btn-sm btn-success">
+                                            <i class="fas fa-plus"></i> Bayar
+                                        </a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <a href="{{ route('loans.index') }}" class="btn btn-warning">
+                            <i class="fas fa-list"></i> Lihat Semua Pinjaman
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <!-- Charts Row -->
     <div class="row">
         <div class="col-md-8">
@@ -204,6 +338,22 @@
                         <div class="progress progress-sm">
                             <div class="progress-bar bg-primary" style="width: {{ min(($stats['total_transactions'] / 100) * 100, 100) }}%"></div>
                         </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <!-- Tutorial Slideshow -->
+                    <div class="text-center">
+                        <h6 class="text-muted mb-3">
+                            <i class="fas fa-graduation-cap"></i> Butuh Bantuan?
+                        </h6>
+                        <a href="{{ route('tutorial.slideshow') }}" class="btn btn-info btn-block">
+                            <i class="fas fa-play-circle"></i> 
+                            Tutorial Penggunaan Sistem
+                        </a>
+                        <small class="text-muted d-block mt-2">
+                            Pelajari cara menggunakan sistem BUMDES dengan panduan langkah demi langkah
+                        </small>
                     </div>
                 </div>
             </div>

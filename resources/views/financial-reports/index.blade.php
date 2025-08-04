@@ -174,7 +174,6 @@
                                                     <form action="{{ route('financial-reports.finalize', $report) }}" 
                                                           method="POST" style="display: inline;">
                                                         @csrf
-                                                        @method('PATCH')
                                                         <button type="submit" class="btn btn-success btn-sm" 
                                                                 title="Finalisasi" 
                                                                 onclick="return confirm('Yakin ingin memfinalisasi laporan ini? Laporan yang sudah final tidak dapat diubah.')">

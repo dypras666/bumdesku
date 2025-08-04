@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 use App\Models\MasterAccount;
+use App\Models\Loan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -89,6 +90,12 @@ class DashboardController extends Controller
         // Data untuk chart bulanan (6 bulan terakhir dari periode yang dipilih)
         $monthlyData = $this->getMonthlyChartData($selectedYear, $selectedMonth);
 
+        // Piutang jatuh tempo
+        $dueReceivables = $this->getDueReceivables();
+
+        // Total telat bayar dan total piutang
+        $loanStats = $this->getLoanStatistics();
+
         // Transaksi terbaru untuk periode yang dipilih
         $recentTransactions = Transaction::with(['account', 'user'])
             ->whereYear('transaction_date', $selectedYear)
@@ -98,7 +105,7 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        return view('dashboard', compact('stats', 'monthlyData', 'recentTransactions'));
+        return view('dashboard', compact('stats', 'monthlyData', 'recentTransactions', 'dueReceivables', 'loanStats'));
     }
 
     /**
@@ -114,7 +121,7 @@ class DashboardController extends Controller
         $startDate = Carbon::create($selectedYear, $selectedMonth, 1)->subMonths(5);
 
         for ($i = 0; $i < 6; $i++) {
-            $date = $startDate->copy()->addMonths($i);
+            $date = $startDate->copy()->addMonths((int) $i);
             $monthName = $date->format('M Y');
             $months[] = $monthName;
 
@@ -215,5 +222,126 @@ class DashboardController extends Controller
         $totalInitialAssets = MasterAccount::where('kategori_akun', 'Aset')->sum('saldo_awal');
         
         return $totalInitialAssets;
+    }
+
+    /**
+     * Get due receivables from loans
+     */
+    private function getDueReceivables()
+    {
+        $today = Carbon::today();
+        
+        // Ambil pinjaman yang masih aktif
+        $activeLoans = Loan::where('status', 'active')->get();
+        
+        $dueReceivables = [];
+        $totalDueAmount = 0;
+        
+        foreach ($activeLoans as $loan) {
+            // Hitung total yang sudah dibayar
+            $totalPaid = $loan->payments()
+                ->where('status', 'approved')
+                ->sum('payment_amount');
+            
+            // Hitung sisa pinjaman
+            $remainingAmount = $loan->loan_amount - $totalPaid;
+            
+            if ($remainingAmount > 0) {
+                // Hitung pembayaran yang jatuh tempo
+                $monthlyPayment = $this->calculateMonthlyPayment($loan);
+                $daysSinceLastPayment = $this->getDaysSinceLastPayment($loan);
+                
+                // Jika sudah lebih dari 30 hari sejak pembayaran terakhir, dianggap jatuh tempo
+                if ($daysSinceLastPayment >= 30) {
+                    $dueReceivables[] = [
+                        'loan' => $loan,
+                        'remaining_amount' => $remainingAmount,
+                        'monthly_payment' => $monthlyPayment,
+                        'days_overdue' => $daysSinceLastPayment - 30,
+                        'borrower_name' => $loan->borrower_name,
+                        'loan_type' => $loan->loan_type
+                    ];
+                    
+                    $totalDueAmount += $monthlyPayment;
+                }
+            }
+        }
+        
+        return [
+            'items' => collect($dueReceivables)->sortByDesc('days_overdue'),
+            'total_amount' => $totalDueAmount,
+            'count' => count($dueReceivables)
+        ];
+    }
+
+    /**
+     * Calculate monthly payment for a loan
+     */
+    private function calculateMonthlyPayment($loan)
+    {
+        if ($loan->loan_type === 'bunga') {
+            // Untuk pinjaman berbunga, hitung cicilan bulanan
+            $monthlyInterest = ($loan->loan_amount * $loan->interest_rate / 100) / 12;
+            $principal = $loan->loan_amount / $loan->loan_term_months;
+            return $principal + $monthlyInterest;
+        } elseif ($loan->loan_type === 'bagi_hasil') {
+            // Untuk bagi hasil, gunakan expected profit dibagi term
+            return ($loan->loan_amount + $loan->expected_profit) / $loan->loan_term_months;
+        } else {
+            // Untuk tanpa bunga, hanya pokok dibagi term
+            return $loan->loan_amount / $loan->loan_term_months;
+        }
+    }
+
+    /**
+     * Get days since last payment
+     */
+    private function getDaysSinceLastPayment($loan)
+    {
+        $lastPayment = $loan->payments()
+            ->where('status', 'approved')
+            ->orderBy('payment_date', 'desc')
+            ->first();
+        
+        if ($lastPayment) {
+            return Carbon::today()->diffInDays(Carbon::parse($lastPayment->payment_date));
+        } else {
+            // Jika belum ada pembayaran, hitung dari tanggal pinjaman
+            return Carbon::today()->diffInDays(Carbon::parse($loan->loan_date));
+        }
+    }
+
+    /**
+     * Get loan statistics for dashboard
+     */
+    private function getLoanStatistics()
+    {
+        // Total piutang (semua pinjaman aktif)
+        $activeLoans = Loan::whereIn('status', ['active', 'overdue'])->get();
+        $totalReceivables = 0;
+        $totalOverduePayments = 0;
+
+        foreach ($activeLoans as $loan) {
+            // Hitung sisa pinjaman
+            $totalPaid = $loan->approvedPayments()->sum('payment_amount');
+            $totalPayable = $loan->getTotalPayableAmount();
+            $remainingBalance = $totalPayable - $totalPaid;
+            
+            if ($remainingBalance > 0) {
+                $totalReceivables += $remainingBalance;
+                
+                // Jika status overdue, tambahkan ke total telat bayar
+                if ($loan->status === 'overdue') {
+                    $totalOverduePayments += $remainingBalance;
+                }
+            }
+        }
+
+        return [
+            'total_receivables' => $totalReceivables,
+            'total_overdue_payments' => $totalOverduePayments,
+            'formatted_total_receivables' => 'Rp ' . number_format($totalReceivables, 0, ',', '.'),
+            'formatted_total_overdue_payments' => 'Rp ' . number_format($totalOverduePayments, 0, ',', '.'),
+        ];
     }
 }

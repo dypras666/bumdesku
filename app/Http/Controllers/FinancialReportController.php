@@ -2360,11 +2360,32 @@ class FinancialReportController extends Controller
     {
         $asOfDate = $request->as_of_date ? Carbon::parse($request->as_of_date) : Carbon::now();
         
-        $reportData = $this->generateTrialBalanceData($asOfDate);
+        $accounts = $this->generateTrialBalanceData($asOfDate);
         $companyInfo = company_info();
         
+        // Calculate totals and check balance
+        $totalDebit = $accounts->sum('debit');
+        $totalCredit = $accounts->sum('credit');
+        $isBalanced = abs($totalDebit - $totalCredit) < 0.01; // Allow for small rounding differences
+        
+        // Log balance check for debugging
+         if (!$isBalanced) {
+             \Illuminate\Support\Facades\Log::warning('Trial Balance is not balanced', [
+                 'as_of_date' => $asOfDate->format('Y-m-d'),
+                 'total_debit' => $totalDebit,
+                 'total_credit' => $totalCredit,
+                 'difference' => $totalDebit - $totalCredit
+             ]);
+         }
+        
         $data = [
-            'reportData' => $reportData,
+            'reportData' => [
+                'accounts' => $accounts->toArray(),
+                'total_debit' => $totalDebit,
+                'total_credit' => $totalCredit,
+                'is_balanced' => $isBalanced,
+                'difference' => $totalDebit - $totalCredit
+            ],
             'asOfDate' => $asOfDate,
             'company_info' => $companyInfo,
             'title' => 'Neraca Saldo'
@@ -2386,8 +2407,13 @@ class FinancialReportController extends Controller
     {
         $asOfDate = $request->as_of_date ? Carbon::parse($request->as_of_date) : Carbon::now();
         
-        $reportData = $this->generateTrialBalanceData($asOfDate);
+        $accounts = $this->generateTrialBalanceData($asOfDate);
         $companyInfo = company_info();
+        
+        // Calculate totals and check balance
+        $totalDebit = $accounts->sum('debit');
+        $totalCredit = $accounts->sum('credit');
+        $isBalanced = abs($totalDebit - $totalCredit) < 0.01;
         
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
         
@@ -2429,18 +2455,12 @@ class FinancialReportController extends Controller
         $table->addCell(1500)->addText('Debit (Rp)', $tableHeaderStyle);
         $table->addCell(1500)->addText('Kredit (Rp)', $tableHeaderStyle);
         
-        $totalDebit = 0;
-        $totalCredit = 0;
-        
-        foreach ($reportData['accounts'] as $account) {
+        foreach ($accounts as $account) {
             $table->addRow();
-            $table->addCell(1000)->addText($account['kode_akun'] ?? '', $tableDataStyle);
-            $table->addCell(3000)->addText($account['nama_akun'], $tableDataStyle);
+            $table->addCell(1000)->addText($account['account_code'] ?? '', $tableDataStyle);
+            $table->addCell(3000)->addText($account['account_name'], $tableDataStyle);
             $table->addCell(1500)->addText(number_format($account['debit'], 0, ',', '.'), $tableDataStyle);
-            $table->addCell(1500)->addText(number_format($account['kredit'], 0, ',', '.'), $tableDataStyle);
-            
-            $totalDebit += $account['debit'];
-            $totalCredit += $account['kredit'];
+            $table->addCell(1500)->addText(number_format($account['credit'], 0, ',', '.'), $tableDataStyle);
         }
         
         // Total row
@@ -2449,6 +2469,23 @@ class FinancialReportController extends Controller
         $table->addCell(3000)->addText('TOTAL', $tableHeaderStyle);
         $table->addCell(1500)->addText(number_format($totalDebit, 0, ',', '.'), $tableHeaderStyle);
         $table->addCell(1500)->addText(number_format($totalCredit, 0, ',', '.'), $tableHeaderStyle);
+        
+        // Balance Check Section
+        $section->addTextBreak(2);
+        $section->addText('Status Neraca: ' . ($isBalanced ? 'SEIMBANG' : 'TIDAK SEIMBANG'), 
+                         ['bold' => true, 'color' => $isBalanced ? '28a745' : 'dc3545']);
+        
+        if (!$isBalanced) {
+            $difference = $totalDebit - $totalCredit;
+            $section->addText('Selisih: Rp ' . number_format(abs($difference), 0, ',', '.') . 
+                             ($difference > 0 ? ' (Debit lebih besar)' : ' (Kredit lebih besar)'), $normalStyle);
+            $section->addTextBreak();
+            $section->addText('Catatan: Neraca saldo harus seimbang (total debit = total kredit). ' .
+                             'Jika tidak seimbang, periksa kembali pencatatan transaksi dan posting ke buku besar.', 
+                             ['size' => 9, 'italic' => true]);
+        } else {
+            $section->addText('Neraca saldo telah seimbang dengan benar.', ['size' => 9, 'italic' => true]);
+        }
         
         // Generate filename and save
         $filename = "Neraca_Saldo_" . $asOfDate->format('Y-m-d') . ".docx";
@@ -2468,8 +2505,13 @@ class FinancialReportController extends Controller
     {
         $asOfDate = $request->as_of_date ? Carbon::parse($request->as_of_date) : Carbon::now();
         
-        $reportData = $this->generateTrialBalanceData($asOfDate);
+        $accounts = $this->generateTrialBalanceData($asOfDate);
         $companyInfo = company_info();
+        
+        // Calculate totals and check balance
+        $totalDebit = $accounts->sum('debit');
+        $totalCredit = $accounts->sum('credit');
+        $isBalanced = abs($totalDebit - $totalCredit) < 0.01;
         
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -2496,20 +2538,16 @@ class FinancialReportController extends Controller
         $sheet->getStyle('A' . $row . ':D' . $row)->getFont()->setBold(true);
         
         $row++;
-        $totalDebit = 0;
-        $totalCredit = 0;
         
-        foreach ($reportData['accounts'] as $account) {
-            $sheet->setCellValue('A' . $row, $account['kode_akun'] ?? '');
-            $sheet->setCellValue('B' . $row, $account['nama_akun']);
+        foreach ($accounts as $account) {
+            $sheet->setCellValue('A' . $row, $account['account_code'] ?? '');
+            $sheet->setCellValue('B' . $row, $account['account_name']);
             $sheet->setCellValue('C' . $row, $account['debit']);
-            $sheet->setCellValue('D' . $row, $account['kredit']);
+            $sheet->setCellValue('D' . $row, $account['credit']);
             
             $sheet->getStyle('C' . $row)->getNumberFormat()->setFormatCode('#,##0');
             $sheet->getStyle('D' . $row)->getNumberFormat()->setFormatCode('#,##0');
             
-            $totalDebit += $account['debit'];
-            $totalCredit += $account['kredit'];
             $row++;
         }
         
@@ -2521,6 +2559,34 @@ class FinancialReportController extends Controller
         $sheet->getStyle('A' . $row . ':D' . $row)->getFont()->setBold(true);
         $sheet->getStyle('C' . $row)->getNumberFormat()->setFormatCode('#,##0');
         $sheet->getStyle('D' . $row)->getNumberFormat()->setFormatCode('#,##0');
+        
+        // Balance Check Section
+        $row += 2;
+        $sheet->setCellValue('A' . $row, 'Status Neraca:');
+        $sheet->setCellValue('B' . $row, $isBalanced ? 'SEIMBANG' : 'TIDAK SEIMBANG');
+        $sheet->getStyle('A' . $row . ':B' . $row)->getFont()->setBold(true);
+        $sheet->getStyle('B' . $row)->getFont()->setColor(
+            new \PhpOffice\PhpSpreadsheet\Style\Color($isBalanced ? '28a745' : 'dc3545')
+        );
+        
+        if (!$isBalanced) {
+            $row++;
+            $difference = $totalDebit - $totalCredit;
+            $sheet->setCellValue('A' . $row, 'Selisih:');
+            $sheet->setCellValue('B' . $row, 'Rp ' . number_format(abs($difference), 0, ',', '.') . 
+                                           ($difference > 0 ? ' (Debit lebih besar)' : ' (Kredit lebih besar)'));
+            
+            $row++;
+            $sheet->setCellValue('A' . $row, 'Catatan:');
+            $sheet->setCellValue('B' . $row, 'Neraca saldo harus seimbang (total debit = total kredit). ' .
+                                           'Jika tidak seimbang, periksa kembali pencatatan transaksi dan posting ke buku besar.');
+            $sheet->getStyle('A' . $row . ':D' . $row)->getFont()->setItalic(true)->setSize(9);
+        } else {
+            $row++;
+            $sheet->setCellValue('A' . $row, 'Catatan:');
+            $sheet->setCellValue('B' . $row, 'Neraca saldo telah seimbang dengan benar.');
+            $sheet->getStyle('A' . $row . ':D' . $row)->getFont()->setItalic(true)->setSize(9);
+        }
         
         // Auto-size columns
         $sheet->getColumnDimension('A')->setAutoSize(true);

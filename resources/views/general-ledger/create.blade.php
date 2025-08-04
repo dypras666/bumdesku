@@ -1,17 +1,17 @@
 @extends('adminlte::page')
 
-@section('title', 'Input Jurnal Baru')
+@section('title', 'Tambah Entri Buku Besar')
 
 @section('content_header')
     <div class="row">
         <div class="col-sm-6">
-            <h1>Input Jurnal Baru</h1>
+            <h1>Tambah Entri Buku Besar</h1>
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('general-ledger.index') }}">Daftar Buku Besar</a></li>
-                <li class="breadcrumb-item active">Input Jurnal Baru</li>
+                <li class="breadcrumb-item active">Tambah Entri</li>
             </ol>
         </div>
     </div>
@@ -22,7 +22,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Form Input Jurnal</h3>
+                    <h3 class="card-title">Form Tambah Entri</h3>
                 </div>
                 <form action="{{ route('general-ledger.store') }}" method="POST">
                     @csrf
@@ -41,25 +41,17 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="account_search">Akun <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <input type="text" id="account_search" class="form-control @error('account_id') is-invalid @enderror" 
-                                               placeholder="Ketik untuk mencari akun..." autocomplete="off" required>
-                                        <div class="input-group-append">
-                                            <button type="button" class="btn btn-outline-secondary" id="clear_account">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" name="account_id" id="account_id" value="{{ old('account_id') }}">
-                                    <div id="account_results" class="list-group position-absolute w-100" style="z-index: 1000; display: none;"></div>
-                                    <div id="account_balance_display" class="mt-2" style="display: none;">
-                                        <small class="text-info">
-                                            <i class="fas fa-wallet"></i> 
-                                            Saldo Akhir: <span id="account_balance_amount" class="font-weight-bold"></span>
-                                        </small>
-                                    </div>
-                                    <small class="text-muted">Ketik minimal 2 karakter untuk mencari akun</small>
+                                    <label for="account_id">Akun <span class="text-danger">*</span></label>
+                                    <select name="account_id" id="account_id" 
+                                            class="form-control @error('account_id') is-invalid @enderror" required>
+                                        <option value="">Pilih Akun</option>
+                                        @foreach($accounts as $account)
+                                            <option value="{{ $account->id }}" 
+                                                {{ old('account_id') == $account->id ? 'selected' : '' }}>
+                                                {{ $account->kode_akun }} - {{ $account->nama_akun }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                     @error('account_id')
                                         <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror
@@ -73,7 +65,7 @@
                                     <label for="debit">Debit</label>
                                     <input type="number" name="debit" id="debit" 
                                            class="form-control @error('debit') is-invalid @enderror" 
-                                           value="{{ old('debit', 0) }}" min="0" step="0.01">
+                                           value="{{ old('debit') }}" min="0" step="0.01">
                                     @error('debit')
                                         <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror
@@ -84,7 +76,7 @@
                                     <label for="credit">Kredit</label>
                                     <input type="number" name="credit" id="credit" 
                                            class="form-control @error('credit') is-invalid @enderror" 
-                                           value="{{ old('credit', 0) }}" min="0" step="0.01">
+                                           value="{{ old('credit') }}" min="0" step="0.01">
                                     @error('credit')
                                         <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror
@@ -109,8 +101,9 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="reference_type">Jenis Referensi</label>
-                                    <select name="reference_type" id="reference_type" class="form-control">
+                                    <label for="reference_type">Jenis Referensi <span class="text-danger">*</span></label>
+                                    <select name="reference_type" id="reference_type" 
+                                            class="form-control @error('reference_type') is-invalid @enderror" required>
                                         <option value="">Pilih Jenis Referensi</option>
                                         <option value="transaction" {{ old('reference_type') == 'transaction' ? 'selected' : '' }}>Transaksi</option>
                                         <option value="invoice" {{ old('reference_type') == 'invoice' ? 'selected' : '' }}>Invoice</option>
@@ -118,14 +111,21 @@
                                         <option value="adjustment" {{ old('reference_type') == 'adjustment' ? 'selected' : '' }}>Penyesuaian</option>
                                         <option value="other" {{ old('reference_type') == 'other' ? 'selected' : '' }}>Lainnya</option>
                                     </select>
+                                    @error('reference_type')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="reference_number">Nomor Referensi</label>
                                     <input type="text" name="reference_number" id="reference_number" 
-                                           class="form-control" value="{{ old('reference_number') }}" 
+                                           class="form-control @error('reference_number') is-invalid @enderror" 
+                                           value="{{ old('reference_number') }}" 
                                            placeholder="Masukkan nomor referensi">
+                                    @error('reference_number')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -133,19 +133,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="transaction_search">Transaksi Terkait</label>
-                                    <div class="input-group">
-                                        <input type="text" id="transaction_search" class="form-control" 
-                                               placeholder="Ketik untuk mencari transaksi..." autocomplete="off">
-                                        <div class="input-group-append">
-                                            <button type="button" class="btn btn-outline-secondary" id="clear_transaction">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" name="transaction_id" id="transaction_id" value="{{ old('transaction_id') }}">
-                                    <div id="transaction_results" class="list-group position-absolute w-100" style="z-index: 1000; display: none;"></div>
-                                    <small class="text-muted">Ketik minimal 2 karakter untuk mencari transaksi</small>
+                                    <label for="transaction_id">Transaksi Terkait</label>
+                                    <select name="transaction_id" id="transaction_id" 
+                                            class="form-control @error('transaction_id') is-invalid @enderror">
+                                        <option value="">Pilih Transaksi (Opsional)</option>
+                                    </select>
+                                    @error('transaction_id')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -164,8 +159,8 @@
                             <strong>Catatan:</strong>
                             <ul class="mb-0 mt-2">
                                 <li>Salah satu dari Debit atau Kredit harus diisi (tidak boleh keduanya kosong)</li>
+                                <li>Debit dan Kredit tidak boleh diisi bersamaan</li>
                                 <li>Jika status "Posted", entri tidak dapat diubah lagi</li>
-                                <li>Kode entri akan dibuat otomatis oleh sistem</li>
                             </ul>
                         </div>
                     </div>
@@ -173,11 +168,8 @@
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save"></i> Simpan
                         </button>
-                        <button type="submit" name="save_and_post" value="1" class="btn btn-success">
-                            <i class="fas fa-check"></i> Simpan & Post
-                        </button>
                         <a href="{{ route('general-ledger.index') }}" class="btn btn-secondary">
-                            <i class="fas fa-times"></i> Batal
+                            <i class="fas fa-arrow-left"></i> Kembali
                         </a>
                     </div>
                 </form>
@@ -186,424 +178,40 @@
     </div>
 @stop
 
-@section('css')
-    <style>
-        .form-group label {
-            font-weight: 600;
-        }
-        .text-danger {
-            color: #dc3545 !important;
-        }
-        
-        /* Transaction search dropdown styles */
-        #transaction_results {
-            max-height: 200px;
-            overflow-y: auto;
-            border: 1px solid #ddd;
-            border-top: none;
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        #transaction_results .list-group-item {
-            border: none;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
-            padding: 10px 15px;
-        }
-        
-        #transaction_results .list-group-item:hover {
-            background-color: #f8f9fa;
-        }
-        
-        #transaction_results .list-group-item.active {
-            background-color: #007bff;
-            color: white;
-        }
-        
-        .transaction-item-code {
-            font-weight: bold;
-            color: #007bff;
-        }
-        
-        .transaction-item-desc {
-            font-size: 0.9em;
-            color: #6c757d;
-        }
-        
-        .transaction-item-amount {
-            font-size: 0.85em;
-            color: #28a745;
-            font-weight: 500;
-        }
-        
-        /* Account search dropdown styles */
-        #account_results {
-            max-height: 200px;
-            overflow-y: auto;
-            border: 1px solid #ddd;
-            border-top: none;
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        #account_results .list-group-item {
-            border: none;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
-            padding: 10px 15px;
-        }
-        
-        #account_results .list-group-item:hover {
-            background-color: #f8f9fa;
-        }
-        
-        #account_results .list-group-item.active {
-            background-color: #007bff;
-            color: white;
-        }
-        
-        .account-item-code {
-            font-weight: bold;
-            color: #007bff;
-        }
-        
-        .account-item-name {
-            font-size: 0.9em;
-            color: #6c757d;
-        }
-        
-        .account-item-balance {
-            font-size: 0.85em;
-            color: #28a745;
-            font-weight: 500;
-        }
-        
-        .account-item-category {
-            font-size: 0.8em;
-            color: #6c757d;
-            font-style: italic;
-        }
-    </style>
-@stop
-
 @section('js')
-    <script src="{{ asset('vendor/axios/axios.min.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            let searchTimeout;
-            let accountSearchTimeout;
-            let selectedTransactionIndex = -1;
-            let selectedAccountIndex = -1;
-            let searchResults = [];
-            let accountSearchResults = [];
-
-            // Validation for debit/credit
-            $('#debit, #credit').on('input', function() {
-                var debit = parseFloat($('#debit').val()) || 0;
-                var credit = parseFloat($('#credit').val()) || 0;
-                
-                if (debit > 0 && credit > 0) {
-                    alert('Debit dan Kredit tidak boleh diisi bersamaan. Pilih salah satu.');
-                    $(this).val(0);
-                }
-            });
-
-            // Transaction search functionality
-            $('#transaction_search').on('input', function() {
-                const query = $(this).val().trim();
-                
-                if (query.length < 2) {
-                    hideSearchResults();
-                    return;
-                }
-
-                // Clear previous timeout
-                clearTimeout(searchTimeout);
-                
-                // Set new timeout for search
-                searchTimeout = setTimeout(() => {
-                    searchTransactions(query);
-                }, 300);
-            });
-
-            // Handle keyboard navigation
-            $('#transaction_search').on('keydown', function(e) {
-                const $results = $('#transaction_results .list-group-item');
-                
-                if (e.key === 'ArrowDown') {
-                    e.preventDefault();
-                    selectedTransactionIndex = Math.min(selectedTransactionIndex + 1, $results.length - 1);
-                    updateSelection($results);
-                } else if (e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    selectedTransactionIndex = Math.max(selectedTransactionIndex - 1, -1);
-                    updateSelection($results);
-                } else if (e.key === 'Enter') {
-                    e.preventDefault();
-                    if (selectedTransactionIndex >= 0 && $results.length > 0) {
-                        selectTransaction(searchResults[selectedTransactionIndex]);
-                    }
-                } else if (e.key === 'Escape') {
-                    hideSearchResults();
-                }
-            });
-
-            // Clear transaction selection
-            $('#clear_transaction').on('click', function() {
-                clearTransactionSelection();
-            });
-
-            // Account search functionality
-            $('#account_search').on('input', function() {
-                const query = $(this).val().trim();
-                
-                if (query.length < 2) {
-                    hideAccountSearchResults();
-                    return;
-                }
-
-                // Clear previous timeout
-                clearTimeout(accountSearchTimeout);
-                
-                // Set new timeout for search
-                accountSearchTimeout = setTimeout(() => {
-                    searchAccounts(query);
-                }, 300);
-            });
-
-            // Handle keyboard navigation for accounts
-            $('#account_search').on('keydown', function(e) {
-                const $results = $('#account_results .list-group-item');
-                
-                if (e.key === 'ArrowDown') {
-                    e.preventDefault();
-                    selectedAccountIndex = Math.min(selectedAccountIndex + 1, $results.length - 1);
-                    updateAccountSelection($results);
-                } else if (e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    selectedAccountIndex = Math.max(selectedAccountIndex - 1, -1);
-                    updateAccountSelection($results);
-                } else if (e.key === 'Enter') {
-                    e.preventDefault();
-                    if (selectedAccountIndex >= 0 && $results.length > 0) {
-                        selectAccount(accountSearchResults[selectedAccountIndex]);
-                    }
-                } else if (e.key === 'Escape') {
-                    hideAccountSearchResults();
-                }
-            });
-
-            // Clear account selection
-            $('#clear_account').on('click', function() {
-                clearAccountSelection();
-            });
-
-            // Hide results when clicking outside
-            $(document).on('click', function(e) {
-                if (!$(e.target).closest('#transaction_search, #transaction_results').length) {
-                    hideSearchResults();
-                }
-                if (!$(e.target).closest('#account_search, #account_results').length) {
-                    hideAccountSearchResults();
-                }
-            });
-
-            function searchTransactions(query) {
-                axios.get('/api/transactions/search', {
-                    params: {
-                        q: query,
-                        limit: 10
-                    }
-                })
-                .then(response => {
-                    if (response.data.success) {
-                        searchResults = response.data.data;
-                        displaySearchResults(searchResults);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error searching transactions:', error);
-                    hideSearchResults();
-                });
+<script>
+$(document).ready(function() {
+    // Simple validation for debit and credit
+    $('#debit, #credit').on('input', function() {
+        var debitVal = parseFloat($('#debit').val()) || 0;
+        var creditVal = parseFloat($('#credit').val()) || 0;
+        
+        if (debitVal > 0 && creditVal > 0) {
+            if ($(this).attr('id') === 'debit') {
+                $('#credit').val('');
+            } else {
+                $('#debit').val('');
             }
+        }
+    });
 
-            function displaySearchResults(transactions) {
-                const $results = $('#transaction_results');
-                $results.empty();
-
-                if (transactions.length === 0) {
-                    $results.append(`
-                        <div class="list-group-item text-muted">
-                            <i class="fas fa-info-circle"></i> Tidak ada transaksi ditemukan
-                        </div>
-                    `);
-                } else {
-                    transactions.forEach((transaction, index) => {
-                        const amount = new Intl.NumberFormat('id-ID', {
-                            style: 'currency',
-                            currency: 'IDR'
-                        }).format(transaction.amount);
-
-                        $results.append(`
-                            <div class="list-group-item" data-index="${index}">
-                                <div class="transaction-item-code">${transaction.transaction_code}</div>
-                                <div class="transaction-item-desc">${transaction.description}</div>
-                                <div class="transaction-item-amount">${amount} • ${transaction.account_name}</div>
-                            </div>
-                        `);
-                    });
-                }
-
-                selectedTransactionIndex = -1;
-                $results.show();
-            }
-
-            function updateSelection($results) {
-                $results.removeClass('active');
-                if (selectedTransactionIndex >= 0) {
-                    $results.eq(selectedTransactionIndex).addClass('active');
-                }
-            }
-
-            function selectTransaction(transaction) {
-                $('#transaction_search').val(transaction.text);
-                $('#transaction_id').val(transaction.id);
-                $('#reference_type').val('transaction');
-                $('#reference_number').val(transaction.transaction_code);
-                hideSearchResults();
-            }
-
-            function clearTransactionSelection() {
-                $('#transaction_search').val('');
-                $('#transaction_id').val('');
-                $('#reference_type').val('');
-                $('#reference_number').val('');
-                hideSearchResults();
-            }
-
-            function hideSearchResults() {
-                $('#transaction_results').hide().empty();
-                selectedTransactionIndex = -1;
-                searchResults = [];
-            }
-
-            // Account search functions
-            function searchAccounts(query) {
-                axios.get('/api/accounts/search', {
-                    params: {
-                        q: query,
-                        limit: 10
-                    }
-                })
-                .then(response => {
-                    if (response.data.success) {
-                        accountSearchResults = response.data.data;
-                        displayAccountSearchResults(accountSearchResults);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error searching accounts:', error);
-                    hideAccountSearchResults();
-                });
-            }
-
-            function displayAccountSearchResults(accounts) {
-                const $results = $('#account_results');
-                $results.empty();
-
-                if (accounts.length === 0) {
-                    $results.append(`
-                        <div class="list-group-item text-muted">
-                            <i class="fas fa-info-circle"></i> Tidak ada akun ditemukan
-                        </div>
-                    `);
-                } else {
-                    accounts.forEach((account, index) => {
-                        $results.append(`
-                            <div class="list-group-item" data-index="${index}">
-                                <div class="account-item-code">${account.kode_akun}</div>
-                                <div class="account-item-name">${account.nama_akun}</div>
-                                <div class="account-item-category">${account.kategori_akun}</div>
-                                <div class="account-item-balance">${account.saldo_formatted}</div>
-                            </div>
-                        `);
-                    });
-                }
-
-                selectedAccountIndex = -1;
-                $results.show();
-            }
-
-            function updateAccountSelection($results) {
-                $results.removeClass('active');
-                if (selectedAccountIndex >= 0) {
-                    $results.eq(selectedAccountIndex).addClass('active');
-                }
-            }
-
-            function selectAccount(account) {
-                $('#account_search').val(account.text);
-                $('#account_id').val(account.id);
-                $('#account_balance_amount').text(account.saldo_formatted);
-                $('#account_balance_display').show();
-                hideAccountSearchResults();
-            }
-
-            function clearAccountSelection() {
-                $('#account_search').val('');
-                $('#account_id').val('');
-                $('#account_balance_display').hide();
-                hideAccountSearchResults();
-            }
-
-            function hideAccountSearchResults() {
-                $('#account_results').hide().empty();
-                selectedAccountIndex = -1;
-                accountSearchResults = [];
-            }
-
-            // Handle click on search results
-            $(document).on('click', '#transaction_results .list-group-item', function() {
-                const index = $(this).data('index');
-                if (index !== undefined && searchResults[index]) {
-                    selectTransaction(searchResults[index]);
-                }
-            });
-
-            // Handle click on account search results
-            $(document).on('click', '#account_results .list-group-item', function() {
-                const index = $(this).data('index');
-                if (index !== undefined && accountSearchResults[index]) {
-                    selectAccount(accountSearchResults[index]);
-                }
-            });
-
-            // Form validation before submit
-            $('form').on('submit', function(e) {
-                var debit = parseFloat($('#debit').val()) || 0;
-                var credit = parseFloat($('#credit').val()) || 0;
-                
-                if (debit === 0 && credit === 0) {
-                    e.preventDefault();
-                    alert('Salah satu dari Debit atau Kredit harus diisi!');
-                    return false;
-                }
-                
-                if (debit > 0 && credit > 0) {
-                    e.preventDefault();
-                    alert('Debit dan Kredit tidak boleh diisi bersamaan!');
-                    return false;
-                }
-            });
-
-            // Load selected transaction on page load (for old input)
-            const oldTransactionId = $('#transaction_id').val();
-            if (oldTransactionId) {
-                // You might want to load the transaction details here
-                // For now, we'll just show the ID
-                $('#transaction_search').val('ID: ' + oldTransactionId);
-            }
-        });
-    </script>
+    // Form validation before submit
+    $('form').on('submit', function(e) {
+        var debitVal = parseFloat($('#debit').val()) || 0;
+        var creditVal = parseFloat($('#credit').val()) || 0;
+        
+        if (debitVal === 0 && creditVal === 0) {
+            e.preventDefault();
+            alert('Salah satu dari Debit atau Kredit harus diisi!');
+            return false;
+        }
+        
+        if (debitVal > 0 && creditVal > 0) {
+            e.preventDefault();
+            alert('Debit dan Kredit tidak boleh diisi bersamaan!');
+            return false;
+        }
+    });
+});
+</script>
 @stop

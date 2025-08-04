@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             // 2. Transactional Data
             TransactionSeeder::class,
             GeneralLedgerSeeder::class,
+            LoanFeatureSeeder::class,
             
             // 3. Reports (Final Output)
             FinancialReportSeeder::class,

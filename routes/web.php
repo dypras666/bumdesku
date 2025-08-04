@@ -17,6 +17,9 @@ use App\Http\Controllers\UploadController;
 use App\Http\Controllers\BackupController;
 use App\Http\Controllers\DataManagementController;
 use App\Http\Controllers\SampleDataController;
+use App\Http\Controllers\TutorialSlideshowController;
+use App\Http\Controllers\LoanController;
+use App\Http\Controllers\LoanPaymentController;
 
 // Public routes (before authentication)
 Route::get('/', [GuideController::class, 'publicIndex'])->name('guides.public.index');
@@ -26,6 +29,9 @@ Auth::routes();
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Tutorial Slideshow routes
+Route::get('/tutorial', [TutorialSlideshowController::class, 'index'])->name('tutorial.slideshow');
 
 // User management routes
 Route::resource('users', UserController::class);
@@ -60,6 +66,18 @@ Route::resource('transactions', TransactionController::class);
 Route::post('transactions/{transaction}/approve', [TransactionController::class, 'approve'])->name('transactions.approve');
 Route::post('transactions/{transaction}/reject', [TransactionController::class, 'reject'])->name('transactions.reject');
 Route::get('transactions/{transaction}/print-receipt', [TransactionController::class, 'printReceipt'])->name('transactions.print-receipt');
+
+// Loan Management routes
+Route::resource('loans', LoanController::class);
+Route::post('loans/{loan}/approve', [LoanController::class, 'approve'])->name('loans.approve');
+Route::get('loans/{loan}/print-agreement', [LoanController::class, 'printAgreement'])->name('loans.print-agreement');
+
+// Loan Payment routes
+Route::get('loan-payments/get-installment-details', [LoanPaymentController::class, 'getLoanInstallment'])->name('loan-payments.get-installment-details');
+Route::resource('loan-payments', LoanPaymentController::class);
+Route::post('loan-payments/{loanPayment}/approve', [LoanPaymentController::class, 'approve'])->name('loan-payments.approve');
+Route::post('loan-payments/{loanPayment}/reject', [LoanPaymentController::class, 'reject'])->name('loan-payments.reject');
+Route::get('loan-payments/{loanPayment}/print-receipt', [LoanPaymentController::class, 'printReceipt'])->name('loan-payments.print-receipt');
 
 // General Ledger routes
 Route::resource('general-ledger', GeneralLedgerController::class);

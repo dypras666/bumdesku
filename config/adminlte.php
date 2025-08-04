@@ -384,6 +384,28 @@ return [
                 ],
             ],
         ],
+        ['header' => 'PINJAMAN MODAL'],
+        [
+            'text' => 'Pinjaman Modal',
+            'icon' => 'fas fa-fw fa-hand-holding-usd',
+            'submenu' => [
+                [
+                    'text' => 'Daftar Pinjaman',
+                    'route' => 'loans.index',
+                    'icon' => 'fas fa-fw fa-list',
+                ],
+                [
+                    'text' => 'Tambah Pinjaman',
+                    'route' => 'loans.create',
+                    'icon' => 'fas fa-fw fa-plus',
+                ],
+                [
+                    'text' => 'Pembayaran Angsuran',
+                    'route' => 'loan-payments.index',
+                    'icon' => 'fas fa-fw fa-money-check-alt',
+                ],
+            ],
+        ],
         ['header' => 'MASTER DATA'],
         [
             'text' => 'Daftar Akun',

@@ -184,7 +184,6 @@
                     @if($report->status === 'generated')
                         <form action="{{ route('financial-reports.finalize', $report) }}" method="POST" class="mb-2">
                             @csrf
-                            @method('PATCH')
                             <button type="submit" class="btn btn-success btn-block" 
                                     onclick="return confirm('Yakin ingin memfinalisasi laporan ini? Laporan yang sudah final tidak dapat diubah.')">
                                 <i class="fas fa-check"></i> Finalisasi Laporan
