@@ -16,6 +16,7 @@ use App\Http\Controllers\GuideController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\BackupController;
 use App\Http\Controllers\DataManagementController;
+use App\Http\Controllers\SampleDataController;
 
 // Public routes (before authentication)
 Route::get('/', [GuideController::class, 'publicIndex'])->name('guides.public.index');
@@ -110,3 +111,9 @@ Route::delete('backups/{filename}', [BackupController::class, 'destroy'])->name(
 Route::get('data-management', [DataManagementController::class, 'index'])->name('data-management.index');
 Route::get('data-management/confirm-reset', [DataManagementController::class, 'confirmReset'])->name('data-management.confirm-reset');
 Route::post('data-management/reset-transaction-data', [DataManagementController::class, 'resetTransactionData'])->name('data-management.reset-transaction-data');
+
+// Sample Data Import routes (Super Admin only)
+Route::get('sample-data', [SampleDataController::class, 'index'])->name('sample-data.index');
+Route::post('sample-data/import', [SampleDataController::class, 'import'])->name('sample-data.import');
+Route::get('sample-data/preview/{type}', [SampleDataController::class, 'preview'])->name('sample-data.preview');
+Route::get('sample-data/check-dependencies', [SampleDataController::class, 'checkDependencies'])->name('sample-data.check-dependencies');

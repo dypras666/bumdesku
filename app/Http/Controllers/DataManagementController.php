@@ -70,14 +70,62 @@ class DataManagementController extends Controller
             $transactionCount = Transaction::count();
             $generalLedgerCount = GeneralLedger::count();
 
-            // Delete all general ledger entries first (due to foreign key constraints)
-            GeneralLedger::truncate();
+            Log::info('Starting data reset process', [
+                'transactions_to_delete' => $transactionCount,
+                'general_ledger_entries_to_delete' => $generalLedgerCount,
+            ]);
+
+            // Get database driver for database-specific operations
+            $driver = DB::getDriverName();
+            
+            // Disable foreign key checks based on database driver
+            if ($driver === 'mysql') {
+                DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+            } elseif ($driver === 'sqlite') {
+                DB::statement('PRAGMA foreign_keys=OFF;');
+            } elseif ($driver === 'pgsql') {
+                // PostgreSQL doesn't have a global foreign key disable, so we'll use a different approach
+                // We'll delete in the correct order instead
+            }
+
+            // Delete all general ledger entries first (they reference transactions)
+            $deletedGL = DB::table('general_ledgers')->delete();
+            Log::info('Deleted general ledger entries', ['count' => $deletedGL]);
 
             // Delete all transactions
-            Transaction::truncate();
+            $deletedTrans = DB::table('transactions')->delete();
+            Log::info('Deleted transactions', ['count' => $deletedTrans]);
 
-            // Reset account balances to initial state (optional - keep saldo_awal but reset current calculations)
-            // This doesn't delete accounts, just resets their transaction-based balances
+            // Reset auto increment counters based on database driver
+            if ($driver === 'mysql') {
+                DB::statement('ALTER TABLE general_ledgers AUTO_INCREMENT = 1;');
+                DB::statement('ALTER TABLE transactions AUTO_INCREMENT = 1;');
+            } elseif ($driver === 'sqlite') {
+                DB::statement('DELETE FROM sqlite_sequence WHERE name IN ("general_ledgers", "transactions");');
+            } elseif ($driver === 'pgsql') {
+                DB::statement('ALTER SEQUENCE general_ledgers_id_seq RESTART WITH 1;');
+                DB::statement('ALTER SEQUENCE transactions_id_seq RESTART WITH 1;');
+            }
+
+            // Re-enable foreign key checks
+            if ($driver === 'mysql') {
+                DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            } elseif ($driver === 'sqlite') {
+                DB::statement('PRAGMA foreign_keys=ON;');
+            }
+
+            // Verify deletion was successful
+            $remainingTransactions = Transaction::count();
+            $remainingGL = GeneralLedger::count();
+            
+            Log::info('Data reset verification', [
+                'remaining_transactions' => $remainingTransactions,
+                'remaining_general_ledger_entries' => $remainingGL,
+            ]);
+
+            if ($remainingTransactions > 0 || $remainingGL > 0) {
+                throw new \Exception("Reset tidak lengkap. Masih ada {$remainingTransactions} transaksi dan {$remainingGL} entri buku besar.");
+            }
             
             DB::commit();
 
@@ -95,8 +143,23 @@ class DataManagementController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             
+            // Make sure to re-enable foreign key checks even if there's an error
+            try {
+                $driver = DB::getDriverName();
+                if ($driver === 'mysql') {
+                    DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+                } elseif ($driver === 'sqlite') {
+                    DB::statement('PRAGMA foreign_keys=ON;');
+                }
+            } catch (\Exception $fkException) {
+                Log::error('Failed to re-enable foreign key checks', [
+                    'error' => $fkException->getMessage(),
+                ]);
+            }
+            
             Log::error('Data reset failed', [
                 'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
                 'user_id' => Auth::id(),
                 'timestamp' => now(),
             ]);
@@ -120,4 +183,6 @@ class DataManagementController extends Controller
 
         return view('data-management.confirm-reset', compact('stats'));
     }
+
+
 }

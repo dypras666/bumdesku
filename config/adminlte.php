@@ -443,6 +443,12 @@ return [
             'icon' => 'fas fa-fw fa-trash-alt',
             'can' => 'super_admin',
         ],
+        [
+            'text' => 'Import Data Sampel',
+            'route' => 'sample-data.index',
+            'icon' => 'fas fa-fw fa-download',
+            'can' => 'super_admin',
+        ],
     ],
 
     /*
