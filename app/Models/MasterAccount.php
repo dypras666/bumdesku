@@ -16,10 +16,12 @@ class MasterAccount extends Model
         'nama_akun',
         'kategori_akun',
         'deskripsi',
+        'saldo_awal',
         'is_active'
     ];
 
     protected $casts = [
+        'saldo_awal' => 'decimal:2',
         'is_active' => 'boolean',
     ];
 
@@ -70,9 +72,14 @@ class MasterAccount extends Model
         // For asset and expense accounts, debit increases balance
         // For liability, equity, and revenue accounts, credit increases balance
         if (in_array($this->kategori_akun, ['Asset', 'Expense'])) {
-            return $totalDebit - $totalCredit;
+            return $this->saldo_awal + $totalDebit - $totalCredit;
         } else {
-            return $totalCredit - $totalDebit;
+            return $this->saldo_awal + $totalCredit - $totalDebit;
         }
+    }
+
+    public function getFormattedSaldoAwalAttribute()
+    {
+        return 'Rp ' . number_format($this->saldo_awal, 0, ',', '.');
     }
 }

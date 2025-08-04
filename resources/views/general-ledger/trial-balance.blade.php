@@ -41,7 +41,7 @@
                                            value="{{ request('end_date', date('Y-m-t')) }}">
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label>&nbsp;</label><br>
                                     <button type="submit" class="btn btn-primary">
@@ -52,6 +52,21 @@
                                     </button>
                                 </div>
                             </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="simple_style">Gaya Tampilan</label>
+                                    <div class="d-block">
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-outline-primary" id="btn-standard" onclick="toggleStyle('standard')">
+                                                <i class="fas fa-desktop"></i> Standard
+                                            </button>
+                                            <button type="button" class="btn btn-outline-success" id="btn-simple" onclick="toggleStyle('simple')">
+                                                <i class="fas fa-file-pdf"></i> Simple
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -59,17 +74,19 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-12">
-            <div class="card" id="trial-balance-report">
-                <div class="card-header text-center">
-                    <h3 class="card-title">
-                        <strong>{{ company_info('name') ?? 'BUMDES' }}</strong><br>
-                        <span class="h4">NERACA SALDO</span><br>
-                        <span class="h5">Periode: {{ request('start_date', date('Y-m-01')) ? \Carbon\Carbon::parse(request('start_date', date('Y-m-01')))->format('d F Y') : '' }} 
-                        s/d {{ request('end_date', date('Y-m-t')) ? \Carbon\Carbon::parse(request('end_date', date('Y-m-t')))->format('d F Y') : '' }}</span>
-                    </h3>
-                </div>
+    <!-- Standard View -->
+    <div id="standard-view">
+        <div class="row">
+            <div class="col-12">
+                <div class="card" id="trial-balance-report">
+                    <div class="card-header text-center">
+                        <h3 class="card-title">
+                            <strong>{{ company_info('name') ?? 'BUMDES' }}</strong><br>
+                            <span class="h4">NERACA SALDO</span><br>
+                            <span class="h5">Periode: {{ request('start_date', date('Y-m-01')) ? \Carbon\Carbon::parse(request('start_date', date('Y-m-01')))->format('d F Y') : '' }} 
+                            s/d {{ request('end_date', date('Y-m-t')) ? \Carbon\Carbon::parse(request('end_date', date('Y-m-t')))->format('d F Y') : '' }}</span>
+                        </h3>
+                    </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered">
@@ -98,8 +115,8 @@
                                         $totalCredit += $creditBalance;
                                     @endphp
                                     <tr>
-                                        <td>{{ $account['account_code'] }}</td>
-                                        <td>{{ $account['account_name'] }}</td>
+                                        <td>{{ $account['account']->account_code }}</td>
+                                        <td>{{ $account['account']->account_name }}</td>
                                         <td class="text-right">
                                             @if($debitBalance > 0)
                                                 {{ format_currency($debitBalance) }}
@@ -179,7 +196,9 @@
                     </div>
                     <div class="card-body">
                         @php
-                            $categories = collect($trialBalance)->groupBy('account_category');
+                            $categories = collect($trialBalance)->groupBy(function($item) {
+                                return $item['account']->account_category;
+                            });
                         @endphp
                         <div class="table-responsive">
                             <table class="table table-sm">
@@ -254,6 +273,21 @@
             </div>
         </div>
     @endif
+    </div>
+
+    <!-- Simple View -->
+    <div id="simple-view" style="display: none;">
+        @include('reports.simple-trial-balance', [
+            'companyName' => company_info('name') ?? 'BUMDES',
+            'reportTitle' => 'NERACA SALDO',
+            'reportPeriod' => request('start_date', date('Y-m-01')) . ' s/d ' . request('end_date', date('Y-m-t')),
+            'trialBalance' => $trialBalance,
+            'totalDebit' => $totalDebit,
+            'totalCredit' => $totalCredit,
+            'startDate' => $startDate,
+            'endDate' => $endDate
+        ])
+    </div>
 @stop
 
 @section('css')
@@ -286,11 +320,52 @@
             window.print();
         }
 
+        function toggleStyle(style) {
+            const standardView = document.getElementById('standard-view');
+            const simpleView = document.getElementById('simple-view');
+            const btnStandard = document.getElementById('btn-standard');
+            const btnSimple = document.getElementById('btn-simple');
+            
+            if (style === 'simple') {
+                standardView.style.display = 'none';
+                simpleView.style.display = 'block';
+                btnStandard.classList.remove('btn-primary');
+                btnStandard.classList.add('btn-outline-primary');
+                btnSimple.classList.remove('btn-outline-success');
+                btnSimple.classList.add('btn-success');
+                
+                // Load simple reports CSS
+                if (!document.getElementById('simple-reports-css')) {
+                    const link = document.createElement('link');
+                    link.id = 'simple-reports-css';
+                    link.rel = 'stylesheet';
+                    link.href = '{{ asset("css/simple-reports.css") }}';
+                    document.head.appendChild(link);
+                }
+            } else {
+                standardView.style.display = 'block';
+                simpleView.style.display = 'none';
+                btnStandard.classList.remove('btn-outline-primary');
+                btnStandard.classList.add('btn-primary');
+                btnSimple.classList.remove('btn-success');
+                btnSimple.classList.add('btn-outline-success');
+                
+                // Remove simple reports CSS
+                const simpleCSS = document.getElementById('simple-reports-css');
+                if (simpleCSS) {
+                    simpleCSS.remove();
+                }
+            }
+        }
+
         $(document).ready(function() {
             // Auto submit when date changes
             $('#start_date, #end_date').change(function() {
                 $(this).closest('form').submit();
             });
+            
+            // Set default style to standard
+            toggleStyle('standard');
         });
     </script>
 @stop

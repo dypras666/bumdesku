@@ -1,5 +1,5 @@
 {{-- Income Statement Partial --}}
-@if(isset($reportData) && $reportData)
+@if(isset($data) && $data)
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">
@@ -16,7 +16,7 @@
                 <div class="col-12 text-center">
                     <h4>{{ company_info('name') }}</h4>
                     <h5>LAPORAN LABA RUGI</h5>
-                    <p>Periode: {{ \Carbon\Carbon::parse($report->period_start)->format('d F Y') }} - {{ \Carbon\Carbon::parse($report->period_end)->format('d F Y') }}</p>
+                    <p>Periode: {{ $data['period']['description'] ?? 'Periode tidak tersedia' }}</p>
                 </div>
             </div>
 
@@ -35,44 +35,17 @@
                             <td></td>
                         </tr>
                         @php $totalRevenue = 0; @endphp
-                        @foreach($reportData['revenue'] ?? [] as $account)
+                        @foreach($data['revenues'] ?? [] as $account)
                             <tr>
-                                <td class="pl-4">{{ $account['account_name'] }}</td>
+                                <td class="pl-4">{{ $account['account'] }}</td>
                                 <td class="text-right">{{ format_currency($account['amount']) }}</td>
                             </tr>
                             @php $totalRevenue += $account['amount']; @endphp
                         @endforeach
                         <tr class="font-weight-bold">
                             <td class="text-right">Total Pendapatan</td>
-                            <td class="text-right">{{ format_currency($totalRevenue) }}</td>
+                            <td class="text-right">{{ format_currency($data['total_revenue'] ?? $totalRevenue) }}</td>
                         </tr>
-
-                        {{-- BEBAN POKOK PENJUALAN --}}
-                        @if(isset($reportData['cogs']) && count($reportData['cogs']) > 0)
-                            <tr class="bg-warning">
-                                <td><strong>BEBAN POKOK PENJUALAN</strong></td>
-                                <td></td>
-                            </tr>
-                            @php $totalCogs = 0; @endphp
-                            @foreach($reportData['cogs'] as $account)
-                                <tr>
-                                    <td class="pl-4">{{ $account['account_name'] }}</td>
-                                    <td class="text-right">{{ format_currency($account['amount']) }}</td>
-                                </tr>
-                                @php $totalCogs += $account['amount']; @endphp
-                            @endforeach
-                            <tr class="font-weight-bold">
-                                <td class="text-right">Total Beban Pokok Penjualan</td>
-                                <td class="text-right">{{ format_currency($totalCogs) }}</td>
-                            </tr>
-                            
-                            {{-- LABA KOTOR --}}
-                            @php $grossProfit = $totalRevenue - $totalCogs; @endphp
-                            <tr class="font-weight-bold bg-light">
-                                <td class="text-right">LABA KOTOR</td>
-                                <td class="text-right">{{ format_currency($grossProfit) }}</td>
-                            </tr>
-                        @endif
 
                         {{-- BEBAN OPERASIONAL --}}
                         <tr class="bg-info text-white">
@@ -80,63 +53,21 @@
                             <td></td>
                         </tr>
                         @php $totalExpenses = 0; @endphp
-                        @foreach($reportData['expenses'] ?? [] as $account)
+                        @foreach($data['expenses'] ?? [] as $account)
                             <tr>
-                                <td class="pl-4">{{ $account['account_name'] }}</td>
+                                <td class="pl-4">{{ $account['account'] }}</td>
                                 <td class="text-right">{{ format_currency($account['amount']) }}</td>
                             </tr>
                             @php $totalExpenses += $account['amount']; @endphp
                         @endforeach
                         <tr class="font-weight-bold">
                             <td class="text-right">Total Beban Operasional</td>
-                            <td class="text-right">{{ format_currency($totalExpenses) }}</td>
+                            <td class="text-right">{{ format_currency($data['total_expenses'] ?? $totalExpenses) }}</td>
                         </tr>
-
-                        {{-- PENDAPATAN/BEBAN LAIN-LAIN --}}
-                        @if(isset($reportData['other_income']) && count($reportData['other_income']) > 0)
-                            <tr class="bg-secondary text-white">
-                                <td><strong>PENDAPATAN LAIN-LAIN</strong></td>
-                                <td></td>
-                            </tr>
-                            @php $totalOtherIncome = 0; @endphp
-                            @foreach($reportData['other_income'] as $account)
-                                <tr>
-                                    <td class="pl-4">{{ $account['account_name'] }}</td>
-                                    <td class="text-right">{{ format_currency($account['amount']) }}</td>
-                                </tr>
-                                @php $totalOtherIncome += $account['amount']; @endphp
-                            @endforeach
-                            <tr class="font-weight-bold">
-                                <td class="text-right">Total Pendapatan Lain-lain</td>
-                                <td class="text-right">{{ format_currency($totalOtherIncome) }}</td>
-                            </tr>
-                        @endif
-
-                        @if(isset($reportData['other_expenses']) && count($reportData['other_expenses']) > 0)
-                            <tr class="bg-secondary text-white">
-                                <td><strong>BEBAN LAIN-LAIN</strong></td>
-                                <td></td>
-                            </tr>
-                            @php $totalOtherExpenses = 0; @endphp
-                            @foreach($reportData['other_expenses'] as $account)
-                                <tr>
-                                    <td class="pl-4">{{ $account['account_name'] }}</td>
-                                    <td class="text-right">{{ format_currency($account['amount']) }}</td>
-                                </tr>
-                                @php $totalOtherExpenses += $account['amount']; @endphp
-                            @endforeach
-                            <tr class="font-weight-bold">
-                                <td class="text-right">Total Beban Lain-lain</td>
-                                <td class="text-right">{{ format_currency($totalOtherExpenses) }}</td>
-                            </tr>
-                        @endif
 
                         {{-- LABA BERSIH --}}
                         @php 
-                            $netIncome = $totalRevenue - $totalExpenses;
-                            if (isset($totalOtherIncome)) $netIncome += $totalOtherIncome;
-                            if (isset($totalOtherExpenses)) $netIncome -= $totalOtherExpenses;
-                            if (isset($totalCogs)) $netIncome -= $totalCogs;
+                            $netIncome = $data['net_income'] ?? ($totalRevenue - $totalExpenses);
                         @endphp
                         <tr class="font-weight-bold {{ $netIncome >= 0 ? 'bg-success' : 'bg-danger' }} text-white">
                             <td class="text-right">{{ $netIncome >= 0 ? 'LABA BERSIH' : 'RUGI BERSIH' }}</td>
@@ -153,7 +84,7 @@
                         <span class="info-box-icon bg-info"><i class="fas fa-arrow-up"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Total Pendapatan</span>
-                            <span class="info-box-number">{{ format_currency($totalRevenue) }}</span>
+                            <span class="info-box-number">{{ format_currency($data['total_revenue'] ?? 0) }}</span>
                         </div>
                     </div>
                 </div>
@@ -162,7 +93,7 @@
                         <span class="info-box-icon bg-warning"><i class="fas fa-arrow-down"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Total Beban</span>
-                            <span class="info-box-number">{{ format_currency($totalExpenses) }}</span>
+                            <span class="info-box-number">{{ format_currency($data['total_expenses'] ?? 0) }}</span>
                         </div>
                     </div>
                 </div>
@@ -181,7 +112,8 @@
                                 <div class="progress-bar {{ $netIncome >= 0 ? 'bg-success' : 'bg-danger' }}"></div>
                             </div>
                             <span class="progress-description">
-                                Margin: {{ $totalRevenue > 0 ? number_format(abs($netIncome / $totalRevenue * 100), 2) : 0 }}%
+                                @php $totalRev = $data['total_revenue'] ?? 0; @endphp
+                                Margin: {{ $totalRev > 0 ? number_format(abs($netIncome / $totalRev * 100), 2) : 0 }}%
                             </span>
                         </div>
                     </div>
@@ -190,8 +122,7 @@
         </div>
         <div class="card-footer">
             <small class="text-muted">
-                Laporan dibuat pada: {{ now()->format('d F Y H:i:s') }} | 
-                Status: <span class="badge {{ $report->getStatusBadgeClass() }}">{{ $report->getStatusLabel() }}</span>
+                Laporan dibuat pada: {{ now()->format('d F Y H:i:s') }}
             </small>
         </div>
     </div>

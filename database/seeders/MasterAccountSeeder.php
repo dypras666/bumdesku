@@ -20,6 +20,7 @@ class MasterAccountSeeder extends Seeder
                 'nama_akun' => 'Kas',
                 'kategori_akun' => 'Aset',
                 'deskripsi' => 'Kas di tangan dan kas di bank',
+                'saldo_awal' => 50000000, // 50 juta
                 'is_active' => true,
             ],
             [
@@ -27,6 +28,7 @@ class MasterAccountSeeder extends Seeder
                 'nama_akun' => 'Bank',
                 'kategori_akun' => 'Aset',
                 'deskripsi' => 'Rekening bank perusahaan',
+                'saldo_awal' => 200000000, // 200 juta
                 'is_active' => true,
             ],
             [
@@ -34,6 +36,7 @@ class MasterAccountSeeder extends Seeder
                 'nama_akun' => 'Piutang Usaha',
                 'kategori_akun' => 'Aset',
                 'deskripsi' => 'Piutang dari pelanggan',
+                'saldo_awal' => 25000000, // 25 juta
                 'is_active' => true,
             ],
             [
@@ -41,6 +44,7 @@ class MasterAccountSeeder extends Seeder
                 'nama_akun' => 'Persediaan',
                 'kategori_akun' => 'Aset',
                 'deskripsi' => 'Persediaan barang dagangan',
+                'saldo_awal' => 75000000, // 75 juta
                 'is_active' => true,
             ],
             [
@@ -48,6 +52,7 @@ class MasterAccountSeeder extends Seeder
                 'nama_akun' => 'Peralatan',
                 'kategori_akun' => 'Aset',
                 'deskripsi' => 'Peralatan operasional',
+                'saldo_awal' => 150000000, // 150 juta
                 'is_active' => true,
             ],
 
@@ -57,6 +62,7 @@ class MasterAccountSeeder extends Seeder
                 'nama_akun' => 'Hutang Usaha',
                 'kategori_akun' => 'Kewajiban',
                 'deskripsi' => 'Hutang kepada supplier',
+                'saldo_awal' => 30000000, // 30 juta
                 'is_active' => true,
             ],
             [
@@ -64,6 +70,7 @@ class MasterAccountSeeder extends Seeder
                 'nama_akun' => 'Hutang Bank',
                 'kategori_akun' => 'Kewajiban',
                 'deskripsi' => 'Pinjaman dari bank',
+                'saldo_awal' => 100000000, // 100 juta
                 'is_active' => true,
             ],
 
@@ -73,6 +80,7 @@ class MasterAccountSeeder extends Seeder
                 'nama_akun' => 'Modal Awal',
                 'kategori_akun' => 'Modal',
                 'deskripsi' => 'Modal awal BUMDES',
+                'saldo_awal' => 300000000, // 300 juta
                 'is_active' => true,
             ],
             [
@@ -80,6 +88,7 @@ class MasterAccountSeeder extends Seeder
                 'nama_akun' => 'Laba Ditahan',
                 'kategori_akun' => 'Modal',
                 'deskripsi' => 'Akumulasi laba yang ditahan',
+                'saldo_awal' => 70000000, // 70 juta
                 'is_active' => true,
             ],
 
@@ -89,6 +98,7 @@ class MasterAccountSeeder extends Seeder
                 'nama_akun' => 'Pendapatan Penjualan',
                 'kategori_akun' => 'Pendapatan',
                 'deskripsi' => 'Pendapatan dari penjualan barang/jasa',
+                'saldo_awal' => 0, // Pendapatan dimulai dari 0
                 'is_active' => true,
             ],
             [
@@ -96,6 +106,7 @@ class MasterAccountSeeder extends Seeder
                 'nama_akun' => 'Pendapatan Lain-lain',
                 'kategori_akun' => 'Pendapatan',
                 'deskripsi' => 'Pendapatan di luar usaha utama',
+                'saldo_awal' => 0, // Pendapatan dimulai dari 0
                 'is_active' => true,
             ],
 
@@ -105,6 +116,7 @@ class MasterAccountSeeder extends Seeder
                 'nama_akun' => 'Beban Operasional',
                 'kategori_akun' => 'Beban',
                 'deskripsi' => 'Beban untuk operasional harian',
+                'saldo_awal' => 0, // Beban dimulai dari 0
                 'is_active' => true,
             ],
             [
@@ -112,6 +124,7 @@ class MasterAccountSeeder extends Seeder
                 'nama_akun' => 'Beban Gaji',
                 'kategori_akun' => 'Beban',
                 'deskripsi' => 'Beban gaji karyawan',
+                'saldo_awal' => 0, // Beban dimulai dari 0
                 'is_active' => true,
             ],
             [
@@ -119,6 +132,7 @@ class MasterAccountSeeder extends Seeder
                 'nama_akun' => 'Beban Listrik',
                 'kategori_akun' => 'Beban',
                 'deskripsi' => 'Beban listrik dan utilitas',
+                'saldo_awal' => 0, // Beban dimulai dari 0
                 'is_active' => true,
             ],
         ];

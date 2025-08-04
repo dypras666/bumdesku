@@ -1,5 +1,5 @@
 {{-- Trial Balance Partial --}}
-@if(isset($reportData) && $reportData)
+@if(isset($data) && $data)
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">
@@ -37,7 +37,7 @@
                             $currentCategory = '';
                         @endphp
                         
-                        @foreach($reportData['accounts'] ?? [] as $account)
+                        @foreach($data['accounts'] ?? [] as $account)
                             {{-- Category Header --}}
                             @if($account['category'] !== $currentCategory)
                                 @php $currentCategory = $account['category']; @endphp
@@ -50,20 +50,20 @@
                             
                             {{-- Account Row --}}
                             <tr>
-                                <td>{{ $account['account_code'] }}</td>
-                                <td class="pl-3">{{ $account['account_name'] }}</td>
+                                <td>{{ $account['code'] }}</td>
+                                <td class="pl-3">{{ $account['name'] }}</td>
                                 <td class="text-right">
-                                    @if($account['debit_balance'] > 0)
-                                        {{ format_currency($account['debit_balance']) }}
-                                        @php $totalDebit += $account['debit_balance']; @endphp
+                                    @if($account['debit'] > 0)
+                                        {{ format_currency($account['debit']) }}
+                                        @php $totalDebit += $account['debit']; @endphp
                                     @else
                                         -
                                     @endif
                                 </td>
                                 <td class="text-right">
-                                    @if($account['credit_balance'] > 0)
-                                        {{ format_currency($account['credit_balance']) }}
-                                        @php $totalCredit += $account['credit_balance']; @endphp
+                                    @if($account['credit'] > 0)
+                                        {{ format_currency($account['credit']) }}
+                                        @php $totalCredit += $account['credit']; @endphp
                                     @else
                                         -
                                     @endif
@@ -108,7 +108,7 @@
                             </thead>
                             <tbody>
                                 @php $categorySummary = []; @endphp
-                                @foreach($reportData['accounts'] ?? [] as $account)
+                                @foreach($data['accounts'] ?? [] as $account)
                                     @php
                                         $category = $account['category'];
                                         if (!isset($categorySummary[$category])) {
@@ -117,8 +117,8 @@
                                                 'credit' => 0
                                             ];
                                         }
-                                        $categorySummary[$category]['debit'] += $account['debit_balance'];
-                                        $categorySummary[$category]['credit'] += $account['credit_balance'];
+                                        $categorySummary[$category]['debit'] += $account['debit'];
+                                        $categorySummary[$category]['credit'] += $account['credit'];
                                     @endphp
                                 @endforeach
                                 
@@ -174,7 +174,7 @@
                         <span class="info-box-icon bg-info"><i class="fas fa-list"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Jumlah Akun</span>
-                            <span class="info-box-number">{{ count($reportData['accounts'] ?? []) }}</span>
+                            <span class="info-box-number">{{ count($data['accounts'] ?? []) }}</span>
                         </div>
                     </div>
                 </div>

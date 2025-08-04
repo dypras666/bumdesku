@@ -1,0 +1,205 @@
+/* Simple Financial Reports Styling for PDF/Excel Export */
+
+/* Reset and base styles */
+.simple-report {
+    font-family: 'Arial', sans-serif;
+    font-size: 12px;
+    line-height: 1.4;
+    color: #000;
+    background: #fff;
+}
+
+/* Header styling */
+.simple-report .report-header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #000;
+    padding-bottom: 15px;
+}
+
+.simple-report .company-name {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.simple-report .company-address {
+    font-size: 11px;
+    margin-bottom: 10px;
+}
+
+.simple-report .report-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.simple-report .report-period {
+    font-size: 11px;
+    margin-bottom: 0;
+}
+
+/* Table styling */
+.simple-report .report-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.simple-report .report-table th,
+.simple-report .report-table td {
+    padding: 6px 8px;
+    text-align: left;
+    border: 1px solid #000;
+    vertical-align: top;
+}
+
+.simple-report .report-table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    text-align: center;
+}
+
+.simple-report .report-table .text-right {
+    text-align: right;
+}
+
+.simple-report .report-table .text-center {
+    text-align: center;
+}
+
+/* Section headers */
+.simple-report .section-header {
+    background-color: #e0e0e0 !important;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.simple-report .subsection-header {
+    background-color: #f5f5f5 !important;
+    font-weight: bold;
+}
+
+.simple-report .total-row {
+    background-color: #f8f8f8 !important;
+    font-weight: bold;
+    border-top: 2px solid #000;
+}
+
+.simple-report .grand-total-row {
+    background-color: #e0e0e0 !important;
+    font-weight: bold;
+    border-top: 3px double #000;
+    border-bottom: 3px double #000;
+}
+
+/* Indentation for sub-items */
+.simple-report .indent-1 {
+    padding-left: 20px;
+}
+
+.simple-report .indent-2 {
+    padding-left: 40px;
+}
+
+/* Footer */
+.simple-report .report-footer {
+    margin-top: 30px;
+    border-top: 1px solid #000;
+    padding-top: 15px;
+    font-size: 10px;
+}
+
+.simple-report .signature-section {
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.simple-report .signature-box {
+    text-align: center;
+    width: 200px;
+}
+
+.simple-report .signature-line {
+    border-bottom: 1px solid #000;
+    margin-top: 60px;
+    margin-bottom: 5px;
+}
+
+/* Print specific styles */
+@media print {
+    .simple-report {
+        font-size: 11px;
+    }
+    
+    .simple-report .report-table {
+        page-break-inside: avoid;
+    }
+    
+    .simple-report .section-header {
+        page-break-after: avoid;
+    }
+    
+    /* Hide web-specific elements */
+    .card, .card-header, .card-body, .card-footer,
+    .btn, .breadcrumb, .content-header,
+    .main-sidebar, .main-header, .main-footer,
+    .info-box, .alert, .progress {
+        display: none !important;
+    }
+    
+    /* Show only report content */
+    .simple-report {
+        display: block !important;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+/* Balance check styling */
+.simple-report .balance-check {
+    margin-top: 20px;
+    padding: 10px;
+    border: 2px solid #000;
+    text-align: center;
+    font-weight: bold;
+}
+
+.simple-report .balance-check.balanced {
+    background-color: #d4edda;
+    border-color: #28a745;
+}
+
+.simple-report .balance-check.unbalanced {
+    background-color: #f8d7da;
+    border-color: #dc3545;
+}
+
+/* Summary section */
+.simple-report .summary-section {
+    margin-top: 30px;
+    border: 1px solid #000;
+    padding: 15px;
+}
+
+.simple-report .summary-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.simple-report .summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+/* No data message */
+.simple-report .no-data {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+    padding: 20px;
+}

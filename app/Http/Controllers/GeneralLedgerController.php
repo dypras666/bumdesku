@@ -52,7 +52,7 @@ class GeneralLedgerController extends Controller
                         ->orderBy('created_at', 'desc')
                         ->paginate(25);
 
-        $accounts = MasterAccount::orderBy('account_name')->get();
+        $accounts = MasterAccount::orderBy('nama_akun')->get();
 
         return view('general-ledger.index', compact('entries', 'accounts'));
     }
@@ -62,7 +62,7 @@ class GeneralLedgerController extends Controller
      */
     public function create()
     {
-        $accounts = MasterAccount::orderBy('account_name')->get();
+        $accounts = MasterAccount::orderBy('nama_akun')->get();
         $transactions = Transaction::where('status', 'approved')
                                  ->orderBy('transaction_date', 'desc')
                                  ->get();
@@ -120,7 +120,10 @@ class GeneralLedgerController extends Controller
     {
         $generalLedger->load(['account', 'transaction', 'postedBy']);
         
-        return view('general-ledger.show', compact('generalLedger'));
+        // Pass as $entry to match the view expectations
+        $entry = $generalLedger;
+        
+        return view('general-ledger.show', compact('entry'));
     }
 
     /**
@@ -133,12 +136,15 @@ class GeneralLedgerController extends Controller
                            ->with('error', 'Posted entries cannot be edited.');
         }
 
-        $accounts = MasterAccount::orderBy('account_name')->get();
+        $accounts = MasterAccount::orderBy('nama_akun')->get();
         $transactions = Transaction::where('status', 'approved')
                                  ->orderBy('transaction_date', 'desc')
                                  ->get();
 
-        return view('general-ledger.edit', compact('generalLedger', 'accounts', 'transactions'));
+        // Pass as $entry to match the view expectations
+        $entry = $generalLedger;
+
+        return view('general-ledger.edit', compact('entry', 'accounts', 'transactions'));
     }
 
     /**

@@ -58,7 +58,8 @@ class FinancialReportController extends Controller
      */
     public function create()
     {
-        return view('financial-reports.create');
+        $accounts = MasterAccount::orderBy('nama_akun')->get();
+        return view('financial-reports.create', compact('accounts'));
     }
 
     /**
@@ -101,7 +102,10 @@ class FinancialReportController extends Controller
     {
         $financialReport->load(['generatedBy', 'finalizedBy']);
         
-        return view('financial-reports.show', compact('financialReport'));
+        // Assign to $report for view consistency
+        $report = $financialReport;
+        
+        return view('financial-reports.show', compact('report'));
     }
 
     /**
@@ -114,7 +118,13 @@ class FinancialReportController extends Controller
                            ->with('error', 'Finalized reports cannot be edited.');
         }
 
-        return view('financial-reports.edit', compact('financialReport'));
+        // Assign to $report for view consistency
+        $report = $financialReport;
+        
+        // Get accounts for the account selection dropdown
+        $accounts = MasterAccount::orderBy('kode_akun')->get();
+
+        return view('financial-reports.edit', compact('report', 'accounts'));
     }
 
     /**
@@ -217,8 +227,8 @@ class FinancialReportController extends Controller
      */
     public function incomeStatement(Request $request)
     {
-        $periodStart = $request->period_start ?? Carbon::now()->startOfMonth();
-        $periodEnd = $request->period_end ?? Carbon::now()->endOfMonth();
+        $periodStart = $request->period_start ? Carbon::parse($request->period_start) : Carbon::now()->startOfMonth();
+        $periodEnd = $request->period_end ? Carbon::parse($request->period_end) : Carbon::now()->endOfMonth();
 
         $reportData = $this->generateReportData('income_statement', $periodStart, $periodEnd);
 
@@ -230,7 +240,7 @@ class FinancialReportController extends Controller
      */
     public function balanceSheet(Request $request)
     {
-        $asOfDate = $request->as_of_date ?? Carbon::now();
+        $asOfDate = $request->as_of_date ? Carbon::parse($request->as_of_date) : Carbon::now();
 
         $reportData = $this->generateReportData('balance_sheet', null, $asOfDate);
 
@@ -242,8 +252,8 @@ class FinancialReportController extends Controller
      */
     public function cashFlow(Request $request)
     {
-        $periodStart = $request->period_start ?? Carbon::now()->startOfMonth();
-        $periodEnd = $request->period_end ?? Carbon::now()->endOfMonth();
+        $periodStart = $request->period_start ? Carbon::parse($request->period_start) : Carbon::now()->startOfMonth();
+        $periodEnd = $request->period_end ? Carbon::parse($request->period_end) : Carbon::now()->endOfMonth();
 
         $reportData = $this->generateReportData('cash_flow', $periodStart, $periodEnd);
 
@@ -276,32 +286,39 @@ class FinancialReportController extends Controller
      */
     private function generateIncomeStatementData($periodStart, $periodEnd)
     {
-        $revenues = GeneralLedger::whereHas('account', function($query) {
-                $query->where('account_category', 'Revenue');
-            })
-            ->posted()
-            ->whereBetween('posting_date', [$periodStart, $periodEnd])
-            ->with('account')
-            ->get()
-            ->groupBy('account.account_name')
-            ->map(function($entries) {
-                return $entries->sum('credit') - $entries->sum('debit');
-            });
+        // Get revenue accounts with detailed breakdown
+        $revenueAccounts = MasterAccount::where('kategori_akun', 'Pendapatan')
+            ->with(['generalLedgerEntries' => function($query) use ($periodStart, $periodEnd) {
+                $query->posted()->whereBetween('posting_date', [$periodStart, $periodEnd]);
+            }])
+            ->get();
 
-        $expenses = GeneralLedger::whereHas('account', function($query) {
-                $query->where('account_category', 'Expense');
-            })
-            ->posted()
-            ->whereBetween('posting_date', [$periodStart, $periodEnd])
-            ->with('account')
-            ->get()
-            ->groupBy('account.account_name')
-            ->map(function($entries) {
-                return $entries->sum('debit') - $entries->sum('credit');
-            });
+        $revenues = collect();
+        $totalRevenue = 0;
+        foreach ($revenueAccounts as $account) {
+            $amount = $account->generalLedgerEntries->sum('credit') - $account->generalLedgerEntries->sum('debit');
+            if ($amount > 0) {
+                $revenues->put($account->nama_akun, $amount);
+                $totalRevenue += $amount;
+            }
+        }
 
-        $totalRevenue = $revenues->sum();
-        $totalExpenses = $expenses->sum();
+        // Get expense accounts with detailed breakdown
+        $expenseAccounts = MasterAccount::where('kategori_akun', 'Beban')
+            ->with(['generalLedgerEntries' => function($query) use ($periodStart, $periodEnd) {
+                $query->posted()->whereBetween('posting_date', [$periodStart, $periodEnd]);
+            }])
+            ->get();
+
+        $expenses = collect();
+        $totalExpenses = 0;
+        foreach ($expenseAccounts as $account) {
+            $amount = $account->generalLedgerEntries->sum('debit') - $account->generalLedgerEntries->sum('credit');
+            if ($amount > 0) {
+                $expenses->put($account->nama_akun, $amount);
+                $totalExpenses += $amount;
+            }
+        }
         $netIncome = $totalRevenue - $totalExpenses;
 
         return [
@@ -309,7 +326,9 @@ class FinancialReportController extends Controller
             'expenses' => $expenses,
             'total_revenue' => $totalRevenue,
             'total_expenses' => $totalExpenses,
-            'net_income' => $netIncome
+            'net_income' => $netIncome,
+            'period_start' => $periodStart,
+            'period_end' => $periodEnd
         ];
     }
 
@@ -318,43 +337,65 @@ class FinancialReportController extends Controller
      */
     private function generateBalanceSheetData($asOfDate)
     {
-        $assets = MasterAccount::where('account_category', 'Asset')
+        // Assets
+        $assetAccounts = MasterAccount::where('kategori_akun', 'Aset')
             ->with(['generalLedgerEntries' => function($query) use ($asOfDate) {
-                $query->posted()->whereDate('posting_date', '<=', $asOfDate);
+                $query->posted()->where('posting_date', '<=', $asOfDate);
             }])
-            ->get()
-            ->mapWithKeys(function($account) {
-                $balance = $account->generalLedgerEntries->sum('debit') - $account->generalLedgerEntries->sum('credit');
-                return [$account->account_name => $balance];
-            });
+            ->get();
 
-        $liabilities = MasterAccount::where('account_category', 'Liability')
-            ->with(['generalLedgerEntries' => function($query) use ($asOfDate) {
-                $query->posted()->whereDate('posting_date', '<=', $asOfDate);
-            }])
-            ->get()
-            ->mapWithKeys(function($account) {
-                $balance = $account->generalLedgerEntries->sum('credit') - $account->generalLedgerEntries->sum('debit');
-                return [$account->account_name => $balance];
-            });
+        $assets = collect();
+        $totalAssets = 0;
+        foreach ($assetAccounts as $account) {
+            $balance = $account->saldo_awal + $account->generalLedgerEntries->sum('debit') - $account->generalLedgerEntries->sum('credit');
+            if ($balance != 0) {
+                $assets->put($account->nama_akun, $balance);
+                $totalAssets += $balance;
+            }
+        }
 
-        $equity = MasterAccount::where('account_category', 'Equity')
+        // Liabilities
+        $liabilityAccounts = MasterAccount::where('kategori_akun', 'Kewajiban')
             ->with(['generalLedgerEntries' => function($query) use ($asOfDate) {
-                $query->posted()->whereDate('posting_date', '<=', $asOfDate);
+                $query->posted()->where('posting_date', '<=', $asOfDate);
             }])
-            ->get()
-            ->mapWithKeys(function($account) {
-                $balance = $account->generalLedgerEntries->sum('credit') - $account->generalLedgerEntries->sum('debit');
-                return [$account->account_name => $balance];
-            });
+            ->get();
+
+        $liabilities = collect();
+        $totalLiabilities = 0;
+        foreach ($liabilityAccounts as $account) {
+            $balance = $account->saldo_awal + $account->generalLedgerEntries->sum('credit') - $account->generalLedgerEntries->sum('debit');
+            if ($balance != 0) {
+                $liabilities->put($account->nama_akun, $balance);
+                $totalLiabilities += $balance;
+            }
+        }
+
+        // Equity
+        $equityAccounts = MasterAccount::where('kategori_akun', 'Modal')
+            ->with(['generalLedgerEntries' => function($query) use ($asOfDate) {
+                $query->posted()->where('posting_date', '<=', $asOfDate);
+            }])
+            ->get();
+
+        $equity = collect();
+        $totalEquity = 0;
+        foreach ($equityAccounts as $account) {
+            $balance = $account->saldo_awal + $account->generalLedgerEntries->sum('credit') - $account->generalLedgerEntries->sum('debit');
+            if ($balance != 0) {
+                $equity->put($account->nama_akun, $balance);
+                $totalEquity += $balance;
+            }
+        }
 
         return [
             'assets' => $assets,
             'liabilities' => $liabilities,
             'equity' => $equity,
-            'total_assets' => $assets->sum(),
-            'total_liabilities' => $liabilities->sum(),
-            'total_equity' => $equity->sum()
+            'total_assets' => $totalAssets,
+            'total_liabilities' => $totalLiabilities,
+            'total_equity' => $totalEquity,
+            'as_of_date' => $asOfDate
         ];
     }
 
@@ -363,35 +404,134 @@ class FinancialReportController extends Controller
      */
     private function generateCashFlowData($periodStart, $periodEnd)
     {
-        $cashAccounts = MasterAccount::where('account_name', 'like', '%Cash%')
-            ->orWhere('account_name', 'like', '%Bank%')
+        // Get cash and bank accounts
+        $cashAccounts = MasterAccount::where(function($query) {
+                $query->where('nama_akun', 'like', '%Kas%')
+                      ->orWhere('nama_akun', 'like', '%Bank%')
+                      ->orWhere('nama_akun', 'like', '%Cash%')
+                      ->orWhere('kode_akun', 'like', '1-1%'); // Cash accounts typically start with 1-1
+            })
             ->pluck('id');
 
+        // Get all cash transactions for the period
         $cashTransactions = GeneralLedger::whereIn('account_id', $cashAccounts)
             ->posted()
             ->whereBetween('posting_date', [$periodStart, $periodEnd])
             ->with(['account', 'transaction'])
             ->get();
 
-        $operatingActivities = $cashTransactions->filter(function($entry) {
-            return in_array($entry->reference_type, ['Revenue', 'Expense', 'Operating']);
-        });
+        // Operating Activities - based on transaction types and account categories
+        $operatingActivities = collect();
+        $investingActivities = collect();
+        $financingActivities = collect();
 
-        $investingActivities = $cashTransactions->filter(function($entry) {
-            return in_array($entry->reference_type, ['Investment', 'Asset Purchase', 'Asset Sale']);
-        });
+        foreach ($cashTransactions as $entry) {
+            $transaction = $entry->transaction;
+            $amount = $entry->debit - $entry->credit; // Positive = cash in, Negative = cash out
+            
+            if ($transaction) {
+                // Categorize based on transaction type
+                switch ($transaction->jenis_transaksi) {
+                    case 'income':
+                    case 'revenue':
+                    case 'penjualan':
+                        $operatingActivities->push([
+                            'description' => $entry->description ?: $transaction->keterangan,
+                            'amount' => $amount,
+                            'date' => $entry->posting_date,
+                            'type' => 'Revenue'
+                        ]);
+                        break;
+                    
+                    case 'expense':
+                    case 'beban':
+                    case 'operasional':
+                        $operatingActivities->push([
+                            'description' => $entry->description ?: $transaction->keterangan,
+                            'amount' => $amount,
+                            'date' => $entry->posting_date,
+                            'type' => 'Operating Expense'
+                        ]);
+                        break;
+                    
+                    case 'investment':
+                    case 'asset':
+                    case 'peralatan':
+                        $investingActivities->push([
+                            'description' => $entry->description ?: $transaction->keterangan,
+                            'amount' => $amount,
+                            'date' => $entry->posting_date,
+                            'type' => 'Asset Purchase'
+                        ]);
+                        break;
+                    
+                    case 'loan':
+                    case 'modal':
+                    case 'pinjaman':
+                        $financingActivities->push([
+                            'description' => $entry->description ?: $transaction->keterangan,
+                            'amount' => $amount,
+                            'date' => $entry->posting_date,
+                            'type' => 'Financing'
+                        ]);
+                        break;
+                    
+                    default:
+                        // Default to operating activities
+                        $operatingActivities->push([
+                            'description' => $entry->description ?: $transaction->keterangan,
+                            'amount' => $amount,
+                            'date' => $entry->posting_date,
+                            'type' => 'Other Operating'
+                        ]);
+                        break;
+                }
+            } else {
+                // If no transaction linked, categorize as operating
+                $operatingActivities->push([
+                    'description' => $entry->description,
+                    'amount' => $amount,
+                    'date' => $entry->posting_date,
+                    'type' => 'General'
+                ]);
+            }
+        }
 
-        $financingActivities = $cashTransactions->filter(function($entry) {
-            return in_array($entry->reference_type, ['Loan', 'Capital', 'Dividend']);
-        });
+        // Calculate beginning and ending cash balances
+        $beginningCash = 0;
+        foreach ($cashAccounts as $accountId) {
+            $account = MasterAccount::find($accountId);
+            if ($account) {
+                $beginningCash += $account->saldo_awal;
+                
+                // Add transactions before period start
+                $priorEntries = GeneralLedger::where('account_id', $accountId)
+                    ->posted()
+                    ->where('posting_date', '<', $periodStart)
+                    ->get();
+                
+                $beginningCash += $priorEntries->sum('debit') - $priorEntries->sum('credit');
+            }
+        }
+
+        $netOperatingCash = $operatingActivities->sum('amount');
+        $netInvestingCash = $investingActivities->sum('amount');
+        $netFinancingCash = $financingActivities->sum('amount');
+        $netCashChange = $netOperatingCash + $netInvestingCash + $netFinancingCash;
+        $endingCash = $beginningCash + $netCashChange;
 
         return [
             'operating_activities' => $operatingActivities,
             'investing_activities' => $investingActivities,
             'financing_activities' => $financingActivities,
-            'net_operating_cash' => $operatingActivities->sum('debit') - $operatingActivities->sum('credit'),
-            'net_investing_cash' => $investingActivities->sum('debit') - $investingActivities->sum('credit'),
-            'net_financing_cash' => $financingActivities->sum('debit') - $financingActivities->sum('credit')
+            'net_operating_cash' => $netOperatingCash,
+            'net_investing_cash' => $netInvestingCash,
+            'net_financing_cash' => $netFinancingCash,
+            'net_cash_change' => $netCashChange,
+            'beginning_cash' => $beginningCash,
+            'ending_cash' => $endingCash,
+            'period_start' => $periodStart,
+            'period_end' => $periodEnd
         ];
     }
 
@@ -409,8 +549,8 @@ class FinancialReportController extends Controller
             $totalCredit = $account->generalLedgerEntries->sum('credit');
 
             return [
-                'account_name' => $account->account_name,
-                'account_code' => $account->account_code,
+                'account_name' => $account->nama_akun,
+                'account_code' => $account->kode_akun,
                 'debit' => $totalDebit,
                 'credit' => $totalCredit,
                 'balance' => $totalDebit - $totalCredit
@@ -431,6 +571,6 @@ class FinancialReportController extends Controller
             ->orderBy('posting_date')
             ->orderBy('entry_code')
             ->get()
-            ->groupBy('account.account_name');
+            ->groupBy('account.nama_akun');
     }
 }

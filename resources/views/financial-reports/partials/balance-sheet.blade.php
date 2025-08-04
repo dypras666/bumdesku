@@ -1,5 +1,5 @@
 {{-- Balance Sheet Partial --}}
-@if(isset($reportData) && $reportData)
+@if(isset($data) && $data)
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">
@@ -41,9 +41,9 @@
                                     <td></td>
                                 </tr>
                                 @php $totalCurrentAssets = 0; @endphp
-                                @foreach($reportData['current_assets'] ?? [] as $account)
+                                @foreach($data['current_assets'] ?? [] as $account)
                                     <tr>
-                                        <td class="pl-3">{{ $account['account_name'] }}</td>
+                                        <td class="pl-3">{{ $account['account'] }}</td>
                                         <td class="text-right">{{ format_currency($account['amount']) }}</td>
                                     </tr>
                                     @php $totalCurrentAssets += $account['amount']; @endphp
@@ -59,9 +59,9 @@
                                     <td></td>
                                 </tr>
                                 @php $totalFixedAssets = 0; @endphp
-                                @foreach($reportData['fixed_assets'] ?? [] as $account)
+                                @foreach($data['fixed_assets'] ?? [] as $account)
                                     <tr>
-                                        <td class="pl-3">{{ $account['account_name'] }}</td>
+                                        <td class="pl-3">{{ $account['account'] }}</td>
                                         <td class="text-right">{{ format_currency($account['amount']) }}</td>
                                     </tr>
                                     @php $totalFixedAssets += $account['amount']; @endphp
@@ -72,15 +72,15 @@
                                 </tr>
 
                                 {{-- ASET LAIN-LAIN --}}
-                                @if(isset($reportData['other_assets']) && count($reportData['other_assets']) > 0)
+                                @if(isset($data['other_assets']) && count($data['other_assets']) > 0)
                                     <tr class="bg-info text-white">
                                         <td><strong>ASET LAIN-LAIN</strong></td>
                                         <td></td>
                                     </tr>
                                     @php $totalOtherAssets = 0; @endphp
-                                    @foreach($reportData['other_assets'] as $account)
+                                    @foreach($data['other_assets'] as $account)
                                         <tr>
-                                            <td class="pl-3">{{ $account['account_name'] }}</td>
+                                            <td class="pl-3">{{ $account['account'] }}</td>
                                             <td class="text-right">{{ format_currency($account['amount']) }}</td>
                                         </tr>
                                         @php $totalOtherAssets += $account['amount']; @endphp
@@ -125,9 +125,9 @@
                                     <td></td>
                                 </tr>
                                 @php $totalCurrentLiabilities = 0; @endphp
-                                @foreach($reportData['current_liabilities'] ?? [] as $account)
+                                @foreach($data['current_liabilities'] ?? [] as $account)
                                     <tr>
-                                        <td class="pl-3">{{ $account['account_name'] }}</td>
+                                        <td class="pl-3">{{ $account['account'] }}</td>
                                         <td class="text-right">{{ format_currency($account['amount']) }}</td>
                                     </tr>
                                     @php $totalCurrentLiabilities += $account['amount']; @endphp
@@ -143,9 +143,9 @@
                                     <td></td>
                                 </tr>
                                 @php $totalLongTermLiabilities = 0; @endphp
-                                @foreach($reportData['long_term_liabilities'] ?? [] as $account)
+                                @foreach($data['long_term_liabilities'] ?? [] as $account)
                                     <tr>
-                                        <td class="pl-3">{{ $account['account_name'] }}</td>
+                                        <td class="pl-3">{{ $account['account'] }}</td>
                                         <td class="text-right">{{ format_currency($account['amount']) }}</td>
                                     </tr>
                                     @php $totalLongTermLiabilities += $account['amount']; @endphp
@@ -168,9 +168,9 @@
                                     <td></td>
                                 </tr>
                                 @php $totalEquity = 0; @endphp
-                                @foreach($reportData['equity'] ?? [] as $account)
+                                @foreach($data['equity'] ?? [] as $account)
                                     <tr>
-                                        <td class="pl-3">{{ $account['account_name'] }}</td>
+                                        <td class="pl-3">{{ $account['account'] }}</td>
                                         <td class="text-right">{{ format_currency($account['amount']) }}</td>
                                     </tr>
                                     @php $totalEquity += $account['amount']; @endphp

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\MasterUnit;
+use App\Models\User;
 
 class MasterUnitSeeder extends Seeder
 {
@@ -13,6 +14,13 @@ class MasterUnitSeeder extends Seeder
      */
     public function run(): void
     {
+        // Get users for assignment as penanggung jawab
+        $admin = User::where('email', 'admin@bumdes.com')->first();
+        $financeManager = User::where('email', 'finance@bumdes.com')->first();
+        $accountant = User::where('email', 'accountant@bumdes.com')->first();
+        $cashier = User::where('email', 'cashier@bumdes.com')->first();
+        $user = User::where('email', 'user@bumdes.com')->first();
+
         $units = [
             // Kantor
             [
@@ -20,7 +28,7 @@ class MasterUnitSeeder extends Seeder
                 'kategori_unit' => 'Kantor',
                 'nama_unit' => 'Kantor Pusat BUMDES',
                 'nilai_aset' => 150000000,
-                'penanggung_jawab' => 'Budi Santoso',
+                'penanggung_jawab_id' => $admin?->id,
                 'alamat' => 'Jl. Desa Makmur No. 1, Desa Sejahtera',
                 'is_active' => true,
             ],
@@ -29,7 +37,7 @@ class MasterUnitSeeder extends Seeder
                 'kategori_unit' => 'Kantor',
                 'nama_unit' => 'Kantor Cabang Pasar',
                 'nilai_aset' => 75000000,
-                'penanggung_jawab' => 'Siti Aminah',
+                'penanggung_jawab_id' => $financeManager?->id,
                 'alamat' => 'Jl. Pasar Desa No. 15, Desa Sejahtera',
                 'is_active' => true,
             ],
@@ -40,7 +48,7 @@ class MasterUnitSeeder extends Seeder
                 'kategori_unit' => 'Produksi',
                 'nama_unit' => 'Unit Produksi Keripik',
                 'nilai_aset' => 200000000,
-                'penanggung_jawab' => 'Ahmad Fauzi',
+                'penanggung_jawab_id' => $accountant?->id,
                 'alamat' => 'Jl. Industri No. 5, Desa Sejahtera',
                 'is_active' => true,
             ],
@@ -49,7 +57,7 @@ class MasterUnitSeeder extends Seeder
                 'kategori_unit' => 'Produksi',
                 'nama_unit' => 'Unit Produksi Gula Aren',
                 'nilai_aset' => 120000000,
-                'penanggung_jawab' => 'Dewi Sartika',
+                'penanggung_jawab_id' => $user?->id,
                 'alamat' => 'Jl. Kebun Aren No. 10, Desa Sejahtera',
                 'is_active' => true,
             ],
@@ -60,7 +68,7 @@ class MasterUnitSeeder extends Seeder
                 'kategori_unit' => 'Gudang',
                 'nama_unit' => 'Gudang Bahan Baku',
                 'nilai_aset' => 80000000,
-                'penanggung_jawab' => 'Joko Widodo',
+                'penanggung_jawab_id' => $cashier?->id,
                 'alamat' => 'Jl. Gudang Utama No. 3, Desa Sejahtera',
                 'is_active' => true,
             ],
@@ -69,7 +77,7 @@ class MasterUnitSeeder extends Seeder
                 'kategori_unit' => 'Gudang',
                 'nama_unit' => 'Gudang Produk Jadi',
                 'nilai_aset' => 90000000,
-                'penanggung_jawab' => 'Sri Mulyani',
+                'penanggung_jawab_id' => $financeManager?->id,
                 'alamat' => 'Jl. Gudang Selatan No. 7, Desa Sejahtera',
                 'is_active' => true,
             ],
@@ -80,7 +88,7 @@ class MasterUnitSeeder extends Seeder
                 'kategori_unit' => 'Kendaraan',
                 'nama_unit' => 'Truk Distribusi L300',
                 'nilai_aset' => 85000000,
-                'penanggung_jawab' => 'Bambang Sutrisno',
+                'penanggung_jawab_id' => $admin?->id,
                 'alamat' => 'Pool Kendaraan BUMDES',
                 'is_active' => true,
             ],
@@ -89,7 +97,7 @@ class MasterUnitSeeder extends Seeder
                 'kategori_unit' => 'Kendaraan',
                 'nama_unit' => 'Motor Pickup Carry',
                 'nilai_aset' => 45000000,
-                'penanggung_jawab' => 'Andi Setiawan',
+                'penanggung_jawab_id' => $accountant?->id,
                 'alamat' => 'Pool Kendaraan BUMDES',
                 'is_active' => true,
             ],
@@ -100,7 +108,7 @@ class MasterUnitSeeder extends Seeder
                 'kategori_unit' => 'Peralatan',
                 'nama_unit' => 'Mesin Penggoreng Keripik',
                 'nilai_aset' => 25000000,
-                'penanggung_jawab' => 'Rudi Hartono',
+                'penanggung_jawab_id' => $user?->id,
                 'alamat' => 'Unit Produksi Keripik',
                 'is_active' => true,
             ],
@@ -109,7 +117,7 @@ class MasterUnitSeeder extends Seeder
                 'kategori_unit' => 'Peralatan',
                 'nama_unit' => 'Mesin Pemarut Kelapa',
                 'nilai_aset' => 15000000,
-                'penanggung_jawab' => 'Sari Indah',
+                'penanggung_jawab_id' => $cashier?->id,
                 'alamat' => 'Unit Produksi Gula Aren',
                 'is_active' => true,
             ],

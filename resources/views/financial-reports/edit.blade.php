@@ -264,7 +264,7 @@
                     </a>
                     
                     @if($report->status === 'generated')
-                        <form action="{{ route('reports.finalize', $report) }}" method="POST" class="mb-2">
+                        <form action="{{ route('financial-reports.finalize', $report) }}" method="POST" class="mb-2">
                             @csrf
                             @method('PATCH')
                             <button type="submit" class="btn btn-block btn-success btn-sm" 

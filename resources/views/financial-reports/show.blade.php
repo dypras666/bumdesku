@@ -157,7 +157,7 @@
                             @endif
                         </p>
                         @if($report->status === 'draft')
-                            <form action="{{ route('reports.regenerate', $report) }}" method="POST" style="display: inline;">
+                            <form action="{{ route('financial-reports.regenerate', $report) }}" method="POST" style="display: inline;">
                                 @csrf
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fas fa-sync"></i> Generate Laporan
@@ -182,7 +182,7 @@
                     @endif
 
                     @if($report->status === 'generated')
-                        <form action="{{ route('reports.finalize', $report) }}" method="POST" class="mb-2">
+                        <form action="{{ route('financial-reports.finalize', $report) }}" method="POST" class="mb-2">
                             @csrf
                             @method('PATCH')
                             <button type="submit" class="btn btn-success btn-block" 
@@ -193,7 +193,7 @@
                     @endif
 
                     @if($report->status === 'generated' || $report->status === 'finalized')
-                        <form action="{{ route('reports.regenerate', $report) }}" method="POST" class="mb-2">
+                        <form action="{{ route('financial-reports.regenerate', $report) }}" method="POST" class="mb-2">
                             @csrf
                             <button type="submit" class="btn btn-primary btn-block">
                                 <i class="fas fa-sync"></i> Regenerate Data

@@ -13,13 +13,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Seed roles first, then users (because users depend on roles)
+        // Seed dalam urutan yang benar untuk menghasilkan data lengkap
         $this->call([
+            // 1. Master Data (Foundation)
             RoleSeeder::class,
             UserSeeder::class,
+            SystemSettingSeeder::class,
             MasterAccountSeeder::class,
             MasterUnitSeeder::class,
             MasterInventorySeeder::class,
+            
+            // 2. Transactional Data
+            TransactionSeeder::class,
+            GeneralLedgerSeeder::class,
+            
+            // 3. Reports (Final Output)
+            FinancialReportSeeder::class,
         ]);
     }
 }

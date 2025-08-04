@@ -98,7 +98,7 @@ class FinancialReport extends Model
         return $prefix . '-' . $date . '-' . str_pad($sequence, 4, '0', STR_PAD_LEFT);
     }
 
-    public function getReportTypeLabelAttribute()
+    public function getReportTypeLabel()
     {
         return match($this->report_type) {
             'income_statement' => 'Laporan Laba Rugi',
@@ -110,7 +110,7 @@ class FinancialReport extends Model
         };
     }
 
-    public function getStatusLabelAttribute()
+    public function getStatusLabel()
     {
         return match($this->status) {
             'draft' => 'Draft',
@@ -120,7 +120,7 @@ class FinancialReport extends Model
         };
     }
 
-    public function getStatusBadgeClassAttribute()
+    public function getStatusBadgeClass()
     {
         return match($this->status) {
             'draft' => 'badge-warning',
@@ -130,7 +130,7 @@ class FinancialReport extends Model
         };
     }
 
-    public function getPeriodLabelAttribute()
+    public function getPeriodLabel()
     {
         return $this->period_start->format('d M Y') . ' - ' . $this->period_end->format('d M Y');
     }

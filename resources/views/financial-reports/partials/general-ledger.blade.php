@@ -1,11 +1,11 @@
 {{-- General Ledger Partial --}}
-@if(isset($reportData) && $reportData)
+@if(isset($data) && $data)
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">
                 <i class="fas fa-book"></i> Buku Besar
-                @if(isset($reportData['account_info']))
-                    - {{ $reportData['account_info']['account_code'] }} {{ $reportData['account_info']['account_name'] }}
+                @if(isset($data['account_info']))
+                    - {{ $data['account_info']['account_code'] }} {{ $data['account_info']['account_name'] }}
                 @endif
             </h3>
             <div class="card-tools">
@@ -19,27 +19,27 @@
                 <div class="col-12 text-center">
                     <h4>{{ company_info('name') }}</h4>
                     <h5>BUKU BESAR</h5>
-                    @if(isset($reportData['account_info']))
-                        <h6>{{ $reportData['account_info']['account_code'] }} - {{ $reportData['account_info']['account_name'] }}</h6>
+                    @if(isset($data['account_info']))
+                        <h6>{{ $data['account_info']['account_code'] }} - {{ $data['account_info']['account_name'] }}</h6>
                     @endif
                     <p>Periode {{ \Carbon\Carbon::parse($report->period_start)->format('d F Y') }} s/d {{ \Carbon\Carbon::parse($report->period_end)->format('d F Y') }}</p>
                 </div>
             </div>
 
             {{-- Account Information --}}
-            @if(isset($reportData['account_info']))
+            @if(isset($data['account_info']))
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="info-box">
                             <span class="info-box-icon bg-info"><i class="fas fa-info-circle"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">Informasi Akun</span>
-                                <span class="info-box-number">{{ $reportData['account_info']['account_code'] }}</span>
+                                <span class="info-box-number">{{ $data['account_info']['account_code'] }}</span>
                                 <div class="progress">
                                     <div class="progress-bar bg-info"></div>
                                 </div>
                                 <span class="progress-description">
-                                    {{ $reportData['account_info']['account_name'] }}
+                                    {{ $data['account_info']['account_name'] }}
                                 </span>
                             </div>
                         </div>
@@ -49,12 +49,12 @@
                             <span class="info-box-icon bg-warning"><i class="fas fa-tag"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">Kategori</span>
-                                <span class="info-box-number">{{ $reportData['account_info']['category'] ?? 'N/A' }}</span>
+                                <span class="info-box-number">{{ $data['account_info']['category'] ?? 'N/A' }}</span>
                                 <div class="progress">
                                     <div class="progress-bar bg-warning"></div>
                                 </div>
                                 <span class="progress-description">
-                                    Saldo Awal: {{ format_currency($reportData['beginning_balance'] ?? 0) }}
+                                    Saldo Awal: {{ format_currency($data['beginning_balance'] ?? 0) }}
                                 </span>
                             </div>
                         </div>
@@ -78,7 +78,7 @@
                     <tbody>
                         {{-- Beginning Balance --}}
                         @php 
-                            $runningBalance = $reportData['beginning_balance'] ?? 0;
+                            $runningBalance = $data['beginning_balance'] ?? 0;
                             $totalDebit = 0;
                             $totalCredit = 0;
                         @endphp
@@ -104,7 +104,7 @@
                         @endif
 
                         {{-- Ledger Entries --}}
-                        @forelse($reportData['entries'] ?? [] as $entry)
+                        @forelse($data['entries'] ?? [] as $entry)
                             @php
                                 $debitAmount = $entry['debit'] ?? 0;
                                 $creditAmount = $entry['credit'] ?? 0;
@@ -199,7 +199,7 @@
                         <span class="info-box-icon bg-info"><i class="fas fa-list-ol"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Jumlah Transaksi</span>
-                            <span class="info-box-number">{{ count($reportData['entries'] ?? []) }}</span>
+                            <span class="info-box-number">{{ count($data['entries'] ?? []) }}</span>
                         </div>
                     </div>
                 </div>
@@ -230,7 +230,7 @@
                             Analisis Pergerakan: {{ $movementType }}
                         </h5>
                         <p class="mb-0">
-                            Saldo Awal: {{ format_currency(abs($reportData['beginning_balance'] ?? 0)) }} |
+                            Saldo Awal: {{ format_currency(abs($data['beginning_balance'] ?? 0)) }} |
                             Saldo Akhir: {{ format_currency(abs($runningBalance)) }} |
                             Perubahan: {{ format_currency(abs($netMovement)) }}
                         </p>
@@ -244,7 +244,7 @@
                 $endDate = \Carbon\Carbon::parse($report->period_end);
                 $monthsDiff = $startDate->diffInMonths($endDate);
             @endphp
-            @if($monthsDiff > 0 && isset($reportData['monthly_summary']))
+            @if($monthsDiff > 0 && isset($data['monthly_summary']))
                 <div class="row mt-4">
                     <div class="col-12">
                         <div class="card">
@@ -266,7 +266,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach($reportData['monthly_summary'] as $month => $summary)
+                                            @foreach($data['monthly_summary'] as $month => $summary)
                                                 <tr>
                                                     <td>{{ \Carbon\Carbon::parse($month)->format('F Y') }}</td>
                                                     <td class="text-right">{{ format_currency($summary['debit']) }}</td>

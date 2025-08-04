@@ -34,15 +34,21 @@ Route::resource('master-accounts', MasterAccountController::class);
 Route::resource('master-units', MasterUnitController::class);
 Route::resource('master-inventories', MasterInventoryController::class);
 
+// Route alias for /akun to redirect to master-accounts
+Route::get('/akun', function () {
+    return redirect('/master-accounts');
+});
+
 // System Settings routes
 Route::resource('system-settings', SystemSettingController::class);
 Route::put('system-settings-batch', [SystemSettingController::class, 'updateBatch'])->name('system-settings.update-batch');
 Route::post('system-settings/clear-cache', [SystemSettingController::class, 'clearCache'])->name('system-settings.clear-cache');
 
-// Transaction routes
+// Transactions
 Route::resource('transactions', TransactionController::class);
 Route::post('transactions/{transaction}/approve', [TransactionController::class, 'approve'])->name('transactions.approve');
 Route::post('transactions/{transaction}/reject', [TransactionController::class, 'reject'])->name('transactions.reject');
+Route::get('transactions/{transaction}/print-receipt', [TransactionController::class, 'printReceipt'])->name('transactions.print-receipt');
 
 // General Ledger routes
 Route::resource('general-ledger', GeneralLedgerController::class);

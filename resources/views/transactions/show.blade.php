@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('adminlte::page')
 
 @section('title', 'Detail Transaksi')
 
@@ -125,6 +125,12 @@
                     <a href="{{ route('transactions.edit', $transaction) }}" class="btn btn-warning">
                         <i class="fas fa-edit"></i> Edit
                     </a>
+                    
+                    @if($transaction->status === 'approved')
+                    <a href="{{ route('transactions.print-receipt', $transaction) }}" class="btn btn-info" target="_blank">
+                        <i class="fas fa-print"></i> Cetak Bukti Kas
+                    </a>
+                    @endif
                     
                     @if($transaction->status === 'pending')
                     <div class="float-right">

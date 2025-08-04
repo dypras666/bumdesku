@@ -1,5 +1,5 @@
 {{-- Cash Flow Partial --}}
-@if(isset($reportData) && $reportData)
+@if(isset($data) && $data)
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">
@@ -41,7 +41,7 @@
                             <td></td>
                         </tr>
                         @php $totalOperatingInflows = 0; @endphp
-                        @foreach($reportData['operating_inflows'] ?? [] as $item)
+                        @foreach($data['operating_inflows'] ?? [] as $item)
                             <tr>
                                 <td class="pl-4">{{ $item['description'] }}</td>
                                 <td class="text-right">{{ format_currency($item['amount']) }}</td>
@@ -59,7 +59,7 @@
                             <td></td>
                         </tr>
                         @php $totalOperatingOutflows = 0; @endphp
-                        @foreach($reportData['operating_outflows'] ?? [] as $item)
+                        @foreach($data['operating_outflows'] ?? [] as $item)
                             <tr>
                                 <td class="pl-4">{{ $item['description'] }}</td>
                                 <td class="text-right">({{ format_currency($item['amount']) }})</td>
@@ -90,7 +90,7 @@
                             <td></td>
                         </tr>
                         @php $totalInvestingInflows = 0; @endphp
-                        @foreach($reportData['investing_inflows'] ?? [] as $item)
+                        @foreach($data['investing_inflows'] ?? [] as $item)
                             <tr>
                                 <td class="pl-4">{{ $item['description'] }}</td>
                                 <td class="text-right">{{ format_currency($item['amount']) }}</td>
@@ -108,7 +108,7 @@
                             <td></td>
                         </tr>
                         @php $totalInvestingOutflows = 0; @endphp
-                        @foreach($reportData['investing_outflows'] ?? [] as $item)
+                        @foreach($data['investing_outflows'] ?? [] as $item)
                             <tr>
                                 <td class="pl-4">{{ $item['description'] }}</td>
                                 <td class="text-right">({{ format_currency($item['amount']) }})</td>
@@ -139,7 +139,7 @@
                             <td></td>
                         </tr>
                         @php $totalFinancingInflows = 0; @endphp
-                        @foreach($reportData['financing_inflows'] ?? [] as $item)
+                        @foreach($data['financing_inflows'] ?? [] as $item)
                             <tr>
                                 <td class="pl-4">{{ $item['description'] }}</td>
                                 <td class="text-right">{{ format_currency($item['amount']) }}</td>
@@ -157,7 +157,7 @@
                             <td></td>
                         </tr>
                         @php $totalFinancingOutflows = 0; @endphp
-                        @foreach($reportData['financing_outflows'] ?? [] as $item)
+                        @foreach($data['financing_outflows'] ?? [] as $item)
                             <tr>
                                 <td class="pl-4">{{ $item['description'] }}</td>
                                 <td class="text-right">({{ format_currency($item['amount']) }})</td>
@@ -185,7 +185,7 @@
 
                         {{-- SALDO KAS --}}
                         @php 
-                            $beginningCash = $reportData['beginning_cash'] ?? 0;
+                            $beginningCash = $data['beginning_cash'] ?? 0;
                             $endingCash = $beginningCash + $netCashFlow;
                         @endphp
                         <tr>

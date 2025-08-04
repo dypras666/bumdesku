@@ -168,7 +168,7 @@
                                                 </a>
                                                 
                                                 @if($report->status === 'generated')
-                                                    <form action="{{ route('reports.finalize', $report) }}" 
+                                                    <form action="{{ route('financial-reports.finalize', $report) }}" 
                                                           method="POST" style="display: inline;">
                                                         @csrf
                                                         @method('PATCH')
@@ -182,7 +182,7 @@
                                             @endif
                                             
                                             @if($report->status === 'generated' || $report->status === 'finalized')
-                                                <form action="{{ route('reports.regenerate', $report) }}" 
+                                                <form action="{{ route('financial-reports.regenerate', $report) }}" 
                                                       method="POST" style="display: inline;">
                                                     @csrf
                                                     <button type="submit" class="btn btn-primary btn-sm" 

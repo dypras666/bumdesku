@@ -20,6 +20,19 @@ class TransactionController extends Controller
      */
     public function index(Request $request)
     {
+        // Jika request AJAX, return JSON
+        if ($request->ajax()) {
+            return $this->getTransactionsData($request);
+        }
+
+        return view('transactions.index');
+    }
+
+    /**
+     * Get transactions data for AJAX requests
+     */
+    public function getTransactionsData(Request $request)
+    {
         $query = Transaction::with(['account', 'user', 'approver']);
 
         // Filter berdasarkan jenis transaksi
@@ -52,11 +65,25 @@ class TransactionController extends Controller
             });
         }
 
+        $perPage = $request->get('per_page', 25);
         $transactions = $query->orderBy('transaction_date', 'desc')
                              ->orderBy('created_at', 'desc')
-                             ->paginate(25);
+                             ->paginate($perPage);
 
-        return view('transactions.index', compact('transactions'));
+        return response()->json([
+            'data' => $transactions->items(),
+            'pagination' => [
+                'current_page' => $transactions->currentPage(),
+                'last_page' => $transactions->lastPage(),
+                'per_page' => $transactions->perPage(),
+                'total' => $transactions->total(),
+                'from' => $transactions->firstItem(),
+                'to' => $transactions->lastItem(),
+                'has_more_pages' => $transactions->hasMorePages(),
+                'prev_page_url' => $transactions->previousPageUrl(),
+                'next_page_url' => $transactions->nextPageUrl(),
+            ]
+        ]);
     }
 
     /**
@@ -203,6 +230,25 @@ class TransactionController extends Controller
     }
 
     /**
+     * Print cash receipt for approved transactions
+     */
+    public function printReceipt(Transaction $transaction)
+    {
+        if ($transaction->status !== 'approved') {
+            return redirect()->back()->with('error', 'Hanya transaksi yang sudah disetujui yang dapat dicetak.');
+        }
+
+        $companyInfo = [
+            'name' => company_info('name') ?? 'BUMDES',
+            'address' => company_info('address') ?? '',
+            'phone' => company_info('phone') ?? '',
+            'email' => company_info('email') ?? ''
+        ];
+
+        return view('transactions.print-receipt', compact('transaction', 'companyInfo'));
+    }
+
+    /**
      * Approve transaction
      */
     public function approve(Transaction $transaction)
@@ -254,6 +300,160 @@ class TransactionController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('transactions.index')
                            ->with('error', 'Gagal menolak transaksi: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * API endpoint untuk mendapatkan data transaksi dengan pagination dan filter
+     */
+    public function apiIndex(Request $request)
+    {
+        $query = Transaction::with(['account', 'user', 'approver']);
+
+        // Filter berdasarkan jenis transaksi
+        if ($request->filled('type')) {
+            $query->where('transaction_type', $request->type);
+        }
+
+        // Filter berdasarkan status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Filter berdasarkan tanggal
+        if ($request->filled('date_from')) {
+            $query->whereDate('transaction_date', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('transaction_date', '<=', $request->date_to);
+        }
+
+        // Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('transaction_code', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhereHas('account', function($q) use ($search) {
+                      $q->where('nama_akun', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $perPage = $request->get('per_page', 25);
+        $transactions = $query->orderBy('transaction_date', 'desc')
+                             ->orderBy('created_at', 'desc')
+                             ->paginate($perPage);
+
+        return response()->json([
+            'success' => true,
+            'data' => $transactions->items(),
+            'pagination' => [
+                'current_page' => $transactions->currentPage(),
+                'last_page' => $transactions->lastPage(),
+                'per_page' => $transactions->perPage(),
+                'total' => $transactions->total(),
+                'from' => $transactions->firstItem(),
+                'to' => $transactions->lastItem(),
+                'has_more_pages' => $transactions->hasMorePages(),
+                'prev_page_url' => $transactions->previousPageUrl(),
+                'next_page_url' => $transactions->nextPageUrl(),
+            ]
+        ]);
+    }
+
+    /**
+     * API endpoint untuk approve transaksi
+     */
+    public function apiApprove(Transaction $transaction)
+    {
+        if ($transaction->status !== 'pending') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Transaksi sudah diproses sebelumnya.'
+            ], 400);
+        }
+
+        try {
+            $transaction->update([
+                'status' => 'approved',
+                'approved_at' => now(),
+                'approved_by' => Auth::id(),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Transaksi berhasil disetujui.',
+                'data' => $transaction->load(['account', 'user', 'approver'])
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menyetujui transaksi: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * API endpoint untuk reject transaksi
+     */
+    public function apiReject(Request $request, Transaction $transaction)
+    {
+        if ($transaction->status !== 'pending') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Transaksi sudah diproses sebelumnya.'
+            ], 400);
+        }
+
+        $request->validate([
+            'notes' => 'required|string|max:1000',
+        ]);
+
+        try {
+            $transaction->update([
+                'status' => 'rejected',
+                'approved_at' => now(),
+                'approved_by' => Auth::id(),
+                'notes' => $request->notes,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Transaksi berhasil ditolak.',
+                'data' => $transaction->load(['account', 'user', 'approver'])
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menolak transaksi: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * API endpoint untuk delete transaksi
+     */
+    public function apiDestroy(Transaction $transaction)
+    {
+        if ($transaction->status !== 'pending') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Transaksi yang sudah disetujui/ditolak tidak dapat dihapus.'
+            ], 400);
+        }
+
+        try {
+            $transaction->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Transaksi berhasil dihapus.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus transaksi: ' . $e->getMessage()
+            ], 500);
         }
     }
 }
