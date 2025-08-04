@@ -12,10 +12,11 @@ use App\Http\Controllers\SystemSettingController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\GeneralLedgerController;
 use App\Http\Controllers\FinancialReportController;
+use App\Http\Controllers\GuideController;
 
-Route::get('/', function () {
-    return redirect('/dashboard');
-});
+// Public routes (before authentication)
+Route::get('/', [GuideController::class, 'publicIndex'])->name('guides.public.index');
+Route::get('/panduan/{slug}', [GuideController::class, 'publicShow'])->name('guides.public.show');
 
 Auth::routes();
 
@@ -24,6 +25,9 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 // User management routes
 Route::resource('users', UserController::class);
+
+// Guide management routes (superadmin only)
+Route::resource('guides', GuideController::class);
 
 // Profile routes
 Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
