@@ -226,9 +226,9 @@
                         </tbody>
                     </table>
                 </div>
-                @if($reports->hasPages())
-                    <div class="card-footer">
-                        {{ $reports->appends(request()->query())->links() }}
+                @if($reports->hasPages() || $reports->total() > 0)
+                    <div class="card-footer bg-light">
+                        {{ $reports->appends(request()->query())->links('pagination.bootstrap-4') }}
                     </div>
                 @endif
             </div>

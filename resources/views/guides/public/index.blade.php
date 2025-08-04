@@ -111,6 +111,9 @@
                         @case('best-practices')
                             <i class="fas fa-star me-1"></i>
                             @break
+                        @case('comprehensive')
+                            <i class="fas fa-graduation-cap me-1"></i>
+                            @break
                         @default
                             <i class="fas fa-book me-1"></i>
                     @endswitch

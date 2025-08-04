@@ -13,6 +13,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\GeneralLedgerController;
 use App\Http\Controllers\FinancialReportController;
 use App\Http\Controllers\GuideController;
+use App\Http\Controllers\UploadController;
 
 // Public routes (before authentication)
 Route::get('/', [GuideController::class, 'publicIndex'])->name('guides.public.index');
@@ -28,6 +29,9 @@ Route::resource('users', UserController::class);
 
 // Guide management routes (superadmin only)
 Route::resource('guides', GuideController::class);
+
+// Upload routes
+Route::post('/upload/image', [UploadController::class, 'uploadImage'])->name('upload.image');
 
 // Profile routes
 Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');

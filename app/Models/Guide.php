@@ -17,6 +17,7 @@ class Guide extends Model
         'is_published',
         'icon',
         'description',
+        'youtube_url',
         'created_by'
     ];
 
@@ -71,12 +72,39 @@ class Guide extends Model
     {
         return [
             'getting-started' => 'Memulai',
-            'user-management' => 'Manajemen Pengguna',
-            'transactions' => 'Transaksi',
-            'financial-reports' => 'Laporan Keuangan',
-            'master-data' => 'Data Master',
-            'system-settings' => 'Pengaturan Sistem',
-            'troubleshooting' => 'Pemecahan Masalah'
+            'financial-management' => 'Manajemen Keuangan',
+            'system-administration' => 'Administrasi Sistem',
+            'troubleshooting' => 'Pemecahan Masalah',
+            'best-practices' => 'Best Practices',
+            'comprehensive' => 'Panduan Lengkap'
         ];
+    }
+
+    /**
+     * Extract YouTube video ID from URL
+     */
+    public function getYoutubeVideoIdAttribute()
+    {
+        if (!$this->youtube_url) {
+            return null;
+        }
+
+        $url = $this->youtube_url;
+        
+        // Handle different YouTube URL formats
+        if (preg_match('/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]+)/', $url, $matches)) {
+            return $matches[1];
+        }
+        
+        return null;
+    }
+
+    /**
+     * Get YouTube embed URL
+     */
+    public function getYoutubeEmbedUrlAttribute()
+    {
+        $videoId = $this->youtube_video_id;
+        return $videoId ? "https://www.youtube.com/embed/{$videoId}" : null;
     }
 }

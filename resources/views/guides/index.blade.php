@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('adminlte::page')
 
 @section('title', 'Manajemen Panduan')
 
@@ -122,7 +122,7 @@
                                                target="_blank">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('guides.edit', $guide->id) }}" 
+                                            <a href="{{ route('guides.edit', $guide->slug) }}" 
                                                class="btn btn-sm btn-warning" 
                                                title="Edit">
                                                 <i class="fas fa-edit"></i>
@@ -153,9 +153,9 @@
                     </div>
 
                     <!-- Pagination -->
-                    @if($guides->hasPages())
-                    <div class="d-flex justify-content-center">
-                        {{ $guides->links() }}
+                    @if($guides->hasPages() || $guides->total() > 0)
+                    <div class="card-footer bg-light">
+                        {{ $guides->links('pagination.bootstrap-4') }}
                     </div>
                     @endif
                 </div>
@@ -192,6 +192,9 @@
 @endsection
 
 @section('css')
+<!-- DataTables CDN -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap4.min.css">
 <style>
 .card-title {
     margin-bottom: 0;
@@ -209,6 +212,12 @@
 @endsection
 
 @section('js')
+<!-- DataTables CDN -->
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap4.min.js"></script>
+
 <script>
 $(document).ready(function() {
     // Initialize DataTable

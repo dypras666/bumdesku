@@ -189,9 +189,33 @@
                         </div>
                     </div>
 
+                    <!-- YouTube Video -->
+                    @if($guide->youtube_url)
+                    <div class="youtube-video mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fab fa-youtube text-danger me-2"></i>
+                                    Video Tutorial
+                                </h5>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="ratio ratio-16x9">
+                                    <iframe src="{{ $guide->youtube_embed_url }}" 
+                                            title="YouTube video player" 
+                                            frameborder="0" 
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                            allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+
                     <!-- Guide Content -->
                     <div class="guide-content">
-                        {!! \Illuminate\Support\Str::markdown($guide->content) !!}
+                        {!! $guide->content !!}
                     </div>
 
                     <!-- Navigation -->
@@ -297,7 +321,21 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
+        // Convert Markdown to HTML if needed
+        function processContent() {
+            const contentDiv = document.querySelector('.guide-content');
+            const content = contentDiv.innerHTML.trim();
+            
+            // Check if content looks like Markdown (starts with # or contains markdown patterns)
+            if (content.includes('\n#') || content.match(/^#\s/m)) {
+                // Convert Markdown to HTML
+                const htmlContent = marked.parse(content);
+                contentDiv.innerHTML = htmlContent;
+            }
+        }
+
         // Generate Table of Contents
         function generateTOC() {
             const headings = document.querySelectorAll('.guide-content h1, .guide-content h2, .guide-content h3');
@@ -361,6 +399,7 @@
 
         // Initialize everything when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
+            processContent();
             generateTOC();
             setupSmoothScrolling();
             setupBackToTop();

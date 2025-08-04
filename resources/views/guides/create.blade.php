@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('adminlte::page')
 
 @section('title', 'Tambah Panduan')
 
@@ -74,18 +74,33 @@
                                     @enderror
                                 </div>
 
+                                <!-- YouTube URL -->
+                                <div class="form-group">
+                                    <label for="youtube_url">Link YouTube</label>
+                                    <input type="url" 
+                                           class="form-control @error('youtube_url') is-invalid @enderror" 
+                                           id="youtube_url" 
+                                           name="youtube_url" 
+                                           value="{{ old('youtube_url') }}" 
+                                           placeholder="https://www.youtube.com/watch?v=...">
+                                    <small class="form-text text-muted">
+                                        Link video YouTube untuk tutorial detail (opsional)
+                                    </small>
+                                    @error('youtube_url')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
                                 <!-- Content -->
                                 <div class="form-group">
                                     <label for="content" class="required">Konten Panduan</label>
                                     <textarea class="form-control @error('content') is-invalid @enderror" 
                                               id="content" 
                                               name="content" 
-                                              rows="20" 
-                                              placeholder="Tulis konten panduan menggunakan Markdown"
+                                              placeholder="Tulis konten panduan dengan rich text editor"
                                               required>{{ old('content') }}</textarea>
                                     <small class="form-text text-muted">
-                                        Gunakan format Markdown untuk formatting. 
-                                        <a href="#" data-toggle="modal" data-target="#markdownHelp">Lihat panduan Markdown</a>
+                                        Gunakan editor untuk formatting teks, menambahkan gambar, dan styling konten.
                                     </small>
                                     @error('content')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -268,6 +283,8 @@ Code block
 @endsection
 
 @section('css')
+<!-- Summernote CSS -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
 <style>
 .required::after {
     content: " *";
@@ -288,12 +305,85 @@ pre {
     border-radius: 4px;
     font-size: 12px;
 }
+.note-editor {
+    border: 1px solid #ced4da;
+}
+.note-editor.note-frame .note-editing-area .note-editable {
+    min-height: 300px;
+}
 </style>
 @endsection
 
 @section('js')
+<!-- Summernote JS -->
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
 <script>
 $(document).ready(function() {
+    // Initialize Summernote
+    $('#content').summernote({
+        height: 400,
+        minHeight: 300,
+        maxHeight: 600,
+        placeholder: 'Tulis konten panduan dengan rich text editor...',
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+        ],
+        callbacks: {
+            onImageUpload: function(files) {
+                // Handle image upload
+                for (let i = 0; i < files.length; i++) {
+                    uploadImage(files[i]);
+                }
+            },
+            onPaste: function(e) {
+                // Handle paste events including images
+                var clipboardData = e.originalEvent.clipboardData;
+                if (clipboardData && clipboardData.items) {
+                    var items = clipboardData.items;
+                    for (var i = 0; i < items.length; i++) {
+                        if (items[i].type.indexOf('image') !== -1) {
+                            var blob = items[i].getAsFile();
+                            uploadImage(blob);
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Function to handle image upload
+    function uploadImage(file) {
+        var data = new FormData();
+        data.append('image', file);
+        data.append('_token', $('meta[name="csrf-token"]').attr('content'));
+
+        $.ajax({
+            url: '{{ route("upload.image") }}', // We'll create this route
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: data,
+            type: 'POST',
+            success: function(response) {
+                if (response.success) {
+                    $('#content').summernote('insertImage', response.url);
+                } else {
+                    alert('Gagal mengupload gambar: ' + response.message);
+                }
+            },
+            error: function() {
+                alert('Terjadi kesalahan saat mengupload gambar');
+            }
+        });
+    }
+
     // Auto-generate slug from title
     $('#title').on('input', function() {
         var title = $(this).val();
@@ -333,7 +423,7 @@ $(document).ready(function() {
     $('#guideForm').on('submit', function(e) {
         var title = $('#title').val().trim();
         var description = $('#description').val().trim();
-        var content = $('#content').val().trim();
+        var content = $('#content').summernote('code').trim();
         var category = $('#category').val();
 
         if (!title || !description || !content || !category) {

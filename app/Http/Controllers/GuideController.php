@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Guide;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -13,7 +14,7 @@ class GuideController extends Controller
     {
         $this->middleware('auth')->except(['publicIndex', 'publicShow']);
         $this->middleware(function ($request, $next) {
-            if (Auth::check() && Auth::user()->role !== 'superadmin') {
+            if (Auth::check() && Auth::user()->role->name !== 'super_admin') {
                 abort(403, 'Unauthorized action.');
             }
             return $next($request);
@@ -73,6 +74,7 @@ class GuideController extends Controller
             'order' => 'nullable|integer|min:0',
             'description' => 'nullable|string|max:500',
             'icon' => 'nullable|string|max:100',
+            'youtube_url' => 'nullable|url',
             'is_published' => 'boolean'
         ]);
 
@@ -84,6 +86,7 @@ class GuideController extends Controller
             'order' => $request->order ?? 0,
             'description' => $request->description,
             'icon' => $request->icon,
+            'youtube_url' => $request->youtube_url,
             'is_published' => $request->boolean('is_published', true),
             'created_by' => Auth::id()
         ]);
@@ -154,7 +157,16 @@ class GuideController extends Controller
      */
     public function edit(Guide $guide)
     {
+        // Validate guide exists and is accessible
+        if (!$guide || !$guide->exists) {
+            abort(404, 'Guide not found');
+        }
+        
+        // Clean content for safe display
+        $guide->content = mb_convert_encoding($guide->content, 'UTF-8', 'UTF-8');
+        
         $categories = Guide::getCategories();
+        
         return view('guides.edit', compact('guide', 'categories'));
     }
 
@@ -170,6 +182,7 @@ class GuideController extends Controller
             'order' => 'nullable|integer|min:0',
             'description' => 'nullable|string|max:500',
             'icon' => 'nullable|string|max:100',
+            'youtube_url' => 'nullable|url',
             'is_published' => 'boolean'
         ]);
 
@@ -181,6 +194,7 @@ class GuideController extends Controller
             'order' => $request->order ?? 0,
             'description' => $request->description,
             'icon' => $request->icon,
+            'youtube_url' => $request->youtube_url,
             'is_published' => $request->boolean('is_published', true)
         ]);
 

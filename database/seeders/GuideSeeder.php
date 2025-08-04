@@ -144,6 +144,505 @@ Jika mengalami kesulitan, silakan hubungi administrator sistem atau merujuk ke p
                 'created_by' => $superadmin?->id,
             ],
 
+            // Complete Year-End Guide
+            [
+                'title' => 'Panduan Lengkap: Dari Awal Hingga Laporan Akhir Tahun',
+                'slug' => 'panduan-lengkap-dari-awal-hingga-laporan-akhir-tahun',
+                'content' => '
+# Panduan Lengkap: Dari Awal Hingga Laporan Akhir Tahun
+
+Panduan komprehensif ini akan memandu Anda melalui seluruh proses pengelolaan keuangan BUMDES, mulai dari setup awal hingga pembuatan laporan akhir tahun.
+
+## FASE 1: PERSIAPAN AWAL SISTEM
+
+### 1.1 Setup Informasi Perusahaan
+**Lokasi**: Menu Pengaturan → Pengaturan Perusahaan
+
+**Langkah-langkah:**
+1. **Akses Pengaturan Perusahaan**
+   - Login sebagai administrator
+   - Klik menu "Pengaturan" di sidebar
+   - Pilih "Pengaturan Perusahaan"
+
+2. **Lengkapi Informasi Dasar**
+   - Nama BUMDES: [Nama lengkap BUMDES]
+   - Alamat lengkap desa
+   - Nomor telepon dan email
+   - NPWP (jika ada)
+   - Nomor SK pendirian BUMDES
+
+3. **Upload Logo dan Dokumen**
+   - Logo BUMDES (format PNG/JPG, max 2MB)
+   - Kop surat resmi
+   - Stempel digital (opsional)
+
+4. **Pengaturan Keuangan**
+   - Mata uang: Rupiah (IDR)
+   - Format angka: 1.000.000,00
+   - Tahun buku: Januari - Desember
+   - Metode akuntansi: Akrual
+
+### 1.2 Setup Master Data Akun
+**Lokasi**: Menu Master Data → Daftar Akun
+
+**Struktur Kode Akun BUMDES:**
+```
+1xxx - ASET
+  11xx - Aset Lancar
+    1101 - Kas
+    1102 - Bank
+    1103 - Piutang Usaha
+    1104 - Persediaan Barang Dagang
+    1105 - Biaya Dibayar Dimuka
+  
+  12xx - Aset Tetap
+    1201 - Tanah
+    1202 - Bangunan
+    1203 - Kendaraan
+    1204 - Peralatan
+    1205 - Akumulasi Penyusutan
+
+2xxx - KEWAJIBAN
+  21xx - Kewajiban Lancar
+    2101 - Utang Usaha
+    2102 - Utang Gaji
+    2103 - Utang Pajak
+    2104 - Biaya Yang Masih Harus Dibayar
+  
+  22xx - Kewajiban Jangka Panjang
+    2201 - Utang Bank
+    2202 - Utang Investasi
+
+3xxx - MODAL
+  3101 - Modal Desa
+  3102 - Modal Masyarakat
+  3103 - Laba Ditahan
+  3104 - Laba Tahun Berjalan
+
+4xxx - PENDAPATAN
+  4101 - Pendapatan Usaha Utama
+  4102 - Pendapatan Usaha Sampingan
+  4103 - Pendapatan Bunga
+  4104 - Pendapatan Lain-lain
+
+5xxx - BEBAN
+  5101 - Harga Pokok Penjualan
+  5102 - Beban Gaji
+  5103 - Beban Listrik
+  5104 - Beban Telepon
+  5105 - Beban Transportasi
+  5106 - Beban Penyusutan
+  5107 - Beban Lain-lain
+```
+
+**Cara Input Master Akun:**
+1. Klik "Tambah Akun Baru"
+2. Masukkan kode akun (4 digit)
+3. Nama akun yang jelas dan deskriptif
+4. Pilih kategori (Aset/Kewajiban/Modal/Pendapatan/Beban)
+5. Masukkan saldo awal (jika ada)
+6. Simpan
+
+### 1.3 Setup Master Data Unit Usaha
+**Lokasi**: Menu Master Data → Unit Usaha
+
+**Contoh Unit Usaha BUMDES:**
+- Unit Simpan Pinjam
+- Unit Perdagangan
+- Unit Jasa
+- Unit Produksi
+- Unit Pariwisata
+
+**Data yang diperlukan:**
+- Nama unit usaha
+- Kategori usaha
+- Penanggung jawab
+- Modal awal unit
+- Target pendapatan
+
+### 1.4 Setup Master Data Inventaris
+**Lokasi**: Menu Master Data → Inventaris
+
+**Kategori Inventaris:**
+- Barang Dagang
+- Bahan Baku
+- Aset Tetap
+- Perlengkapan Kantor
+
+## FASE 2: OPERASIONAL HARIAN
+
+### 2.1 Pencatatan Transaksi Harian
+**Lokasi**: Menu Transaksi → Tambah Transaksi
+
+**Jenis Transaksi Umum:**
+
+**A. Transaksi Penerimaan:**
+1. **Penjualan Tunai**
+   - Debit: 1101 (Kas) - Rp xxx
+   - Kredit: 4101 (Pendapatan Usaha) - Rp xxx
+
+2. **Penjualan Kredit**
+   - Debit: 1103 (Piutang Usaha) - Rp xxx
+   - Kredit: 4101 (Pendapatan Usaha) - Rp xxx
+
+3. **Penerimaan Piutang**
+   - Debit: 1101 (Kas) - Rp xxx
+   - Kredit: 1103 (Piutang Usaha) - Rp xxx
+
+**B. Transaksi Pengeluaran:**
+1. **Pembelian Tunai**
+   - Debit: 1104 (Persediaan) - Rp xxx
+   - Kredit: 1101 (Kas) - Rp xxx
+
+2. **Pembelian Kredit**
+   - Debit: 1104 (Persediaan) - Rp xxx
+   - Kredit: 2101 (Utang Usaha) - Rp xxx
+
+3. **Pembayaran Beban**
+   - Debit: 5xxx (Beban terkait) - Rp xxx
+   - Kredit: 1101 (Kas) - Rp xxx
+
+### 2.2 Prosedur Pencatatan Transaksi
+1. **Persiapan Dokumen**
+   - Kumpulkan semua bukti transaksi
+   - Pastikan dokumen lengkap dan sah
+   - Urutkan berdasarkan tanggal
+
+2. **Input Transaksi**
+   - Buka menu Transaksi
+   - Klik "Tambah Transaksi Baru"
+   - Pilih jenis transaksi
+   - Masukkan tanggal transaksi
+   - Pilih akun debit dan kredit
+   - Input nominal (harus balance)
+   - Tambahkan keterangan yang jelas
+   - Upload bukti transaksi (scan/foto)
+
+3. **Validasi dan Approval**
+   - Periksa kembali data yang diinput
+   - Pastikan debit = kredit
+   - Submit untuk approval (jika diperlukan)
+   - Transaksi otomatis masuk ke buku besar
+
+### 2.3 Monitoring Harian
+**Dashboard yang perlu dipantau:**
+- Saldo kas harian
+- Total penjualan hari ini
+- Outstanding piutang
+- Utang yang jatuh tempo
+- Stok barang kritis
+
+## FASE 3: PELAPORAN BERKALA
+
+### 3.1 Laporan Mingguan
+**Yang perlu dibuat:**
+- Ringkasan transaksi mingguan
+- Posisi kas dan bank
+- Aging piutang
+- Status utang
+
+### 3.2 Laporan Bulanan
+**Lokasi**: Menu Laporan Keuangan
+
+**Laporan yang wajib dibuat:**
+
+**A. Neraca Bulanan**
+1. Akses menu "Laporan Keuangan"
+2. Pilih "Neraca"
+3. Set periode: 1 bulan
+4. Klik "Generate Laporan"
+5. Review dan export PDF
+
+**B. Laporan Laba Rugi**
+1. Pilih "Laporan Laba Rugi"
+2. Set periode: 1 bulan
+3. Generate dan review
+4. Analisis margin keuntungan
+
+**C. Laporan Arus Kas**
+1. Pilih "Laporan Arus Kas"
+2. Set periode: 1 bulan
+3. Kategorikan: Operasional, Investasi, Pendanaan
+4. Generate laporan
+
+**D. Buku Besar**
+1. Pilih "Buku Besar"
+2. Pilih akun yang ingin dilihat
+3. Set periode
+4. Review mutasi per akun
+
+### 3.3 Analisis Kinerja Bulanan
+**Indikator yang perlu dianalisis:**
+- Pertumbuhan pendapatan
+- Efisiensi biaya operasional
+- Tingkat kolektibilitas piutang
+- Perputaran persediaan
+- ROI per unit usaha
+
+## FASE 4: PERSIAPAN AKHIR TAHUN
+
+### 4.1 Penyesuaian Akhir Tahun (Adjusting Entries)
+**Lokasi**: Menu Transaksi → Jurnal Penyesuaian
+
+**Jenis Penyesuaian:**
+
+**A. Penyusutan Aset Tetap**
+```
+Debit: 5106 (Beban Penyusutan) - Rp xxx
+Kredit: 1205 (Akumulasi Penyusutan) - Rp xxx
+```
+
+**B. Penyesuaian Persediaan**
+```
+Debit: 5101 (HPP) - Rp xxx
+Kredit: 1104 (Persediaan) - Rp xxx
+```
+
+**C. Biaya Dibayar Dimuka**
+```
+Debit: 5xxx (Beban terkait) - Rp xxx
+Kredit: 1105 (Biaya Dibayar Dimuka) - Rp xxx
+```
+
+**D. Biaya Yang Masih Harus Dibayar**
+```
+Debit: 5xxx (Beban terkait) - Rp xxx
+Kredit: 2104 (Biaya YMH Dibayar) - Rp xxx
+```
+
+### 4.2 Rekonsiliasi Bank
+**Langkah-langkah:**
+1. Dapatkan rekening koran dari bank
+2. Bandingkan dengan catatan kas/bank di sistem
+3. Identifikasi perbedaan
+4. Buat jurnal penyesuaian jika diperlukan
+5. Pastikan saldo sesuai
+
+### 4.3 Inventarisasi Fisik
+**Proses:**
+1. Hitung fisik semua aset tetap
+2. Hitung persediaan barang dagang
+3. Bandingkan dengan catatan sistem
+4. Buat adjustment jika ada selisih
+5. Update nilai aset jika diperlukan
+
+## FASE 5: LAPORAN AKHIR TAHUN
+
+### 5.1 Neraca Akhir Tahun
+**Lokasi**: Menu Laporan Keuangan → Neraca
+
+**Langkah-langkah:**
+1. Pastikan semua transaksi sudah diinput
+2. Lakukan semua jurnal penyesuaian
+3. Generate Neraca periode 1 Jan - 31 Des
+4. Review keseimbangan Aset = Kewajiban + Modal
+5. Export dalam format PDF dan Excel
+
+**Komponen Neraca:**
+```
+ASET
+├── Aset Lancar
+│   ├── Kas dan Setara Kas
+│   ├── Piutang Usaha
+│   ├── Persediaan
+│   └── Biaya Dibayar Dimuka
+└── Aset Tetap
+    ├── Tanah
+    ├── Bangunan
+    ├── Kendaraan
+    ├── Peralatan
+    └── (Akumulasi Penyusutan)
+
+KEWAJIBAN DAN MODAL
+├── Kewajiban Lancar
+│   ├── Utang Usaha
+│   ├── Utang Gaji
+│   └── Biaya YMH Dibayar
+├── Kewajiban Jangka Panjang
+│   └── Utang Bank
+└── Modal
+    ├── Modal Desa
+    ├── Modal Masyarakat
+    ├── Laba Ditahan
+    └── Laba Tahun Berjalan
+```
+
+### 5.2 Laporan Laba Rugi Tahunan
+**Struktur Laporan:**
+```
+PENDAPATAN
+├── Pendapatan Usaha Utama
+├── Pendapatan Usaha Sampingan
+├── Pendapatan Bunga
+└── Pendapatan Lain-lain
+TOTAL PENDAPATAN
+
+BEBAN
+├── Harga Pokok Penjualan
+├── Beban Operasional
+│   ├── Beban Gaji
+│   ├── Beban Listrik
+│   ├── Beban Transportasi
+│   └── Beban Lainnya
+├── Beban Penyusutan
+└── Beban Non-Operasional
+TOTAL BEBAN
+
+LABA BERSIH TAHUN BERJALAN
+```
+
+### 5.3 Laporan Arus Kas Tahunan
+**Kategori Arus Kas:**
+
+**A. Arus Kas Operasional**
+- Penerimaan dari pelanggan
+- Pembayaran kepada pemasok
+- Pembayaran gaji karyawan
+- Pembayaran beban operasional
+
+**B. Arus Kas Investasi**
+- Pembelian aset tetap
+- Penjualan aset tetap
+- Investasi jangka panjang
+
+**C. Arus Kas Pendanaan**
+- Penerimaan modal
+- Pembayaran dividen
+- Penerimaan/pembayaran utang
+
+### 5.4 Catatan Atas Laporan Keuangan
+**Informasi yang harus disertakan:**
+1. **Gambaran Umum BUMDES**
+   - Sejarah dan kegiatan usaha
+   - Struktur organisasi
+   - Kebijakan akuntansi
+
+2. **Penjelasan Pos-pos Neraca**
+   - Rincian aset tetap
+   - Kebijakan penyusutan
+   - Komposisi utang
+   - Perubahan modal
+
+3. **Penjelasan Pos-pos Laba Rugi**
+   - Sumber pendapatan utama
+   - Komponen beban terbesar
+   - Pos-pos luar biasa
+
+4. **Komitmen dan Kontinjensi**
+   - Kontrak jangka panjang
+   - Jaminan yang diberikan
+   - Perkara hukum (jika ada)
+
+## FASE 6: ANALISIS DAN EVALUASI
+
+### 6.1 Analisis Rasio Keuangan
+**Rasio Likuiditas:**
+- Current Ratio = Aset Lancar / Kewajiban Lancar
+- Quick Ratio = (Aset Lancar - Persediaan) / Kewajiban Lancar
+
+**Rasio Profitabilitas:**
+- Gross Profit Margin = (Pendapatan - HPP) / Pendapatan
+- Net Profit Margin = Laba Bersih / Pendapatan
+- ROA = Laba Bersih / Total Aset
+- ROE = Laba Bersih / Total Modal
+
+**Rasio Aktivitas:**
+- Perputaran Piutang = Pendapatan / Rata-rata Piutang
+- Perputaran Persediaan = HPP / Rata-rata Persediaan
+
+### 6.2 Evaluasi Kinerja per Unit Usaha
+**Metrik yang dievaluasi:**
+- Kontribusi pendapatan
+- Margin keuntungan
+- Efisiensi operasional
+- Pertumbuhan year-over-year
+
+### 6.3 Rekomendasi untuk Tahun Berikutnya
+**Berdasarkan analisis, buat rekomendasi:**
+- Strategi peningkatan pendapatan
+- Efisiensi biaya operasional
+- Investasi aset produktif
+- Pengembangan unit usaha baru
+
+## FASE 7: PELAPORAN DAN PERTANGGUNGJAWABAN
+
+### 7.1 Penyusunan Laporan Tahunan
+**Komponen Laporan Tahunan:**
+1. **Kata Pengantar Direktur**
+2. **Profil BUMDES**
+3. **Laporan Keuangan Audited**
+4. **Analisis Kinerja Keuangan**
+5. **Program Kerja Tahun Depan**
+6. **Lampiran-lampiran**
+
+### 7.2 Presentasi ke Stakeholder
+**Persiapan Presentasi:**
+- Ringkasan eksekutif
+- Highlight pencapaian
+- Tantangan yang dihadapi
+- Rencana pengembangan
+- Q&A session
+
+### 7.3 Dokumentasi dan Arsip
+**Dokumen yang harus diarsipkan:**
+- Laporan keuangan lengkap
+- Bukti-bukti transaksi
+- Notulen rapat
+- Kontrak dan perjanjian
+- Dokumen legal
+
+## CHECKLIST AKHIR TAHUN
+
+### ✅ Persiapan
+- [ ] Semua transaksi sudah diinput
+- [ ] Rekonsiliasi bank selesai
+- [ ] Inventarisasi fisik selesai
+- [ ] Jurnal penyesuaian dibuat
+
+### ✅ Laporan Keuangan
+- [ ] Neraca akhir tahun
+- [ ] Laporan Laba Rugi
+- [ ] Laporan Arus Kas
+- [ ] Catatan atas Laporan Keuangan
+
+### ✅ Analisis
+- [ ] Analisis rasio keuangan
+- [ ] Evaluasi kinerja unit usaha
+- [ ] Benchmark dengan tahun sebelumnya
+
+### ✅ Pelaporan
+- [ ] Laporan tahunan disusun
+- [ ] Presentasi ke stakeholder
+- [ ] Dokumentasi diarsipkan
+
+## TIPS SUKSES
+
+1. **Konsistensi**: Catat transaksi secara rutin dan tepat waktu
+2. **Akurasi**: Pastikan semua data akurat dan dapat dipertanggungjawabkan
+3. **Backup**: Selalu backup data secara berkala
+4. **Training**: Latih semua user untuk menggunakan sistem dengan benar
+5. **Review**: Lakukan review berkala untuk memastikan kualitas data
+6. **Compliance**: Pastikan semua laporan sesuai standar akuntansi
+
+## KONTAK DUKUNGAN
+
+Jika mengalami kesulitan dalam proses ini, silakan hubungi:
+- Administrator Sistem
+- Tim IT Support
+- Konsultan Keuangan BUMDES
+
+---
+
+*Panduan ini merupakan roadmap lengkap untuk mengelola keuangan BUMDES dari awal hingga akhir tahun. Ikuti setiap fase secara berurutan untuk hasil yang optimal.*
+                ',
+                'category' => 'comprehensive',
+                'order' => 1,
+                'is_published' => true,
+                'icon' => 'fas fa-route',
+                'description' => 'Panduan komprehensif dari setup awal hingga laporan akhir tahun',
+                'created_by' => $superadmin?->id,
+            ],
+
             // Financial Management
             [
                 'title' => 'Pengelolaan Transaksi Keuangan',
@@ -934,7 +1433,10 @@ Pengelolaan keuangan BUMDES yang baik memerlukan:
         ];
 
         foreach ($guides as $guide) {
-            Guide::create($guide);
+            Guide::updateOrCreate(
+                ['slug' => $guide['slug']], // Find by slug
+                $guide // Update or create with this data
+            );
         }
 
         $this->command->info('Guide seeder completed successfully!');
