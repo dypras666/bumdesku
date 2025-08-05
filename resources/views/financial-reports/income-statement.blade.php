@@ -142,11 +142,22 @@
                                 @php $totalRevenue = 0; @endphp
                                 @if(isset($reportData['revenues']) && count($reportData['revenues']) > 0)
                                     @foreach($reportData['revenues'] as $accountName => $amount)
+                                        @php
+                                            // Handle both data structures: seeder (array) and controller (key-value)
+                                            if (is_array($amount)) {
+                                                $displayName = $amount['account'] ?? $accountName;
+                                                $displayAmount = $amount['amount'] ?? 0;
+                                            } else {
+                                                $displayName = $accountName;
+                                                $displayAmount = $amount;
+                                            }
+                                            $displayAmount = (float) $displayAmount;
+                                        @endphp
                                         <tr>
-                                            <td class="pl-4">{{ $accountName }}</td>
-                                            <td class="text-right">{{ format_currency($amount) }}</td>
+                                            <td class="pl-4">{{ $displayName }}</td>
+                                            <td class="text-right">{{ format_currency($displayAmount) }}</td>
                                         </tr>
-                                        @php $totalRevenue += $amount; @endphp
+                                        @php $totalRevenue += $displayAmount; @endphp
                                     @endforeach
                                 @else
                                     <tr>
@@ -167,11 +178,22 @@
                                 @php $totalExpenses = 0; @endphp
                                 @if(isset($reportData['expenses']) && count($reportData['expenses']) > 0)
                                     @foreach($reportData['expenses'] as $accountName => $amount)
+                                        @php
+                                            // Handle both data structures: seeder (array) and controller (key-value)
+                                            if (is_array($amount)) {
+                                                $displayName = $amount['account'] ?? $accountName;
+                                                $displayAmount = $amount['amount'] ?? 0;
+                                            } else {
+                                                $displayName = $accountName;
+                                                $displayAmount = $amount;
+                                            }
+                                            $displayAmount = (float) $displayAmount;
+                                        @endphp
                                         <tr>
-                                            <td class="pl-4">{{ $accountName }}</td>
-                                            <td class="text-right">{{ format_currency($amount) }}</td>
+                                            <td class="pl-4">{{ $displayName }}</td>
+                                            <td class="text-right">{{ format_currency($displayAmount) }}</td>
                                         </tr>
-                                        @php $totalExpenses += $amount; @endphp
+                                        @php $totalExpenses += $displayAmount; @endphp
                                     @endforeach
                                 @else
                                     <tr>

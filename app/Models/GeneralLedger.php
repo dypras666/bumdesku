@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class GeneralLedger extends Model
@@ -85,13 +86,32 @@ class GeneralLedger extends Model
     public static function generateEntryCode()
     {
         $date = Carbon::now()->format('Ymd');
-        $lastEntry = self::whereDate('created_at', Carbon::today())
-                         ->orderBy('id', 'desc')
-                         ->first();
         
-        $sequence = $lastEntry ? (int)substr($lastEntry->entry_code, -4) + 1 : 1;
-        
-        return 'GL-' . $date . '-' . str_pad($sequence, 4, '0', STR_PAD_LEFT);
+        // Use database transaction to ensure atomicity
+        return DB::transaction(function () use ($date) {
+            // Get the highest sequence number for today with row locking
+            $lastEntry = self::where('entry_code', 'LIKE', 'GL-' . $date . '-%')
+                             ->orderBy('entry_code', 'desc')
+                             ->lockForUpdate()
+                             ->first();
+            
+            $sequence = 1;
+            if ($lastEntry) {
+                // Extract sequence number from entry code (last 4 digits)
+                $lastSequence = (int)substr($lastEntry->entry_code, -4);
+                $sequence = $lastSequence + 1;
+            }
+            
+            $entryCode = 'GL-' . $date . '-' . str_pad($sequence, 4, '0', STR_PAD_LEFT);
+            
+            // Double-check uniqueness and increment if needed
+            while (self::where('entry_code', $entryCode)->exists()) {
+                $sequence++;
+                $entryCode = 'GL-' . $date . '-' . str_pad($sequence, 4, '0', STR_PAD_LEFT);
+            }
+            
+            return $entryCode;
+        });
     }
 
     public function getFormattedDebitAttribute()

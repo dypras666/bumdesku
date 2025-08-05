@@ -533,7 +533,7 @@ class TransactionController extends Controller
             $totalAmount = 0;
 
             foreach ($transactions as $transaction) {
-                // Generate entry code untuk jurnal umum
+                // Generate entry code untuk jurnal umum - satu kode untuk semua entry dalam transaksi ini
                 $entryCode = \App\Models\GeneralLedger::generateEntryCode();
 
                 // Buat entry jurnal umum berdasarkan jenis transaksi
@@ -690,7 +690,7 @@ class TransactionController extends Controller
             $totalAmount = 0;
 
             foreach ($transactions as $transaction) {
-                // Generate entry code untuk jurnal umum
+                // Generate entry code untuk jurnal umum - satu kode untuk semua entry dalam transaksi ini
                 $entryCode = \App\Models\GeneralLedger::generateEntryCode();
 
                 // Buat entry jurnal umum berdasarkan jenis transaksi

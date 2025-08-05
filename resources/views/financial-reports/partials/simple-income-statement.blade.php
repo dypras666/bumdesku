@@ -24,11 +24,22 @@
             @php $totalRevenue = 0; @endphp
             @if(isset($reportData['revenues']) && count($reportData['revenues']) > 0)
                 @foreach($reportData['revenues'] as $accountName => $amount)
+                    @php
+                        // Handle both data structures: seeder (array) and controller (key-value)
+                        if (is_array($amount)) {
+                            $displayName = $amount['account'] ?? $accountName;
+                            $displayAmount = $amount['amount'] ?? 0;
+                        } else {
+                            $displayName = $accountName;
+                            $displayAmount = $amount;
+                        }
+                        $displayAmount = (float) $displayAmount;
+                    @endphp
                     <tr>
-                        <td class="indent-1">{{ $accountName }}</td>
-                        <td class="text-right">{{ number_format($amount, 0, ',', '.') }}</td>
+                        <td class="indent-1">{{ $displayName }}</td>
+                        <td class="text-right">{{ number_format($displayAmount, 0, ',', '.') }}</td>
                     </tr>
-                    @php $totalRevenue += $amount; @endphp
+                    @php $totalRevenue += $displayAmount; @endphp
                 @endforeach
             @else
                 <tr>
@@ -48,11 +59,22 @@
                 </tr>
                 @php $totalCOGS = 0; @endphp
                 @foreach($reportData['cost_of_goods_sold'] as $accountName => $amount)
+                    @php
+                        // Handle both data structures: seeder (array) and controller (key-value)
+                        if (is_array($amount)) {
+                            $displayName = $amount['account'] ?? $accountName;
+                            $displayAmount = $amount['amount'] ?? 0;
+                        } else {
+                            $displayName = $accountName;
+                            $displayAmount = $amount;
+                        }
+                        $displayAmount = (float) $displayAmount;
+                    @endphp
                     <tr>
-                        <td class="indent-1">{{ $accountName }}</td>
-                        <td class="text-right">{{ number_format($amount, 0, ',', '.') }}</td>
+                        <td class="indent-1">{{ $displayName }}</td>
+                        <td class="text-right">{{ number_format($displayAmount, 0, ',', '.') }}</td>
                     </tr>
-                    @php $totalCOGS += $amount; @endphp
+                    @php $totalCOGS += $displayAmount; @endphp
                 @endforeach
                 <tr class="total-row">
                     <td class="text-right">Total Harga Pokok Penjualan</td>
@@ -76,11 +98,22 @@
             @php $totalExpenses = 0; @endphp
             @if(isset($reportData['expenses']) && count($reportData['expenses']) > 0)
                 @foreach($reportData['expenses'] as $accountName => $amount)
+                    @php
+                        // Handle both data structures: seeder (array) and controller (key-value)
+                        if (is_array($amount)) {
+                            $displayName = $amount['account'] ?? $accountName;
+                            $displayAmount = $amount['amount'] ?? 0;
+                        } else {
+                            $displayName = $accountName;
+                            $displayAmount = $amount;
+                        }
+                        $displayAmount = (float) $displayAmount;
+                    @endphp
                     <tr>
-                        <td class="indent-1">{{ $accountName }}</td>
-                        <td class="text-right">{{ number_format($amount, 0, ',', '.') }}</td>
+                        <td class="indent-1">{{ $displayName }}</td>
+                        <td class="text-right">{{ number_format($displayAmount, 0, ',', '.') }}</td>
                     </tr>
-                    @php $totalExpenses += $amount; @endphp
+                    @php $totalExpenses += $displayAmount; @endphp
                 @endforeach
             @else
                 <tr>
@@ -107,11 +140,22 @@
                     <td colspan="2">PENDAPATAN LAIN-LAIN</td>
                 </tr>
                 @foreach($reportData['other_income'] as $accountName => $amount)
+                    @php
+                        // Handle both data structures: seeder (array) and controller (key-value)
+                        if (is_array($amount)) {
+                            $displayName = $amount['account'] ?? $accountName;
+                            $displayAmount = $amount['amount'] ?? 0;
+                        } else {
+                            $displayName = $accountName;
+                            $displayAmount = $amount;
+                        }
+                        $displayAmount = (float) $displayAmount;
+                    @endphp
                     <tr>
-                        <td class="indent-1">{{ $accountName }}</td>
-                        <td class="text-right">{{ number_format($amount, 0, ',', '.') }}</td>
+                        <td class="indent-1">{{ $displayName }}</td>
+                        <td class="text-right">{{ number_format($displayAmount, 0, ',', '.') }}</td>
                     </tr>
-                    @php $totalOtherIncome += $amount; @endphp
+                    @php $totalOtherIncome += $displayAmount; @endphp
                 @endforeach
                 <tr class="total-row">
                     <td class="text-right">Total Pendapatan Lain-lain</td>
@@ -124,11 +168,22 @@
                     <td colspan="2">BEBAN LAIN-LAIN</td>
                 </tr>
                 @foreach($reportData['other_expenses'] as $accountName => $amount)
+                    @php
+                        // Handle both data structures: seeder (array) and controller (key-value)
+                        if (is_array($amount)) {
+                            $displayName = $amount['account'] ?? $accountName;
+                            $displayAmount = $amount['amount'] ?? 0;
+                        } else {
+                            $displayName = $accountName;
+                            $displayAmount = $amount;
+                        }
+                        $displayAmount = (float) $displayAmount;
+                    @endphp
                     <tr>
-                        <td class="indent-1">{{ $accountName }}</td>
-                        <td class="text-right">{{ number_format($amount, 0, ',', '.') }}</td>
+                        <td class="indent-1">{{ $displayName }}</td>
+                        <td class="text-right">{{ number_format($displayAmount, 0, ',', '.') }}</td>
                     </tr>
-                    @php $totalOtherExpenses += $amount; @endphp
+                    @php $totalOtherExpenses += $displayAmount; @endphp
                 @endforeach
                 <tr class="total-row">
                     <td class="text-right">Total Beban Lain-lain</td>
@@ -152,11 +207,22 @@
                     <td colspan="2">PAJAK</td>
                 </tr>
                 @foreach($reportData['tax_expense'] as $accountName => $amount)
+                    @php
+                        // Handle both data structures: seeder (array) and controller (key-value)
+                        if (is_array($amount)) {
+                            $displayName = $amount['account'] ?? $accountName;
+                            $displayAmount = $amount['amount'] ?? 0;
+                        } else {
+                            $displayName = $accountName;
+                            $displayAmount = $amount;
+                        }
+                        $displayAmount = (float) $displayAmount;
+                    @endphp
                     <tr>
-                        <td class="indent-1">{{ $accountName }}</td>
-                        <td class="text-right">{{ number_format($amount, 0, ',', '.') }}</td>
+                        <td class="indent-1">{{ $displayName }}</td>
+                        <td class="text-right">{{ number_format($displayAmount, 0, ',', '.') }}</td>
                     </tr>
-                    @php $taxExpense += $amount; @endphp
+                    @php $taxExpense += $displayAmount; @endphp
                 @endforeach
                 <tr class="total-row">
                     <td class="text-right">Total Pajak</td>

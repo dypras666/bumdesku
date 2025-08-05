@@ -10,6 +10,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @stop
 
+@section('plugins.Sweetalert2', true)
+
 @section('content')
 <div class="container-fluid" id="transactionApp">
     <div class="row">
@@ -238,33 +240,7 @@
         </div>
     </div>
     
-    <!-- Reject Modal -->
-    <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Tolak Transaksi</h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span>&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Yakin ingin menolak transaksi <strong>@{{ selectedTransaction ? selectedTransaction.transaction_code : '' }}</strong>?</p>
-                    <div class="form-group">
-                        <label for="rejectNotes">Catatan Penolakan</label>
-                        <textarea v-model="rejectNotes" id="rejectNotes" class="form-control" rows="3" required 
-                                  placeholder="Masukkan alasan penolakan..."></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button @click="rejectTransaction" class="btn btn-danger" :disabled="!rejectNotes.trim()">
-                        Tolak Transaksi
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+
 </div>
 @stop
 
@@ -297,8 +273,7 @@ new Vue({
             from: 0,
             to: 0
         },
-        selectedTransaction: null,
-        rejectNotes: '',
+
         searchTimeout: null
     },
     mounted() {
@@ -406,54 +381,137 @@ new Vue({
         },
         
         approveTransaction(transaction) {
-            if (!confirm('Yakin ingin menyetujui transaksi ini?')) return;
-            
-            axios.post(`/api/transactions/${transaction.id}/approve`)
-                .then(response => {
-                    this.$toast.success('Transaksi berhasil disetujui');
-                    this.loadTransactions(this.pagination.current_page);
-                })
-                .catch(error => {
-                    console.error('Error approving transaction:', error);
-                    this.$toast.error(error.response?.data?.message || 'Gagal menyetujui transaksi');
-                });
-        },
-        
-        showRejectModal(transaction) {
-            this.selectedTransaction = transaction;
-            this.rejectNotes = '';
-            $('#rejectModal').modal('show');
-        },
-        
-        rejectTransaction() {
-            if (!this.rejectNotes.trim()) return;
-            
-            axios.post(`/api/transactions/${this.selectedTransaction.id}/reject`, {
-                notes: this.rejectNotes
-            })
-            .then(response => {
-                this.$toast.success('Transaksi berhasil ditolak');
-                $('#rejectModal').modal('hide');
-                this.loadTransactions(this.pagination.current_page);
-            })
-            .catch(error => {
-                console.error('Error rejecting transaction:', error);
-                this.$toast.error(error.response?.data?.message || 'Gagal menolak transaksi');
+            Swal.fire({
+                title: 'Konfirmasi Persetujuan',
+                text: `Yakin ingin menyetujui transaksi ${transaction.transaction_code}?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: '<i class="fas fa-check"></i> Ya, Setujui',
+                cancelButtonText: '<i class="fas fa-times"></i> Batal',
+                reverseButtons: true,
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+                    return axios.post(`/api/transactions/${transaction.id}/approve`)
+                        .then(response => {
+                            return response.data;
+                        })
+                        .catch(error => {
+                            Swal.showValidationMessage(
+                                error.response?.data?.message || 'Gagal menyetujui transaksi'
+                            );
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: 'Transaksi berhasil disetujui',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        // Auto reload halaman setelah 2 detik
+                        this.loadTransactions(this.pagination.current_page);
+                    });
+                }
             });
         },
         
+        showRejectModal(transaction) {
+            Swal.fire({
+                title: 'Tolak Transaksi',
+                text: `Yakin ingin menolak transaksi ${transaction.transaction_code}?`,
+                icon: 'warning',
+                input: 'textarea',
+                inputLabel: 'Catatan Penolakan',
+                inputPlaceholder: 'Masukkan alasan penolakan...',
+                inputValidator: (value) => {
+                    if (!value || !value.trim()) {
+                        return 'Catatan penolakan harus diisi!';
+                    }
+                },
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: '<i class="fas fa-times"></i> Ya, Tolak',
+                cancelButtonText: '<i class="fas fa-arrow-left"></i> Batal',
+                reverseButtons: true,
+                showLoaderOnConfirm: true,
+                preConfirm: (notes) => {
+                    return axios.post(`/api/transactions/${transaction.id}/reject`, {
+                        notes: notes
+                    })
+                    .then(response => {
+                        return response.data;
+                    })
+                    .catch(error => {
+                        Swal.showValidationMessage(
+                            error.response?.data?.message || 'Gagal menolak transaksi'
+                        );
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: 'Transaksi berhasil ditolak',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        // Auto reload halaman setelah 2 detik
+                        this.loadTransactions(this.pagination.current_page);
+                    });
+                }
+            });
+        },
+        
+        rejectTransaction() {
+            // This method is no longer needed as we use SweetAlert directly
+        },
+        
         deleteTransaction(transaction) {
-            if (!confirm('Yakin ingin menghapus transaksi ini?')) return;
-            
-            axios.delete(`/api/transactions/${transaction.id}`)
-                .then(response => {
-                    this.$toast.success('Transaksi berhasil dihapus');
-                    this.loadTransactions(this.pagination.current_page);
-                })
-                .catch(error => {
-                    console.error('Error deleting transaction:', error);
-                    this.$toast.error(error.response?.data?.message || 'Gagal menghapus transaksi');
-                });
+            Swal.fire({
+                title: 'Hapus Transaksi',
+                text: `Yakin ingin menghapus transaksi ${transaction.transaction_code}? Tindakan ini tidak dapat dibatalkan!`,
+                icon: 'error',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: '<i class="fas fa-trash"></i> Ya, Hapus',
+                cancelButtonText: '<i class="fas fa-times"></i> Batal',
+                reverseButtons: true,
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+                    return axios.delete(`/api/transactions/${transaction.id}`)
+                        .then(response => {
+                            return response.data;
+                        })
+                        .catch(error => {
+                            Swal.showValidationMessage(
+                                error.response?.data?.message || 'Gagal menghapus transaksi'
+                            );
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: 'Transaksi berhasil dihapus',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        // Auto reload halaman setelah 2 detik
+                        this.loadTransactions(this.pagination.current_page);
+                    });
+                }
+            });
         },
         
         formatDate(date) {

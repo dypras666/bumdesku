@@ -10,6 +10,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @stop
 
+@section('plugins.Sweetalert2', true)
+
 @section('content')
 <div class="container-fluid">
     <div class="row">

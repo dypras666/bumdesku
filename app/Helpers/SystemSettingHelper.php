@@ -110,6 +110,22 @@ class SystemSettingHelper
     {
         $settings = self::getFinancialSettings();
         
+        // Handle non-numeric values
+        if (is_array($amount)) {
+            // If it's an array, try to get the first numeric value or return 0
+            $amount = 0;
+            foreach ((array) $amount as $value) {
+                if (is_numeric($value)) {
+                    $amount = (float) $value;
+                    break;
+                }
+            }
+        } elseif (!is_numeric($amount)) {
+            $amount = 0;
+        } else {
+            $amount = (float) $amount;
+        }
+        
         return $settings['currency_symbol'] . ' ' . number_format(
             $amount,
             $settings['decimal_places'],

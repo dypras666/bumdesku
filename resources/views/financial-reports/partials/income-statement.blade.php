@@ -36,11 +36,21 @@
                         </tr>
                         @php $totalRevenue = 0; @endphp
                         @foreach($data['revenues'] ?? [] as $accountName => $amount)
+                            @php
+                                // Handle both data structures: controller (key-value) and seeder (array of objects)
+                                if (is_array($amount) && isset($amount['account']) && isset($amount['amount'])) {
+                                    $displayName = $amount['account'];
+                                    $displayAmount = $amount['amount'];
+                                } else {
+                                    $displayName = $accountName;
+                                    $displayAmount = $amount;
+                                }
+                                $totalRevenue += (float) $displayAmount;
+                            @endphp
                             <tr>
-                                <td class="pl-4">{{ $accountName }}</td>
-                                <td class="text-right">{{ format_currency($amount) }}</td>
+                                <td class="pl-4">{{ $displayName }}</td>
+                                <td class="text-right">{{ format_currency($displayAmount) }}</td>
                             </tr>
-                            @php $totalRevenue += $amount; @endphp
                         @endforeach
                         <tr class="font-weight-bold">
                             <td class="text-right">Total Pendapatan</td>
@@ -54,11 +64,21 @@
                         </tr>
                         @php $totalExpenses = 0; @endphp
                         @foreach($data['expenses'] ?? [] as $accountName => $amount)
+                            @php
+                                // Handle both data structures: controller (key-value) and seeder (array of objects)
+                                if (is_array($amount) && isset($amount['account']) && isset($amount['amount'])) {
+                                    $displayName = $amount['account'];
+                                    $displayAmount = $amount['amount'];
+                                } else {
+                                    $displayName = $accountName;
+                                    $displayAmount = $amount;
+                                }
+                                $totalExpenses += (float) $displayAmount;
+                            @endphp
                             <tr>
-                                <td class="pl-4">{{ $accountName }}</td>
-                                <td class="text-right">{{ format_currency($amount) }}</td>
+                                <td class="pl-4">{{ $displayName }}</td>
+                                <td class="text-right">{{ format_currency($displayAmount) }}</td>
                             </tr>
-                            @php $totalExpenses += $amount; @endphp
                         @endforeach
                         <tr class="font-weight-bold">
                             <td class="text-right">Total Beban Operasional</td>
