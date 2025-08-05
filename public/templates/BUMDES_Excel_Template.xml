@@ -1,0 +1,588 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ 
+<DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Title>BUMDES Manual Backup Template</Title>
+  <Subject>Template Manual Backup Sistem BUMDES</Subject>
+  <Author>BUMDES System</Author>
+  <Created>2025-01-01T00:00:00Z</Created>
+  <Version>1.0</Version>
+</DocumentProperties>
+
+<Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+    <Alignment ss:Vertical="Bottom"/>
+    <Borders/>
+    <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000"/>
+    <Interior/>
+    <NumberFormat/>
+    <Protection/>
+  </Style>
+  <Style ss:ID="Header">
+    <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+    <Borders>
+      <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+      <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+      <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+      <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+    </Borders>
+    <Font ss:FontName="Calibri" ss:Size="11" ss:Color="#FFFFFF" ss:Bold="1"/>
+    <Interior ss:Color="#2F75B5" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="Currency">
+    <NumberFormat ss:Format="&quot;Rp &quot;#,##0"/>
+  </Style>
+  <Style ss:ID="CategoryHeader">
+    <Font ss:FontName="Calibri" ss:Size="11" ss:Bold="1"/>
+    <Interior ss:Color="#D9E1F2" ss:Pattern="Solid"/>
+  </Style>
+</Styles>
+
+<!-- WORKSHEET 1: CHART OF ACCOUNTS -->
+<Worksheet ss:Name="1. Chart of Accounts">
+  <Table ss:ExpandedColumnCount="7" ss:ExpandedRowCount="50">
+    <Column ss:AutoFitWidth="0" ss:Width="80"/>
+    <Column ss:AutoFitWidth="0" ss:Width="200"/>
+    <Column ss:AutoFitWidth="0" ss:Width="80"/>
+    <Column ss:AutoFitWidth="0" ss:Width="250"/>
+    <Column ss:AutoFitWidth="0" ss:Width="120"/>
+    <Column ss:AutoFitWidth="0" ss:Width="60"/>
+    <Column ss:AutoFitWidth="0" ss:Width="80"/>
+    
+    <Row ss:Height="25">
+      <Cell ss:StyleID="Header"><Data ss:Type="String">Kode Akun</Data></Cell>
+      <Cell ss:StyleID="Header"><Data ss:Type="String">Nama Akun</Data></Cell>
+      <Cell ss:StyleID="Header"><Data ss:Type="String">Kategori</Data></Cell>
+      <Cell ss:StyleID="Header"><Data ss:Type="String">Deskripsi</Data></Cell>
+      <Cell ss:StyleID="Header"><Data ss:Type="String">Saldo Awal</Data></Cell>
+      <Cell ss:StyleID="Header"><Data ss:Type="String">Status</Data></Cell>
+      <Cell ss:StyleID="Header"><Data ss:Type="String">Normal Balance</Data></Cell>
+    </Row>
+    
+    <!-- ASET LANCAR -->
+    <Row><Cell ss:StyleID="CategoryHeader" ss:MergeAcross="6"><Data ss:Type="String">ASET LANCAR</Data></Cell></Row>
+    <Row>
+      <Cell><Data ss:Type="String">1-1001</Data></Cell>
+      <Cell><Data ss:Type="String">Kas</Data></Cell>
+      <Cell><Data ss:Type="String">Aset</Data></Cell>
+      <Cell><Data ss:Type="String">Kas di tangan dan kas kecil</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">150000000</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Debit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">1-1002</Data></Cell>
+      <Cell><Data ss:Type="String">Bank BRI</Data></Cell>
+      <Cell><Data ss:Type="String">Aset</Data></Cell>
+      <Cell><Data ss:Type="String">Rekening bank BRI BUMDES</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">300000000</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Debit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">1-1003</Data></Cell>
+      <Cell><Data ss:Type="String">Bank Mandiri</Data></Cell>
+      <Cell><Data ss:Type="String">Aset</Data></Cell>
+      <Cell><Data ss:Type="String">Rekening bank Mandiri untuk operasional</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">200000000</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Debit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">1-1004</Data></Cell>
+      <Cell><Data ss:Type="String">Piutang Usaha</Data></Cell>
+      <Cell><Data ss:Type="String">Aset</Data></Cell>
+      <Cell><Data ss:Type="String">Piutang dari pelanggan dan mitra</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">50000000</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Debit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">1-1005</Data></Cell>
+      <Cell><Data ss:Type="String">Persediaan Bahan Baku</Data></Cell>
+      <Cell><Data ss:Type="String">Aset</Data></Cell>
+      <Cell><Data ss:Type="String">Persediaan bahan baku produksi</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">80000000</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Debit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">1-1006</Data></Cell>
+      <Cell><Data ss:Type="String">Persediaan Barang Jadi</Data></Cell>
+      <Cell><Data ss:Type="String">Aset</Data></Cell>
+      <Cell><Data ss:Type="String">Persediaan produk siap jual</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">120000000</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Debit</Data></Cell>
+    </Row>
+    
+    <!-- ASET TETAP -->
+    <Row><Cell ss:StyleID="CategoryHeader" ss:MergeAcross="6"><Data ss:Type="String">ASET TETAP</Data></Cell></Row>
+    <Row>
+      <Cell><Data ss:Type="String">1-2001</Data></Cell>
+      <Cell><Data ss:Type="String">Tanah</Data></Cell>
+      <Cell><Data ss:Type="String">Aset</Data></Cell>
+      <Cell><Data ss:Type="String">Tanah untuk operasional BUMDES</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">500000000</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Debit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">1-2002</Data></Cell>
+      <Cell><Data ss:Type="String">Bangunan</Data></Cell>
+      <Cell><Data ss:Type="String">Aset</Data></Cell>
+      <Cell><Data ss:Type="String">Bangunan kantor dan gudang</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">400000000</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Debit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">1-2003</Data></Cell>
+      <Cell><Data ss:Type="String">Peralatan Produksi</Data></Cell>
+      <Cell><Data ss:Type="String">Aset</Data></Cell>
+      <Cell><Data ss:Type="String">Mesin dan peralatan produksi</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">250000000</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Debit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">1-2004</Data></Cell>
+      <Cell><Data ss:Type="String">Kendaraan</Data></Cell>
+      <Cell><Data ss:Type="String">Aset</Data></Cell>
+      <Cell><Data ss:Type="String">Kendaraan operasional dan distribusi</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">180000000</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Debit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">1-2005</Data></Cell>
+      <Cell><Data ss:Type="String">Peralatan Kantor</Data></Cell>
+      <Cell><Data ss:Type="String">Aset</Data></Cell>
+      <Cell><Data ss:Type="String">Komputer, furniture, dan peralatan kantor</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">75000000</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Debit</Data></Cell>
+    </Row>
+    
+    <!-- KEWAJIBAN -->
+    <Row><Cell ss:StyleID="CategoryHeader" ss:MergeAcross="6"><Data ss:Type="String">KEWAJIBAN LANCAR</Data></Cell></Row>
+    <Row>
+      <Cell><Data ss:Type="String">2-1001</Data></Cell>
+      <Cell><Data ss:Type="String">Hutang Usaha</Data></Cell>
+      <Cell><Data ss:Type="String">Kewajiban</Data></Cell>
+      <Cell><Data ss:Type="String">Hutang kepada supplier dan vendor</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">60000000</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Kredit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">2-1002</Data></Cell>
+      <Cell><Data ss:Type="String">Hutang Gaji</Data></Cell>
+      <Cell><Data ss:Type="String">Kewajiban</Data></Cell>
+      <Cell><Data ss:Type="String">Hutang gaji karyawan</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">15000000</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Kredit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">2-1003</Data></Cell>
+      <Cell><Data ss:Type="String">Hutang Pajak</Data></Cell>
+      <Cell><Data ss:Type="String">Kewajiban</Data></Cell>
+      <Cell><Data ss:Type="String">Hutang pajak penghasilan dan PPN</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">25000000</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Kredit</Data></Cell>
+    </Row>
+    
+    <Row><Cell ss:StyleID="CategoryHeader" ss:MergeAcross="6"><Data ss:Type="String">KEWAJIBAN JANGKA PANJANG</Data></Cell></Row>
+    <Row>
+      <Cell><Data ss:Type="String">2-2001</Data></Cell>
+      <Cell><Data ss:Type="String">Hutang Bank Jangka Panjang</Data></Cell>
+      <Cell><Data ss:Type="String">Kewajiban</Data></Cell>
+      <Cell><Data ss:Type="String">Pinjaman bank untuk investasi</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">200000000</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Kredit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">2-2002</Data></Cell>
+      <Cell><Data ss:Type="String">Hutang Pembiayaan Kendaraan</Data></Cell>
+      <Cell><Data ss:Type="String">Kewajiban</Data></Cell>
+      <Cell><Data ss:Type="String">Hutang leasing kendaraan</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">80000000</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Kredit</Data></Cell>
+    </Row>
+    
+    <!-- MODAL -->
+    <Row><Cell ss:StyleID="CategoryHeader" ss:MergeAcross="6"><Data ss:Type="String">MODAL</Data></Cell></Row>
+    <Row>
+      <Cell><Data ss:Type="String">3-1001</Data></Cell>
+      <Cell><Data ss:Type="String">Modal Awal BUMDES</Data></Cell>
+      <Cell><Data ss:Type="String">Modal</Data></Cell>
+      <Cell><Data ss:Type="String">Modal awal dari dana desa</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">1000000000</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Kredit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">3-1002</Data></Cell>
+      <Cell><Data ss:Type="String">Modal Tambahan</Data></Cell>
+      <Cell><Data ss:Type="String">Modal</Data></Cell>
+      <Cell><Data ss:Type="String">Modal tambahan dari pemerintah dan investor</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">500000000</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Kredit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">3-1003</Data></Cell>
+      <Cell><Data ss:Type="String">Laba Ditahan</Data></Cell>
+      <Cell><Data ss:Type="String">Modal</Data></Cell>
+      <Cell><Data ss:Type="String">Akumulasi laba yang ditahan</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">235000000</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Kredit</Data></Cell>
+    </Row>
+    
+    <!-- PENDAPATAN -->
+    <Row><Cell ss:StyleID="CategoryHeader" ss:MergeAcross="6"><Data ss:Type="String">PENDAPATAN</Data></Cell></Row>
+    <Row>
+      <Cell><Data ss:Type="String">4-1001</Data></Cell>
+      <Cell><Data ss:Type="String">Pendapatan Penjualan Produk</Data></Cell>
+      <Cell><Data ss:Type="String">Pendapatan</Data></Cell>
+      <Cell><Data ss:Type="String">Pendapatan dari penjualan produk UMKM</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">0</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Kredit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">4-1002</Data></Cell>
+      <Cell><Data ss:Type="String">Pendapatan Jasa</Data></Cell>
+      <Cell><Data ss:Type="String">Pendapatan</Data></Cell>
+      <Cell><Data ss:Type="String">Pendapatan dari jasa konsultasi dan pelatihan</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">0</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Kredit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">4-1003</Data></Cell>
+      <Cell><Data ss:Type="String">Pendapatan Wisata Desa</Data></Cell>
+      <Cell><Data ss:Type="String">Pendapatan</Data></Cell>
+      <Cell><Data ss:Type="String">Pendapatan dari sektor pariwisata desa</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">0</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Kredit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">4-1004</Data></Cell>
+      <Cell><Data ss:Type="String">Pendapatan Lain-lain</Data></Cell>
+      <Cell><Data ss:Type="String">Pendapatan</Data></Cell>
+      <Cell><Data ss:Type="String">Pendapatan di luar usaha utama</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">0</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Kredit</Data></Cell>
+    </Row>
+    
+    <!-- BEBAN -->
+    <Row><Cell ss:StyleID="CategoryHeader" ss:MergeAcross="6"><Data ss:Type="String">BEBAN OPERASIONAL</Data></Cell></Row>
+    <Row>
+      <Cell><Data ss:Type="String">5-1001</Data></Cell>
+      <Cell><Data ss:Type="String">Beban Gaji dan Tunjangan</Data></Cell>
+      <Cell><Data ss:Type="String">Beban</Data></Cell>
+      <Cell><Data ss:Type="String">Beban gaji karyawan dan tunjangan</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">0</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Debit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">5-1002</Data></Cell>
+      <Cell><Data ss:Type="String">Beban Bahan Baku</Data></Cell>
+      <Cell><Data ss:Type="String">Beban</Data></Cell>
+      <Cell><Data ss:Type="String">Beban pembelian bahan baku produksi</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">0</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Debit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">5-1003</Data></Cell>
+      <Cell><Data ss:Type="String">Beban Listrik dan Air</Data></Cell>
+      <Cell><Data ss:Type="String">Beban</Data></Cell>
+      <Cell><Data ss:Type="String">Beban utilitas listrik dan air</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">0</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Debit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">5-1004</Data></Cell>
+      <Cell><Data ss:Type="String">Beban Transportasi</Data></Cell>
+      <Cell><Data ss:Type="String">Beban</Data></Cell>
+      <Cell><Data ss:Type="String">Beban transportasi dan distribusi</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">0</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Debit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">5-1005</Data></Cell>
+      <Cell><Data ss:Type="String">Beban Pemasaran</Data></Cell>
+      <Cell><Data ss:Type="String">Beban</Data></Cell>
+      <Cell><Data ss:Type="String">Beban promosi dan pemasaran</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">0</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Debit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">5-1006</Data></Cell>
+      <Cell><Data ss:Type="String">Beban Administrasi</Data></Cell>
+      <Cell><Data ss:Type="String">Beban</Data></Cell>
+      <Cell><Data ss:Type="String">Beban administrasi dan operasional kantor</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">0</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Debit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">5-1007</Data></Cell>
+      <Cell><Data ss:Type="String">Beban Penyusutan</Data></Cell>
+      <Cell><Data ss:Type="String">Beban</Data></Cell>
+      <Cell><Data ss:Type="String">Beban penyusutan aset tetap</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">0</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Debit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">5-1008</Data></Cell>
+      <Cell><Data ss:Type="String">Beban Bunga</Data></Cell>
+      <Cell><Data ss:Type="String">Beban</Data></Cell>
+      <Cell><Data ss:Type="String">Beban bunga pinjaman bank</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">0</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Debit</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">5-1009</Data></Cell>
+      <Cell><Data ss:Type="String">Beban Lain-lain</Data></Cell>
+      <Cell><Data ss:Type="String">Beban</Data></Cell>
+      <Cell><Data ss:Type="String">Beban operasional lainnya</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">0</Data></Cell>
+      <Cell><Data ss:Type="String">Aktif</Data></Cell>
+      <Cell><Data ss:Type="String">Debit</Data></Cell>
+    </Row>
+  </Table>
+</Worksheet>
+
+<!-- WORKSHEET 2: JURNAL UMUM -->
+<Worksheet ss:Name="2. Jurnal Umum">
+  <Table ss:ExpandedColumnCount="8" ss:ExpandedRowCount="100">
+    <Column ss:AutoFitWidth="0" ss:Width="80"/>
+    <Column ss:AutoFitWidth="0" ss:Width="120"/>
+    <Column ss:AutoFitWidth="0" ss:Width="200"/>
+    <Column ss:AutoFitWidth="0" ss:Width="80"/>
+    <Column ss:AutoFitWidth="0" ss:Width="150"/>
+    <Column ss:AutoFitWidth="0" ss:Width="100"/>
+    <Column ss:AutoFitWidth="0" ss:Width="100"/>
+    <Column ss:AutoFitWidth="0" ss:Width="50"/>
+    
+    <Row ss:Height="25">
+      <Cell ss:StyleID="Header"><Data ss:Type="String">Tanggal</Data></Cell>
+      <Cell ss:StyleID="Header"><Data ss:Type="String">Kode Transaksi</Data></Cell>
+      <Cell ss:StyleID="Header"><Data ss:Type="String">Keterangan</Data></Cell>
+      <Cell ss:StyleID="Header"><Data ss:Type="String">Kode Akun</Data></Cell>
+      <Cell ss:StyleID="Header"><Data ss:Type="String">Nama Akun</Data></Cell>
+      <Cell ss:StyleID="Header"><Data ss:Type="String">Debit</Data></Cell>
+      <Cell ss:StyleID="Header"><Data ss:Type="String">Kredit</Data></Cell>
+      <Cell ss:StyleID="Header"><Data ss:Type="String">Ref</Data></Cell>
+    </Row>
+    
+    <!-- Contoh Transaksi -->
+    <Row><Cell ss:StyleID="CategoryHeader" ss:MergeAcross="7"><Data ss:Type="String">CONTOH TRANSAKSI 1: SETORAN MODAL AWAL</Data></Cell></Row>
+    <Row>
+      <Cell><Data ss:Type="String">2025-01-01</Data></Cell>
+      <Cell><Data ss:Type="String">IN202501010001</Data></Cell>
+      <Cell><Data ss:Type="String">Setoran Modal Awal</Data></Cell>
+      <Cell><Data ss:Type="String">1-1001</Data></Cell>
+      <Cell><Data ss:Type="String">Kas</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">50000000</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="String">-</Data></Cell>
+      <Cell><Data ss:Type="String">1</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">2025-01-01</Data></Cell>
+      <Cell><Data ss:Type="String">IN202501010001</Data></Cell>
+      <Cell><Data ss:Type="String">Setoran Modal Awal</Data></Cell>
+      <Cell><Data ss:Type="String">3-1001</Data></Cell>
+      <Cell><Data ss:Type="String">Modal Awal BUMDES</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="String">-</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">50000000</Data></Cell>
+      <Cell><Data ss:Type="String">1</Data></Cell>
+    </Row>
+    
+    <Row><Cell ss:StyleID="CategoryHeader" ss:MergeAcross="7"><Data ss:Type="String">CONTOH TRANSAKSI 2: PEMBELIAN BAHAN BAKU</Data></Cell></Row>
+    <Row>
+      <Cell><Data ss:Type="String">2025-01-02</Data></Cell>
+      <Cell><Data ss:Type="String">OUT202501020001</Data></Cell>
+      <Cell><Data ss:Type="String">Pembelian Bahan Baku</Data></Cell>
+      <Cell><Data ss:Type="String">5-1002</Data></Cell>
+      <Cell><Data ss:Type="String">Beban Bahan Baku</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">5000000</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="String">-</Data></Cell>
+      <Cell><Data ss:Type="String">2</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">2025-01-02</Data></Cell>
+      <Cell><Data ss:Type="String">OUT202501020001</Data></Cell>
+      <Cell><Data ss:Type="String">Pembelian Bahan Baku</Data></Cell>
+      <Cell><Data ss:Type="String">1-1001</Data></Cell>
+      <Cell><Data ss:Type="String">Kas</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="String">-</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">5000000</Data></Cell>
+      <Cell><Data ss:Type="String">2</Data></Cell>
+    </Row>
+    
+    <Row><Cell ss:StyleID="CategoryHeader" ss:MergeAcross="7"><Data ss:Type="String">CONTOH TRANSAKSI 3: PENJUALAN PRODUK</Data></Cell></Row>
+    <Row>
+      <Cell><Data ss:Type="String">2025-01-03</Data></Cell>
+      <Cell><Data ss:Type="String">IN202501030001</Data></Cell>
+      <Cell><Data ss:Type="String">Penjualan Produk</Data></Cell>
+      <Cell><Data ss:Type="String">1-1001</Data></Cell>
+      <Cell><Data ss:Type="String">Kas</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">10000000</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="String">-</Data></Cell>
+      <Cell><Data ss:Type="String">3</Data></Cell>
+    </Row>
+    <Row>
+      <Cell><Data ss:Type="String">2025-01-03</Data></Cell>
+      <Cell><Data ss:Type="String">IN202501030001</Data></Cell>
+      <Cell><Data ss:Type="String">Penjualan Produk</Data></Cell>
+      <Cell><Data ss:Type="String">4-1001</Data></Cell>
+      <Cell><Data ss:Type="String">Pendapatan Penjualan Produk</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="String">-</Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="Number">10000000</Data></Cell>
+      <Cell><Data ss:Type="String">3</Data></Cell>
+    </Row>
+    
+    <!-- Template kosong untuk input -->
+    <Row><Cell ss:StyleID="CategoryHeader" ss:MergeAcross="7"><Data ss:Type="String">TEMPLATE KOSONG UNTUK INPUT TRANSAKSI BARU</Data></Cell></Row>
+    <Row>
+      <Cell><Data ss:Type="String"></Data></Cell>
+      <Cell><Data ss:Type="String"></Data></Cell>
+      <Cell><Data ss:Type="String"></Data></Cell>
+      <Cell><Data ss:Type="String"></Data></Cell>
+      <Cell><Data ss:Type="String"></Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="String"></Data></Cell>
+      <Cell ss:StyleID="Currency"><Data ss:Type="String"></Data></Cell>
+      <Cell><Data ss:Type="String"></Data></Cell>
+    </Row>
+  </Table>
+</Worksheet>
+
+<!-- WORKSHEET 3: PANDUAN -->
+<Worksheet ss:Name="7. Panduan Penggunaan">
+  <Table ss:ExpandedColumnCount="2" ss:ExpandedRowCount="100">
+    <Column ss:AutoFitWidth="0" ss:Width="200"/>
+    <Column ss:AutoFitWidth="0" ss:Width="400"/>
+    
+    <Row ss:Height="30">
+      <Cell ss:StyleID="Header" ss:MergeAcross="1"><Data ss:Type="String">PANDUAN PENGGUNAAN TEMPLATE MANUAL BACKUP BUMDES</Data></Cell>
+    </Row>
+    
+    <Row ss:Height="25">
+      <Cell ss:StyleID="CategoryHeader"><Data ss:Type="String">BAGIAN</Data></Cell>
+      <Cell ss:StyleID="CategoryHeader"><Data ss:Type="String">KETERANGAN</Data></Cell>
+    </Row>
+    
+    <Row>
+      <Cell><Data ss:Type="String">1. Chart of Accounts</Data></Cell>
+      <Cell><Data ss:Type="String">Berisi daftar lengkap akun sesuai sistem BUMDES. Jangan mengubah kode akun yang sudah ada.</Data></Cell>
+    </Row>
+    
+    <Row>
+      <Cell><Data ss:Type="String">2. Jurnal Umum</Data></Cell>
+      <Cell><Data ss:Type="String">Gunakan untuk mencatat transaksi harian. Pastikan setiap transaksi balance (Debit = Kredit).</Data></Cell>
+    </Row>
+    
+    <Row>
+      <Cell><Data ss:Type="String">3. Buku Besar</Data></Cell>
+      <Cell><Data ss:Type="String">Salin data dari Jurnal Umum untuk posting. Setiap baris jurnal menjadi satu entry.</Data></Cell>
+    </Row>
+    
+    <Row>
+      <Cell><Data ss:Type="String">4. Neraca Saldo</Data></Cell>
+      <Cell><Data ss:Type="String">Otomatis menghitung saldo dari buku besar. Periksa balance: Total Debit = Total Kredit.</Data></Cell>
+    </Row>
+    
+    <Row>
+      <Cell><Data ss:Type="String">5. Laporan Laba Rugi</Data></Cell>
+      <Cell><Data ss:Type="String">Otomatis menghitung dari neraca saldo. Menampilkan Pendapatan - Beban = Laba Bersih.</Data></Cell>
+    </Row>
+    
+    <Row>
+      <Cell><Data ss:Type="String">6. Neraca</Data></Cell>
+      <Cell><Data ss:Type="String">Otomatis menghitung dari neraca saldo. Menampilkan Aset = Kewajiban + Modal.</Data></Cell>
+    </Row>
+    
+    <Row ss:Height="25">
+      <Cell ss:StyleID="CategoryHeader"><Data ss:Type="String">FORMAT KODE</Data></Cell>
+      <Cell ss:StyleID="CategoryHeader"><Data ss:Type="String">PENJELASAN</Data></Cell>
+    </Row>
+    
+    <Row>
+      <Cell><Data ss:Type="String">Kode Transaksi</Data></Cell>
+      <Cell><Data ss:Type="String">IN/OUT + YYYYMMDD + 4 digit nomor urut. Contoh: IN202501010001</Data></Cell>
+    </Row>
+    
+    <Row>
+      <Cell><Data ss:Type="String">Kode Entry GL</Data></Cell>
+      <Cell><Data ss:Type="String">GL-YYYYMMDD-4 digit nomor urut. Contoh: GL-20250101-0001</Data></Cell>
+    </Row>
+    
+    <Row ss:Height="25">
+      <Cell ss:StyleID="CategoryHeader"><Data ss:Type="String">VALIDASI BALANCE</Data></Cell>
+      <Cell ss:StyleID="CategoryHeader"><Data ss:Type="String">CARA PERIKSA</Data></Cell>
+    </Row>
+    
+    <Row>
+      <Cell><Data ss:Type="String">Jurnal Umum</Data></Cell>
+      <Cell><Data ss:Type="String">Total Debit = Total Kredit untuk setiap transaksi</Data></Cell>
+    </Row>
+    
+    <Row>
+      <Cell><Data ss:Type="String">Neraca Saldo</Data></Cell>
+      <Cell><Data ss:Type="String">Total Debit = Total Kredit di bagian bawah</Data></Cell>
+    </Row>
+    
+    <Row>
+      <Cell><Data ss:Type="String">Neraca</Data></Cell>
+      <Cell><Data ss:Type="String">Total Aset = Total Kewajiban + Modal</Data></Cell>
+    </Row>
+    
+    <Row ss:Height="25">
+      <Cell ss:StyleID="CategoryHeader"><Data ss:Type="String">TIPS PENGGUNAAN</Data></Cell>
+      <Cell ss:StyleID="CategoryHeader"><Data ss:Type="String">REKOMENDASI</Data></Cell>
+    </Row>
+    
+    <Row>
+      <Cell><Data ss:Type="String">Backup Berkala</Data></Cell>
+      <Cell><Data ss:Type="String">Harian: Backup setelah input. Mingguan: Copy file. Bulanan: Arsip file lama.</Data></Cell>
+    </Row>
+    
+    <Row>
+      <Cell><Data ss:Type="String">Format File</Data></Cell>
+      <Cell><Data ss:Type="String">Simpan sebagai .xlsx untuk mempertahankan rumus dan formatting.</Data></Cell>
+    </Row>
+    
+    <Row>
+      <Cell><Data ss:Type="String">Tanggal</Data></Cell>
+      <Cell><Data ss:Type="String">Gunakan format YYYY-MM-DD untuk konsistensi.</Data></Cell>
+    </Row>
+    
+    <Row>
+      <Cell><Data ss:Type="String">Validasi</Data></Cell>
+      <Cell><Data ss:Type="String">Selalu periksa balance setelah input transaksi.</Data></Cell>
+    </Row>
+  </Table>
+</Worksheet>
+
+</Workbook>

@@ -1,0 +1,236 @@
+TEMPLATE MANUAL BACKUP SISTEM BUMDES
+Dibuat untuk: Backup dan Input Manual Data BUMDES
+Tanggal: 2025
+Versi: 1.0
+
+=== SHEET 1: CHART OF ACCOUNTS (COA) ===
+Kode Akun,Nama Akun,Kategori,Deskripsi,Saldo Awal,Status,Normal Balance
+1-1001,Kas,Aset,Kas di tangan dan kas kecil,150000000,Aktif,Debit
+1-1002,Bank BRI,Aset,Rekening bank BRI BUMDES,300000000,Aktif,Debit
+1-1003,Bank Mandiri,Aset,Rekening bank Mandiri untuk operasional,200000000,Aktif,Debit
+1-1004,Piutang Usaha,Aset,Piutang dari pelanggan dan mitra,50000000,Aktif,Debit
+1-1005,Persediaan Bahan Baku,Aset,Persediaan bahan baku produksi,80000000,Aktif,Debit
+1-1006,Persediaan Barang Jadi,Aset,Persediaan produk siap jual,120000000,Aktif,Debit
+1-2001,Tanah,Aset,Tanah untuk operasional BUMDES,500000000,Aktif,Debit
+1-2002,Bangunan,Aset,Bangunan kantor dan gudang,400000000,Aktif,Debit
+1-2003,Peralatan Produksi,Aset,Mesin dan peralatan produksi,250000000,Aktif,Debit
+1-2004,Kendaraan,Aset,Kendaraan operasional dan distribusi,180000000,Aktif,Debit
+1-2005,Peralatan Kantor,Aset,Komputer furniture dan peralatan kantor,75000000,Aktif,Debit
+2-1001,Hutang Usaha,Kewajiban,Hutang kepada supplier dan vendor,60000000,Aktif,Kredit
+2-1002,Hutang Gaji,Kewajiban,Hutang gaji karyawan,15000000,Aktif,Kredit
+2-1003,Hutang Pajak,Kewajiban,Hutang pajak penghasilan dan PPN,25000000,Aktif,Kredit
+2-2001,Hutang Bank Jangka Panjang,Kewajiban,Pinjaman bank untuk investasi,200000000,Aktif,Kredit
+2-2002,Hutang Pembiayaan Kendaraan,Kewajiban,Hutang leasing kendaraan,80000000,Aktif,Kredit
+3-1001,Modal Awal BUMDES,Modal,Modal awal dari dana desa,1000000000,Aktif,Kredit
+3-1002,Modal Tambahan,Modal,Modal tambahan dari pemerintah dan investor,500000000,Aktif,Kredit
+3-1003,Laba Ditahan,Modal,Akumulasi laba yang ditahan,235000000,Aktif,Kredit
+4-1001,Pendapatan Penjualan Produk,Pendapatan,Pendapatan dari penjualan produk UMKM,0,Aktif,Kredit
+4-1002,Pendapatan Jasa,Pendapatan,Pendapatan dari jasa konsultasi dan pelatihan,0,Aktif,Kredit
+4-1003,Pendapatan Wisata Desa,Pendapatan,Pendapatan dari sektor pariwisata desa,0,Aktif,Kredit
+4-1004,Pendapatan Lain-lain,Pendapatan,Pendapatan di luar usaha utama,0,Aktif,Kredit
+5-1001,Beban Gaji dan Tunjangan,Beban,Beban gaji karyawan dan tunjangan,0,Aktif,Debit
+5-1002,Beban Bahan Baku,Beban,Beban pembelian bahan baku produksi,0,Aktif,Debit
+5-1003,Beban Listrik dan Air,Beban,Beban utilitas listrik dan air,0,Aktif,Debit
+5-1004,Beban Transportasi,Beban,Beban transportasi dan distribusi,0,Aktif,Debit
+5-1005,Beban Pemasaran,Beban,Beban promosi dan pemasaran,0,Aktif,Debit
+5-1006,Beban Administrasi,Beban,Beban administrasi dan operasional kantor,0,Aktif,Debit
+5-1007,Beban Penyusutan,Beban,Beban penyusutan aset tetap,0,Aktif,Debit
+5-1008,Beban Bunga,Beban,Beban bunga pinjaman bank,0,Aktif,Debit
+5-1009,Beban Lain-lain,Beban,Beban operasional lainnya,0,Aktif,Debit
+
+=== SHEET 2: TEMPLATE JURNAL UMUM ===
+Tanggal,Kode Transaksi,Keterangan,Kode Akun,Nama Akun,Debit,Kredit,Ref
+2025-01-01,IN202501010001,Setoran Modal Awal,1-1001,Kas,50000000,,
+2025-01-01,IN202501010001,Setoran Modal Awal,3-1001,Modal Awal BUMDES,,50000000,
+2025-01-02,OUT202501020001,Pembelian Bahan Baku,5-1002,Beban Bahan Baku,5000000,,
+2025-01-02,OUT202501020001,Pembelian Bahan Baku,1-1001,Kas,,5000000,
+2025-01-03,IN202501030001,Penjualan Produk,1-1001,Kas,10000000,,
+2025-01-03,IN202501030001,Penjualan Produk,4-1001,Pendapatan Penjualan Produk,,10000000,
+
+=== SHEET 3: BUKU BESAR ===
+Kode Entry,Tanggal Posting,Kode Akun,Nama Akun,Debit,Kredit,Keterangan,Kode Transaksi,Status
+GL-20250101-0001,2025-01-01,1-1001,Kas,50000000,0,Setoran Modal Awal,IN202501010001,Posted
+GL-20250101-0002,2025-01-01,3-1001,Modal Awal BUMDES,0,50000000,Setoran Modal Awal,IN202501010001,Posted
+GL-20250102-0003,2025-01-02,5-1002,Beban Bahan Baku,5000000,0,Pembelian Bahan Baku,OUT202501020001,Posted
+GL-20250102-0004,2025-01-02,1-1001,Kas,0,5000000,Pembelian Bahan Baku,OUT202501020001,Posted
+
+=== SHEET 4: NERACA SALDO ===
+Kode Akun,Nama Akun,Saldo Awal Debit,Saldo Awal Kredit,Mutasi Debit,Mutasi Kredit,Saldo Akhir Debit,Saldo Akhir Kredit
+1-1001,Kas,150000000,0,=SUMIF(Sheet3.C:C,"1-1001",Sheet3.E:E),=SUMIF(Sheet3.C:C,"1-1001",Sheet3.F:F),=C2+E2-F2,0
+1-1002,Bank BRI,300000000,0,=SUMIF(Sheet3.C:C,"1-1002",Sheet3.E:E),=SUMIF(Sheet3.C:C,"1-1002",Sheet3.F:F),=C3+E3-F3,0
+1-1003,Bank Mandiri,200000000,0,=SUMIF(Sheet3.C:C,"1-1003",Sheet3.E:E),=SUMIF(Sheet3.C:C,"1-1003",Sheet3.F:F),=C4+E4-F4,0
+1-1004,Piutang Usaha,50000000,0,=SUMIF(Sheet3.C:C,"1-1004",Sheet3.E:E),=SUMIF(Sheet3.C:C,"1-1004",Sheet3.F:F),=C5+E5-F5,0
+1-1005,Persediaan Bahan Baku,80000000,0,=SUMIF(Sheet3.C:C,"1-1005",Sheet3.E:E),=SUMIF(Sheet3.C:C,"1-1005",Sheet3.F:F),=C6+E6-F6,0
+1-1006,Persediaan Barang Jadi,120000000,0,=SUMIF(Sheet3.C:C,"1-1006",Sheet3.E:E),=SUMIF(Sheet3.C:C,"1-1006",Sheet3.F:F),=C7+E7-F7,0
+1-2001,Tanah,500000000,0,=SUMIF(Sheet3.C:C,"1-2001",Sheet3.E:E),=SUMIF(Sheet3.C:C,"1-2001",Sheet3.F:F),=C8+E8-F8,0
+1-2002,Bangunan,400000000,0,=SUMIF(Sheet3.C:C,"1-2002",Sheet3.E:E),=SUMIF(Sheet3.C:C,"1-2002",Sheet3.F:F),=C9+E9-F9,0
+1-2003,Peralatan Produksi,250000000,0,=SUMIF(Sheet3.C:C,"1-2003",Sheet3.E:E),=SUMIF(Sheet3.C:C,"1-2003",Sheet3.F:F),=C10+E10-F10,0
+1-2004,Kendaraan,180000000,0,=SUMIF(Sheet3.C:C,"1-2004",Sheet3.E:E),=SUMIF(Sheet3.C:C,"1-2004",Sheet3.F:F),=C11+E11-F11,0
+1-2005,Peralatan Kantor,75000000,0,=SUMIF(Sheet3.C:C,"1-2005",Sheet3.E:E),=SUMIF(Sheet3.C:C,"1-2005",Sheet3.F:F),=C12+E12-F12,0
+2-1001,Hutang Usaha,0,60000000,=SUMIF(Sheet3.C:C,"2-1001",Sheet3.E:E),=SUMIF(Sheet3.C:C,"2-1001",Sheet3.F:F),0,=D13+F13-E13
+2-1002,Hutang Gaji,0,15000000,=SUMIF(Sheet3.C:C,"2-1002",Sheet3.E:E),=SUMIF(Sheet3.C:C,"2-1002",Sheet3.F:F),0,=D14+F14-E14
+2-1003,Hutang Pajak,0,25000000,=SUMIF(Sheet3.C:C,"2-1003",Sheet3.E:E),=SUMIF(Sheet3.C:C,"2-1003",Sheet3.F:F),0,=D15+F15-E15
+2-2001,Hutang Bank Jangka Panjang,0,200000000,=SUMIF(Sheet3.C:C,"2-2001",Sheet3.E:E),=SUMIF(Sheet3.C:C,"2-2001",Sheet3.F:F),0,=D16+F16-E16
+2-2002,Hutang Pembiayaan Kendaraan,0,80000000,=SUMIF(Sheet3.C:C,"2-2002",Sheet3.E:E),=SUMIF(Sheet3.C:C,"2-2002",Sheet3.F:F),0,=D17+F17-E17
+3-1001,Modal Awal BUMDES,0,1000000000,=SUMIF(Sheet3.C:C,"3-1001",Sheet3.E:E),=SUMIF(Sheet3.C:C,"3-1001",Sheet3.F:F),0,=D18+F18-E18
+3-1002,Modal Tambahan,0,500000000,=SUMIF(Sheet3.C:C,"3-1002",Sheet3.E:E),=SUMIF(Sheet3.C:C,"3-1002",Sheet3.F:F),0,=D19+F19-E19
+3-1003,Laba Ditahan,0,235000000,=SUMIF(Sheet3.C:C,"3-1003",Sheet3.E:E),=SUMIF(Sheet3.C:C,"3-1003",Sheet3.F:F),0,=D20+F20-E20
+4-1001,Pendapatan Penjualan Produk,0,0,=SUMIF(Sheet3.C:C,"4-1001",Sheet3.E:E),=SUMIF(Sheet3.C:C,"4-1001",Sheet3.F:F),0,=D21+F21-E21
+4-1002,Pendapatan Jasa,0,0,=SUMIF(Sheet3.C:C,"4-1002",Sheet3.E:E),=SUMIF(Sheet3.C:C,"4-1002",Sheet3.F:F),0,=D22+F22-E22
+4-1003,Pendapatan Wisata Desa,0,0,=SUMIF(Sheet3.C:C,"4-1003",Sheet3.E:E),=SUMIF(Sheet3.C:C,"4-1003",Sheet3.F:F),0,=D23+F23-E23
+4-1004,Pendapatan Lain-lain,0,0,=SUMIF(Sheet3.C:C,"4-1004",Sheet3.E:E),=SUMIF(Sheet3.C:C,"4-1004",Sheet3.F:F),0,=D24+F24-E24
+5-1001,Beban Gaji dan Tunjangan,0,0,=SUMIF(Sheet3.C:C,"5-1001",Sheet3.E:E),=SUMIF(Sheet3.C:C,"5-1001",Sheet3.F:F),=E25-F25,0
+5-1002,Beban Bahan Baku,0,0,=SUMIF(Sheet3.C:C,"5-1002",Sheet3.E:E),=SUMIF(Sheet3.C:C,"5-1002",Sheet3.F:F),=E26-F26,0
+5-1003,Beban Listrik dan Air,0,0,=SUMIF(Sheet3.C:C,"5-1003",Sheet3.E:E),=SUMIF(Sheet3.C:C,"5-1003",Sheet3.F:F),=E27-F27,0
+5-1004,Beban Transportasi,0,0,=SUMIF(Sheet3.C:C,"5-1004",Sheet3.E:E),=SUMIF(Sheet3.C:C,"5-1004",Sheet3.F:F),=E28-F28,0
+5-1005,Beban Pemasaran,0,0,=SUMIF(Sheet3.C:C,"5-1005",Sheet3.E:E),=SUMIF(Sheet3.C:C,"5-1005",Sheet3.F:F),=E29-F29,0
+5-1006,Beban Administrasi,0,0,=SUMIF(Sheet3.C:C,"5-1006",Sheet3.E:E),=SUMIF(Sheet3.C:C,"5-1006",Sheet3.F:F),=E30-F30,0
+5-1007,Beban Penyusutan,0,0,=SUMIF(Sheet3.C:C,"5-1007",Sheet3.E:E),=SUMIF(Sheet3.C:C,"5-1007",Sheet3.F:F),=E31-F31,0
+5-1008,Beban Bunga,0,0,=SUMIF(Sheet3.C:C,"5-1008",Sheet3.E:E),=SUMIF(Sheet3.C:C,"5-1008",Sheet3.F:F),=E32-F32,0
+5-1009,Beban Lain-lain,0,0,=SUMIF(Sheet3.C:C,"5-1009",Sheet3.E:E),=SUMIF(Sheet3.C:C,"5-1009",Sheet3.F:F),=E33-F33,0
+
+TOTAL DEBIT,=SUM(G2:G33)
+TOTAL KREDIT,=SUM(H2:H33)
+SELISIH,=G35-H35
+STATUS BALANCE,=IF(G35=H35,"BALANCE","NOT BALANCE")
+
+=== SHEET 5: LAPORAN LABA RUGI ===
+LAPORAN LABA RUGI
+BUMDES [NAMA DESA]
+Periode: [BULAN TAHUN]
+
+PENDAPATAN:
+Pendapatan Penjualan Produk,=SUMIF(Sheet4.A:A,"4-1001",Sheet4.H:H)
+Pendapatan Jasa,=SUMIF(Sheet4.A:A,"4-1002",Sheet4.H:H)
+Pendapatan Wisata Desa,=SUMIF(Sheet4.A:A,"4-1003",Sheet4.H:H)
+Pendapatan Lain-lain,=SUMIF(Sheet4.A:A,"4-1004",Sheet4.H:H)
+TOTAL PENDAPATAN,=SUM(B6:B9)
+
+BEBAN:
+Beban Gaji dan Tunjangan,=SUMIF(Sheet4.A:A,"5-1001",Sheet4.G:G)
+Beban Bahan Baku,=SUMIF(Sheet4.A:A,"5-1002",Sheet4.G:G)
+Beban Listrik dan Air,=SUMIF(Sheet4.A:A,"5-1003",Sheet4.G:G)
+Beban Transportasi,=SUMIF(Sheet4.A:A,"5-1004",Sheet4.G:G)
+Beban Pemasaran,=SUMIF(Sheet4.A:A,"5-1005",Sheet4.G:G)
+Beban Administrasi,=SUMIF(Sheet4.A:A,"5-1006",Sheet4.G:G)
+Beban Penyusutan,=SUMIF(Sheet4.A:A,"5-1007",Sheet4.G:G)
+Beban Bunga,=SUMIF(Sheet4.A:A,"5-1008",Sheet4.G:G)
+Beban Lain-lain,=SUMIF(Sheet4.A:A,"5-1009",Sheet4.G:G)
+TOTAL BEBAN,=SUM(B12:B20)
+
+LABA BERSIH,=B10-B21
+
+=== SHEET 6: NERACA ===
+NERACA
+BUMDES [NAMA DESA]
+Per: [TANGGAL]
+
+ASET:
+ASET LANCAR:
+Kas,=SUMIF(Sheet4.A:A,"1-1001",Sheet4.G:G)
+Bank BRI,=SUMIF(Sheet4.A:A,"1-1002",Sheet4.G:G)
+Bank Mandiri,=SUMIF(Sheet4.A:A,"1-1003",Sheet4.G:G)
+Piutang Usaha,=SUMIF(Sheet4.A:A,"1-1004",Sheet4.G:G)
+Persediaan Bahan Baku,=SUMIF(Sheet4.A:A,"1-1005",Sheet4.G:G)
+Persediaan Barang Jadi,=SUMIF(Sheet4.A:A,"1-1006",Sheet4.G:G)
+TOTAL ASET LANCAR,=SUM(B8:B13)
+
+ASET TETAP:
+Tanah,=SUMIF(Sheet4.A:A,"1-2001",Sheet4.G:G)
+Bangunan,=SUMIF(Sheet4.A:A,"1-2002",Sheet4.G:G)
+Peralatan Produksi,=SUMIF(Sheet4.A:A,"1-2003",Sheet4.G:G)
+Kendaraan,=SUMIF(Sheet4.A:A,"1-2004",Sheet4.G:G)
+Peralatan Kantor,=SUMIF(Sheet4.A:A,"1-2005",Sheet4.G:G)
+TOTAL ASET TETAP,=SUM(B16:B20)
+
+TOTAL ASET,=B14+B21
+
+KEWAJIBAN DAN MODAL:
+KEWAJIBAN LANCAR:
+Hutang Usaha,=SUMIF(Sheet4.A:A,"2-1001",Sheet4.H:H)
+Hutang Gaji,=SUMIF(Sheet4.A:A,"2-1002",Sheet4.H:H)
+Hutang Pajak,=SUMIF(Sheet4.A:A,"2-1003",Sheet4.H:H)
+TOTAL KEWAJIBAN LANCAR,=SUM(B26:B28)
+
+KEWAJIBAN JANGKA PANJANG:
+Hutang Bank Jangka Panjang,=SUMIF(Sheet4.A:A,"2-2001",Sheet4.H:H)
+Hutang Pembiayaan Kendaraan,=SUMIF(Sheet4.A:A,"2-2002",Sheet4.H:H)
+TOTAL KEWAJIBAN JANGKA PANJANG,=SUM(B31:B32)
+
+TOTAL KEWAJIBAN,=B29+B33
+
+MODAL:
+Modal Awal BUMDES,=SUMIF(Sheet4.A:A,"3-1001",Sheet4.H:H)
+Modal Tambahan,=SUMIF(Sheet4.A:A,"3-1002",Sheet4.H:H)
+Laba Ditahan,=SUMIF(Sheet4.A:A,"3-1003",Sheet4.H:H)
+Laba Tahun Berjalan,=Sheet5.B22
+TOTAL MODAL,=SUM(B37:B40)
+
+TOTAL KEWAJIBAN DAN MODAL,=B35+B41
+
+BALANCE CHECK,=IF(B22=B42,"BALANCE","NOT BALANCE")
+
+=== SHEET 7: PANDUAN PENGGUNAAN ===
+PANDUAN PENGGUNAAN TEMPLATE MANUAL BACKUP BUMDES
+
+1. CHART OF ACCOUNTS (Sheet 1):
+   - Berisi daftar lengkap akun sesuai sistem BUMDES
+   - Jangan mengubah kode akun yang sudah ada
+   - Untuk menambah akun baru ikuti format kode yang sama
+
+2. TEMPLATE JURNAL UMUM (Sheet 2):
+   - Gunakan untuk mencatat transaksi harian
+   - Pastikan setiap transaksi memiliki debit dan kredit yang seimbang
+   - Format kode transaksi: IN/OUT + YYYYMMDD + 4 digit nomor urut
+
+3. BUKU BESAR (Sheet 3):
+   - Salin data dari Sheet 2 ke Sheet 3 untuk posting
+   - Setiap baris jurnal menjadi satu baris di buku besar
+   - Gunakan kode entry format: GL-YYYYMMDD-4 digit nomor urut
+
+4. NERACA SALDO (Sheet 4):
+   - Otomatis menghitung saldo dari buku besar
+   - Periksa balance: Total Debit harus sama dengan Total Kredit
+   - Jika tidak balance periksa kembali jurnal dan posting
+
+5. LAPORAN LABA RUGI (Sheet 5):
+   - Otomatis menghitung dari neraca saldo
+   - Menampilkan pendapatan dikurangi beban
+   - Hasil akhir adalah laba/rugi bersih
+
+6. NERACA (Sheet 6):
+   - Otomatis menghitung dari neraca saldo
+   - Menampilkan posisi keuangan: Aset = Kewajiban + Modal
+   - Periksa balance check di bagian bawah
+
+TIPS PENGGUNAAN:
+- Backup file ini secara berkala
+- Gunakan format tanggal YYYY-MM-DD
+- Selalu periksa balance setelah input transaksi
+- Simpan dalam format Excel (.xlsx) untuk mempertahankan rumus
+- Buat copy untuk setiap periode (bulanan/tahunan)
+
+KODE TRANSAKSI:
+- IN: Transaksi Pemasukan (Income)
+- OUT: Transaksi Pengeluaran (Expense)
+- Format: IN/OUT + YYYYMMDD + 4 digit nomor urut
+- Contoh: IN202501010001 (Pemasukan tanggal 1 Jan 2025 nomor 1)
+
+VALIDASI BALANCE:
+1. Total Debit = Total Kredit di Jurnal
+2. Total Debit = Total Kredit di Neraca Saldo
+3. Total Aset = Total Kewajiban + Modal di Neraca
+
+BACKUP BERKALA:
+- Harian: Backup file setelah input transaksi
+- Mingguan: Buat copy file dengan nama berbeda
+- Bulanan: Arsipkan file bulan sebelumnya
+- Tahunan: Buat file baru untuk tahun baru
+
+TROUBLESHOOTING:
+- Jika balance tidak seimbang: Periksa jurnal dan pastikan setiap transaksi balance
+- Jika rumus error: Pastikan referensi sheet dan cell benar
+- Jika data hilang: Restore dari backup terakhir
+
+KONTAK SUPPORT:
+Untuk bantuan teknis hubungi administrator sistem BUMDES

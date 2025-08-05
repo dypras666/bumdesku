@@ -308,7 +308,7 @@ class TransactionController extends Controller
      */
     public function apiIndex(Request $request)
     {
-        $query = Transaction::with(['account', 'user', 'approver']);
+        $query = Transaction::with(['account', 'user', 'approver', 'generalLedgerEntries']);
 
         // Filter berdasarkan jenis transaksi
         if ($request->filled('type')) {
@@ -345,9 +345,18 @@ class TransactionController extends Controller
                              ->orderBy('created_at', 'desc')
                              ->paginate($perPage);
 
+        // Transform data untuk menyertakan status posting
+        $transformedData = $transactions->getCollection()->map(function($transaction) {
+            $data = $transaction->toArray();
+            $data['is_posted'] = $transaction->isPosted();
+            $data['posting_status_label'] = $transaction->getPostingStatusLabel();
+            $data['posting_status_badge_class'] = $transaction->getPostingStatusBadgeClass();
+            return $data;
+        });
+
         return response()->json([
             'success' => true,
-            'data' => $transactions->items(),
+            'data' => $transformedData,
             'pagination' => [
                 'current_page' => $transactions->currentPage(),
                 'last_page' => $transactions->lastPage(),
@@ -491,6 +500,310 @@ class TransactionController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal menghapus transaksi: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Daily closing - Otomatis posting transaksi approved ke jurnal umum
+     */
+    public function dailyClosing(Request $request)
+    {
+        $request->validate([
+            'closing_date' => 'required|date',
+        ]);
+
+        $closingDate = $request->closing_date;
+        
+        DB::beginTransaction();
+        try {
+            // Ambil semua transaksi approved pada tanggal tersebut yang belum di-posting
+            $transactions = Transaction::with('account')
+                ->where('status', 'approved')
+                ->whereDate('transaction_date', $closingDate)
+                ->whereDoesntHave('generalLedgerEntries')
+                ->get();
+
+            if ($transactions->isEmpty()) {
+                return redirect()->route('transactions.index')
+                    ->with('warning', 'Tidak ada transaksi yang perlu di-closing pada tanggal ' . $closingDate);
+            }
+
+            $postedCount = 0;
+            $totalAmount = 0;
+
+            foreach ($transactions as $transaction) {
+                // Generate entry code untuk jurnal umum
+                $entryCode = \App\Models\GeneralLedger::generateEntryCode();
+
+                // Buat entry jurnal umum berdasarkan jenis transaksi
+                if ($transaction->transaction_type === 'income') {
+                    // Untuk pemasukan: Debit Kas/Bank, Kredit Pendapatan
+                    
+                    // Entry 1: Debit pada akun kas/bank
+                    \App\Models\GeneralLedger::create([
+                        'entry_code' => $entryCode,
+                        'account_id' => $transaction->account_id,
+                        'transaction_id' => $transaction->id,
+                        'posting_date' => $closingDate,
+                        'debit' => $transaction->amount,
+                        'credit' => 0,
+                        'description' => 'Closing Harian - ' . $transaction->description,
+                        'reference_type' => 'transaction',
+                        'reference_number' => $transaction->transaction_code,
+                        'posted_by' => Auth::id(),
+                        'posted_at' => now(),
+                        'status' => 'posted'
+                    ]);
+
+                    // Entry 2: Kredit pada akun pendapatan (cari akun pendapatan default)
+                    $revenueAccount = \App\Models\MasterAccount::where('kategori_akun', 'Pendapatan')->first();
+                    if ($revenueAccount) {
+                        \App\Models\GeneralLedger::create([
+                            'entry_code' => $entryCode,
+                            'account_id' => $revenueAccount->id,
+                            'transaction_id' => $transaction->id,
+                            'posting_date' => $closingDate,
+                            'debit' => 0,
+                            'credit' => $transaction->amount,
+                            'description' => 'Closing Harian - ' . $transaction->description,
+                            'reference_type' => 'transaction',
+                            'reference_number' => $transaction->transaction_code,
+                            'posted_by' => Auth::id(),
+                            'posted_at' => now(),
+                            'status' => 'posted'
+                        ]);
+                    }
+
+                } else {
+                    // Untuk pengeluaran: Debit Beban, Kredit Kas/Bank
+                    
+                    // Entry 1: Debit pada akun beban (gunakan akun yang dipilih atau akun beban default)
+                    $expenseAccount = $transaction->account;
+                    if ($expenseAccount->kategori_akun !== 'Beban') {
+                        $expenseAccount = \App\Models\MasterAccount::where('kategori_akun', 'Beban')->first();
+                    }
+
+                    if ($expenseAccount) {
+                        \App\Models\GeneralLedger::create([
+                            'entry_code' => $entryCode,
+                            'account_id' => $expenseAccount->id,
+                            'transaction_id' => $transaction->id,
+                            'posting_date' => $closingDate,
+                            'debit' => $transaction->amount,
+                            'credit' => 0,
+                            'description' => 'Closing Harian - ' . $transaction->description,
+                            'reference_type' => 'transaction',
+                            'reference_number' => $transaction->transaction_code,
+                            'posted_by' => Auth::id(),
+                            'posted_at' => now(),
+                            'status' => 'posted'
+                        ]);
+                    }
+
+                    // Entry 2: Kredit pada akun kas/bank
+                    $cashAccount = \App\Models\MasterAccount::where('kategori_akun', 'Aset')
+                        ->where('nama_akun', 'LIKE', '%kas%')
+                        ->first();
+                    
+                    if (!$cashAccount) {
+                        $cashAccount = $transaction->account;
+                    }
+
+                    \App\Models\GeneralLedger::create([
+                        'entry_code' => $entryCode,
+                        'account_id' => $cashAccount->id,
+                        'transaction_id' => $transaction->id,
+                        'posting_date' => $closingDate,
+                        'debit' => 0,
+                        'credit' => $transaction->amount,
+                        'description' => 'Closing Harian - ' . $transaction->description,
+                        'reference_type' => 'transaction',
+                        'reference_number' => $transaction->transaction_code,
+                        'posted_by' => Auth::id(),
+                        'posted_at' => now(),
+                        'status' => 'posted'
+                    ]);
+                }
+
+                $postedCount++;
+                $totalAmount += $transaction->amount;
+            }
+
+            DB::commit();
+
+            return redirect()->route('transactions.index')
+                ->with('success', "Closing harian berhasil! {$postedCount} transaksi telah diposting ke jurnal umum dengan total nilai " . format_currency($totalAmount));
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->route('transactions.index')
+                ->with('error', 'Gagal melakukan closing harian: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Show daily closing form
+     */
+    public function showDailyClosing()
+    {
+        // Ambil tanggal hari ini sebagai default
+        $defaultDate = now()->format('Y-m-d');
+        
+        // Hitung jumlah transaksi approved yang belum di-posting untuk hari ini
+        $pendingTransactions = Transaction::where('status', 'approved')
+            ->whereDate('transaction_date', $defaultDate)
+            ->whereDoesntHave('generalLedgerEntries')
+            ->count();
+
+        return view('transactions.daily-closing', compact('defaultDate', 'pendingTransactions'));
+    }
+
+    /**
+     * API endpoint untuk daily closing
+     */
+    public function apiDailyClosing(Request $request)
+    {
+        $request->validate([
+            'closing_date' => 'required|date',
+        ]);
+
+        $closingDate = $request->closing_date;
+        
+        DB::beginTransaction();
+        try {
+            // Ambil semua transaksi approved pada tanggal tersebut yang belum di-posting
+            $transactions = Transaction::with('account')
+                ->where('status', 'approved')
+                ->whereDate('transaction_date', $closingDate)
+                ->whereDoesntHave('generalLedgerEntries')
+                ->get();
+
+            if ($transactions->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Tidak ada transaksi yang perlu di-closing pada tanggal ' . $closingDate
+                ], 400);
+            }
+
+            $postedCount = 0;
+            $totalAmount = 0;
+
+            foreach ($transactions as $transaction) {
+                // Generate entry code untuk jurnal umum
+                $entryCode = \App\Models\GeneralLedger::generateEntryCode();
+
+                // Buat entry jurnal umum berdasarkan jenis transaksi
+                if ($transaction->transaction_type === 'income') {
+                    // Untuk pemasukan: Debit Kas/Bank, Kredit Pendapatan
+                    
+                    // Entry 1: Debit pada akun kas/bank
+                    \App\Models\GeneralLedger::create([
+                        'entry_code' => $entryCode,
+                        'account_id' => $transaction->account_id,
+                        'transaction_id' => $transaction->id,
+                        'posting_date' => $closingDate,
+                        'debit' => $transaction->amount,
+                        'credit' => 0,
+                        'description' => 'Closing Harian - ' . $transaction->description,
+                        'reference_type' => 'transaction',
+                        'reference_number' => $transaction->transaction_code,
+                        'posted_by' => Auth::id(),
+                        'posted_at' => now(),
+                        'status' => 'posted'
+                    ]);
+
+                    // Entry 2: Kredit pada akun pendapatan (cari akun pendapatan default)
+                    $revenueAccount = \App\Models\MasterAccount::where('kategori_akun', 'Pendapatan')->first();
+                    if ($revenueAccount) {
+                        \App\Models\GeneralLedger::create([
+                            'entry_code' => $entryCode,
+                            'account_id' => $revenueAccount->id,
+                            'transaction_id' => $transaction->id,
+                            'posting_date' => $closingDate,
+                            'debit' => 0,
+                            'credit' => $transaction->amount,
+                            'description' => 'Closing Harian - ' . $transaction->description,
+                            'reference_type' => 'transaction',
+                            'reference_number' => $transaction->transaction_code,
+                            'posted_by' => Auth::id(),
+                            'posted_at' => now(),
+                            'status' => 'posted'
+                        ]);
+                    }
+
+                } else {
+                    // Untuk pengeluaran: Debit Beban, Kredit Kas/Bank
+                    
+                    // Entry 1: Debit pada akun beban
+                    $expenseAccount = $transaction->account;
+                    if ($expenseAccount->kategori_akun !== 'Beban') {
+                        $expenseAccount = \App\Models\MasterAccount::where('kategori_akun', 'Beban')->first();
+                    }
+
+                    if ($expenseAccount) {
+                        \App\Models\GeneralLedger::create([
+                            'entry_code' => $entryCode,
+                            'account_id' => $expenseAccount->id,
+                            'transaction_id' => $transaction->id,
+                            'posting_date' => $closingDate,
+                            'debit' => $transaction->amount,
+                            'credit' => 0,
+                            'description' => 'Closing Harian - ' . $transaction->description,
+                            'reference_type' => 'transaction',
+                            'reference_number' => $transaction->transaction_code,
+                            'posted_by' => Auth::id(),
+                            'posted_at' => now(),
+                            'status' => 'posted'
+                        ]);
+                    }
+
+                    // Entry 2: Kredit pada akun kas/bank
+                    $cashAccount = \App\Models\MasterAccount::where('kategori_akun', 'Aset')
+                        ->where('nama_akun', 'LIKE', '%kas%')
+                        ->first();
+                    
+                    if (!$cashAccount) {
+                        $cashAccount = $transaction->account;
+                    }
+
+                    \App\Models\GeneralLedger::create([
+                        'entry_code' => $entryCode,
+                        'account_id' => $cashAccount->id,
+                        'transaction_id' => $transaction->id,
+                        'posting_date' => $closingDate,
+                        'debit' => 0,
+                        'credit' => $transaction->amount,
+                        'description' => 'Closing Harian - ' . $transaction->description,
+                        'reference_type' => 'transaction',
+                        'reference_number' => $transaction->transaction_code,
+                        'posted_by' => Auth::id(),
+                        'posted_at' => now(),
+                        'status' => 'posted'
+                    ]);
+                }
+
+                $postedCount++;
+                $totalAmount += $transaction->amount;
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => "Closing harian berhasil! {$postedCount} transaksi telah diposting ke jurnal umum dengan total nilai " . format_currency($totalAmount),
+                'data' => [
+                    'posted_count' => $postedCount,
+                    'total_amount' => $totalAmount,
+                    'closing_date' => $closingDate
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal melakukan closing harian: ' . $e->getMessage()
             ], 500);
         }
     }

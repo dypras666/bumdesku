@@ -60,7 +60,7 @@
         @if(!empty($companyInfo['director_name']))
             <div class="director-info mt-2">
                 <small class="text-muted">
-                    <strong>Kepala Bumdes:</strong> {{ $companyInfo['director_name'] }}
+                    <strong>Direktur Bumdes:</strong> {{ $companyInfo['director_name'] }}
                     @if(!empty($companyInfo['director_nip']))
                         <br><strong>NIP:</strong> {{ $companyInfo['director_nip'] }}
                     @endif

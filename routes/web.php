@@ -66,6 +66,8 @@ Route::resource('transactions', TransactionController::class);
 Route::post('transactions/{transaction}/approve', [TransactionController::class, 'approve'])->name('transactions.approve');
 Route::post('transactions/{transaction}/reject', [TransactionController::class, 'reject'])->name('transactions.reject');
 Route::get('transactions/{transaction}/print-receipt', [TransactionController::class, 'printReceipt'])->name('transactions.print-receipt');
+Route::get('transactions/daily-closing/form', [TransactionController::class, 'showDailyClosing'])->name('transactions.daily-closing.form');
+Route::post('transactions/daily-closing', [TransactionController::class, 'dailyClosing'])->name('transactions.daily-closing');
 
 // Loan Management routes
 Route::resource('loans', LoanController::class);

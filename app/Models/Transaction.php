@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Transaction extends Model
 {
@@ -53,6 +54,14 @@ class Transaction extends Model
     public function approver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    /**
+     * Relationship dengan GeneralLedger entries
+     */
+    public function generalLedgerEntries(): HasMany
+    {
+        return $this->hasMany(GeneralLedger::class, 'transaction_id');
     }
 
     /**
@@ -148,5 +157,37 @@ class Transaction extends Model
             'rejected' => 'badge-danger',
             default => 'badge-secondary'
         };
+    }
+
+    /**
+     * Check if transaction is already posted to general ledger
+     */
+    public function isPosted()
+    {
+        return $this->generalLedgerEntries()->exists();
+    }
+
+    /**
+     * Get posting status label
+     */
+    public function getPostingStatusLabel()
+    {
+        if ($this->status !== 'approved') {
+            return '-';
+        }
+        
+        return $this->isPosted() ? 'Sudah Diposting' : 'Belum Diposting';
+    }
+
+    /**
+     * Get posting status badge class
+     */
+    public function getPostingStatusBadgeClass()
+    {
+        if ($this->status !== 'approved') {
+            return 'badge-secondary';
+        }
+        
+        return $this->isPosted() ? 'badge-info' : 'badge-warning';
     }
 }

@@ -13,9 +13,8 @@ class TransactionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     * Data transaksi untuk Juni-Juli 2025
-     * Juni: Balance (pendapatan = pengeluaran)
-     * Juli: Minus (pengeluaran > pendapatan)
+     * Data transaksi untuk Agustus 2025 (tanggal 5 Agustus 2025 sebagai base)
+     * Agustus: Plus (pendapatan > pengeluaran)
      */
     public function run(): void
     {
@@ -27,341 +26,195 @@ class TransactionSeeder extends Seeder
             return;
         }
 
-        // Data transaksi untuk Juni-Juli 2025
+        // Data transaksi untuk Agustus 2025 - dimulai dari tanggal 5 Agustus 2025
         $transactions = [
-            // ===== JUNI 2025 - BALANCE (Pendapatan = Pengeluaran) =====
+            // ===== AGUSTUS 2025 - PLUS (Pendapatan > Pengeluaran) =====
             
-            // Minggu 1 Juni 2025
+            // Tanggal 5 Agustus 2025
             [
                 'transaction_type' => 'income',
-                'transaction_date' => Carbon::create(2025, 6, 2),
-                'amount' => 15000000,
-                'description' => 'Penjualan produk kerajinan bambu ke Jakarta',
+                'transaction_date' => Carbon::create(2025, 8, 5),
+                'amount' => 20000000,
+                'description' => 'Kontrak besar - penjualan produk ke perusahaan multinasional',
                 'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 6, 3),
+                'approved_at' => Carbon::create(2025, 8, 5),
                 'account_code' => '4-1001',
             ],
             [
                 'transaction_type' => 'income',
-                'transaction_date' => Carbon::create(2025, 6, 4),
-                'amount' => 8000000,
-                'description' => 'Pendapatan wisata desa - paket tour',
+                'transaction_date' => Carbon::create(2025, 8, 5),
+                'amount' => 15000000,
+                'description' => 'Pendapatan dari festival wisata desa yang sukses',
                 'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 6, 5),
+                'approved_at' => Carbon::create(2025, 8, 5),
                 'account_code' => '4-1003',
             ],
             [
                 'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 6, 5),
+                'transaction_date' => Carbon::create(2025, 8, 5),
+                'amount' => 3000000,
+                'description' => 'Biaya operasional festival',
+                'status' => 'approved',
+                'approved_at' => Carbon::create(2025, 8, 5),
+                'account_code' => '5-1006',
+            ],
+
+            // Tanggal 6 Agustus 2025
+            [
+                'transaction_type' => 'income',
+                'transaction_date' => Carbon::create(2025, 8, 6),
+                'amount' => 12000000,
+                'description' => 'Penjualan produk kerajinan bambu ke Jakarta',
+                'status' => 'approved',
+                'approved_at' => Carbon::create(2025, 8, 6),
+                'account_code' => '4-1001',
+            ],
+            [
+                'transaction_type' => 'expense',
+                'transaction_date' => Carbon::create(2025, 8, 6),
                 'amount' => 5000000,
                 'description' => 'Pembelian bahan baku bambu dan rotan',
                 'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 6, 6),
+                'approved_at' => Carbon::create(2025, 8, 6),
                 'account_code' => '5-1002',
             ],
-            [
-                'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 6, 6),
-                'amount' => 3000000,
-                'description' => 'Gaji karyawan produksi bulan Juni',
-                'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 6, 7),
-                'account_code' => '5-1001',
-            ],
 
-            // Minggu 2 Juni 2025
+            // Tanggal 7 Agustus 2025
             [
                 'transaction_type' => 'income',
-                'transaction_date' => Carbon::create(2025, 6, 9),
-                'amount' => 12000000,
-                'description' => 'Penjualan produk olahan makanan ke supermarket',
+                'transaction_date' => Carbon::create(2025, 8, 7),
+                'amount' => 18000000,
+                'description' => 'Penjualan produk makanan olahan ke distributor',
                 'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 6, 10),
+                'approved_at' => Carbon::create(2025, 8, 7),
                 'account_code' => '4-1001',
             ],
             [
-                'transaction_type' => 'income',
-                'transaction_date' => Carbon::create(2025, 6, 11),
-                'amount' => 6000000,
-                'description' => 'Jasa konsultasi UMKM untuk desa tetangga',
-                'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 6, 12),
-                'account_code' => '4-1002',
-            ],
-            [
                 'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 6, 12),
+                'transaction_date' => Carbon::create(2025, 8, 7),
                 'amount' => 4000000,
-                'description' => 'Pembelian peralatan produksi baru',
+                'description' => 'Gaji karyawan produksi bulan Agustus',
                 'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 6, 13),
-                'account_code' => '1-2003',
+                'approved_at' => Carbon::create(2025, 8, 7),
+                'account_code' => '5-1001',
+            ],
+
+            // Tanggal 8 Agustus 2025
+            [
+                'transaction_type' => 'income',
+                'transaction_date' => Carbon::create(2025, 8, 8),
+                'amount' => 10000000,
+                'description' => 'Pendapatan wisata desa - paket tour',
+                'status' => 'approved',
+                'approved_at' => Carbon::create(2025, 8, 8),
+                'account_code' => '4-1003',
             ],
             [
                 'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 6, 13),
+                'transaction_date' => Carbon::create(2025, 8, 8),
                 'amount' => 2500000,
                 'description' => 'Biaya pemasaran dan promosi',
                 'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 6, 14),
+                'approved_at' => Carbon::create(2025, 8, 8),
                 'account_code' => '5-1005',
             ],
 
-            // Minggu 3 Juni 2025
+            // Tanggal 9 Agustus 2025
             [
                 'transaction_type' => 'income',
-                'transaction_date' => Carbon::create(2025, 6, 16),
-                'amount' => 10000000,
+                'transaction_date' => Carbon::create(2025, 8, 9),
+                'amount' => 14000000,
                 'description' => 'Penjualan hasil pertanian organik',
                 'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 6, 17),
+                'approved_at' => Carbon::create(2025, 8, 9),
                 'account_code' => '4-1001',
             ],
             [
-                'transaction_type' => 'income',
-                'transaction_date' => Carbon::create(2025, 6, 18),
-                'amount' => 7000000,
-                'description' => 'Pendapatan dari event wisata desa',
-                'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 6, 19),
-                'account_code' => '4-1003',
-            ],
-            [
                 'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 6, 19),
+                'transaction_date' => Carbon::create(2025, 8, 9),
                 'amount' => 3500000,
-                'description' => 'Biaya listrik dan air bulan Juni',
+                'description' => 'Biaya listrik dan air bulan Agustus',
                 'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 6, 20),
+                'approved_at' => Carbon::create(2025, 8, 9),
                 'account_code' => '5-1003',
             ],
+
+            // Tanggal 10 Agustus 2025
+            [
+                'transaction_type' => 'income',
+                'transaction_date' => Carbon::create(2025, 8, 10),
+                'amount' => 16000000,
+                'description' => 'Penjualan produk makanan olahan ke distributor nasional',
+                'status' => 'approved',
+                'approved_at' => Carbon::create(2025, 8, 10),
+                'account_code' => '4-1001',
+            ],
             [
                 'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 6, 20),
+                'transaction_date' => Carbon::create(2025, 8, 10),
                 'amount' => 2000000,
                 'description' => 'Biaya transportasi dan distribusi',
                 'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 6, 21),
+                'approved_at' => Carbon::create(2025, 8, 10),
                 'account_code' => '5-1004',
             ],
 
-            // Minggu 4 Juni 2025
+            // Tanggal 11 Agustus 2025
             [
                 'transaction_type' => 'income',
-                'transaction_date' => Carbon::create(2025, 6, 23),
+                'transaction_date' => Carbon::create(2025, 8, 11),
                 'amount' => 9000000,
-                'description' => 'Penjualan kerajinan tangan ke toko souvenir',
+                'description' => 'Pendapatan dari kemitraan dengan hotel resort',
                 'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 6, 24),
-                'account_code' => '4-1001',
-            ],
-            [
-                'transaction_type' => 'income',
-                'transaction_date' => Carbon::create(2025, 6, 25),
-                'amount' => 5000000,
-                'description' => 'Pendapatan lain-lain dari sewa tempat',
-                'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 6, 26),
-                'account_code' => '4-1004',
-            ],
-            [
-                'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 6, 26),
-                'amount' => 4000000,
-                'description' => 'Biaya administrasi dan operasional',
-                'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 6, 27),
-                'account_code' => '5-1006',
-            ],
-            [
-                'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 6, 28),
-                'amount' => 3000000,
-                'description' => 'Biaya penyusutan peralatan',
-                'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 6, 29),
-                'account_code' => '5-1007',
-            ],
-            [
-                'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 6, 30),
-                'amount' => 2500000,
-                'description' => 'Biaya bunga pinjaman bank',
-                'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 6, 30),
-                'account_code' => '5-1008',
-            ],
-
-            // ===== JULI 2025 - MINUS (Pengeluaran > Pendapatan) =====
-            
-            // Minggu 1 Juli 2025
-            [
-                'transaction_type' => 'income',
-                'transaction_date' => Carbon::create(2025, 7, 2),
-                'amount' => 8000000,
-                'description' => 'Penjualan produk kerajinan - menurun karena musim sepi',
-                'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 7, 3),
-                'account_code' => '4-1001',
-            ],
-            [
-                'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 7, 3),
-                'amount' => 15000000,
-                'description' => 'Investasi besar - pembelian mesin produksi baru',
-                'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 7, 4),
-                'account_code' => '1-2003',
-            ],
-            [
-                'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 7, 4),
-                'amount' => 8000000,
-                'description' => 'Renovasi bangunan produksi',
-                'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 7, 5),
-                'account_code' => '1-2002',
-            ],
-            [
-                'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 7, 5),
-                'amount' => 5000000,
-                'description' => 'Gaji karyawan bulan Juli + bonus',
-                'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 7, 6),
-                'account_code' => '5-1001',
-            ],
-
-            // Minggu 2 Juli 2025
-            [
-                'transaction_type' => 'income',
-                'transaction_date' => Carbon::create(2025, 7, 9),
-                'amount' => 6000000,
-                'description' => 'Penjualan produk olahan - turun karena kompetisi',
-                'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 7, 10),
-                'account_code' => '4-1001',
-            ],
-            [
-                'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 7, 10),
-                'amount' => 12000000,
-                'description' => 'Pembelian kendaraan baru untuk distribusi',
-                'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 7, 11),
-                'account_code' => '1-2004',
-            ],
-            [
-                'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 7, 11),
-                'amount' => 6000000,
-                'description' => 'Biaya pelatihan karyawan dan sertifikasi',
-                'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 7, 12),
-                'account_code' => '5-1006',
-            ],
-            [
-                'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 7, 12),
-                'amount' => 4000000,
-                'description' => 'Biaya konsultan untuk pengembangan produk',
-                'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 7, 13),
-                'account_code' => '5-1009',
-            ],
-
-            // Minggu 3 Juli 2025
-            [
-                'transaction_type' => 'income',
-                'transaction_date' => Carbon::create(2025, 7, 16),
-                'amount' => 4000000,
-                'description' => 'Pendapatan wisata desa - sangat menurun',
-                'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 7, 17),
+                'approved_at' => Carbon::create(2025, 8, 11),
                 'account_code' => '4-1003',
             ],
             [
                 'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 7, 17),
-                'amount' => 10000000,
-                'description' => 'Pembelian bahan baku dalam jumlah besar',
+                'transaction_date' => Carbon::create(2025, 8, 11),
+                'amount' => 1500000,
+                'description' => 'Biaya administrasi dan operasional',
                 'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 7, 18),
-                'account_code' => '5-1002',
-            ],
-            [
-                'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 7, 18),
-                'amount' => 7000000,
-                'description' => 'Biaya pemasaran digital dan iklan online',
-                'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 7, 19),
-                'account_code' => '5-1005',
-            ],
-            [
-                'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 7, 19),
-                'amount' => 5000000,
-                'description' => 'Biaya listrik tinggi karena mesin baru',
-                'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 7, 20),
-                'account_code' => '5-1003',
+                'approved_at' => Carbon::create(2025, 8, 11),
+                'account_code' => '5-1006',
             ],
 
-            // Minggu 4 Juli 2025
+            // Tanggal 12 Agustus 2025
             [
                 'transaction_type' => 'income',
-                'transaction_date' => Carbon::create(2025, 7, 23),
-                'amount' => 3000000,
-                'description' => 'Penjualan sisa produk dengan diskon',
+                'transaction_date' => Carbon::create(2025, 8, 12),
+                'amount' => 11000000,
+                'description' => 'Penjualan kerajinan tangan ke toko souvenir',
                 'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 7, 24),
+                'approved_at' => Carbon::create(2025, 8, 12),
                 'account_code' => '4-1001',
             ],
             [
                 'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 7, 24),
-                'amount' => 8000000,
-                'description' => 'Pembayaran hutang supplier yang jatuh tempo',
+                'transaction_date' => Carbon::create(2025, 8, 12),
+                'amount' => 2200000,
+                'description' => 'Biaya maintenance dan perawatan rutin',
                 'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 7, 25),
-                'account_code' => '2-1001',
-            ],
-            [
-                'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 7, 25),
-                'amount' => 6000000,
-                'description' => 'Biaya maintenance peralatan dan kendaraan',
-                'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 7, 26),
+                'approved_at' => Carbon::create(2025, 8, 12),
                 'account_code' => '5-1009',
             ],
+
+            // Beberapa transaksi pending untuk testing
             [
-                'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 7, 26),
-                'amount' => 4000000,
-                'description' => 'Biaya transportasi ekspor ke luar negeri',
-                'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 7, 27),
-                'account_code' => '5-1004',
-            ],
-            [
-                'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 7, 28),
-                'amount' => 3000000,
-                'description' => 'Biaya bunga pinjaman dan administrasi bank',
-                'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 7, 29),
-                'account_code' => '5-1008',
-            ],
-            [
-                'transaction_type' => 'expense',
-                'transaction_date' => Carbon::create(2025, 7, 30),
+                'transaction_type' => 'income',
+                'transaction_date' => Carbon::create(2025, 8, 13),
                 'amount' => 5000000,
-                'description' => 'Biaya tak terduga - perbaikan kerusakan mesin',
-                'status' => 'approved',
-                'approved_at' => Carbon::create(2025, 7, 31),
-                'account_code' => '5-1009',
+                'description' => 'Penjualan produk - menunggu konfirmasi',
+                'status' => 'pending',
+                'account_code' => '4-1001',
+            ],
+            [
+                'transaction_type' => 'expense',
+                'transaction_date' => Carbon::create(2025, 8, 13),
+                'amount' => 1000000,
+                'description' => 'Biaya operasional - menunggu approval',
+                'status' => 'pending',
+                'account_code' => '5-1006',
             ],
         ];
 
@@ -394,34 +247,23 @@ class TransactionSeeder extends Seeder
         }
 
         // Hitung total untuk laporan
-        $juniIncome = collect($transactions)->where('transaction_date', '>=', Carbon::create(2025, 6, 1))
-                                          ->where('transaction_date', '<=', Carbon::create(2025, 6, 30))
-                                          ->where('transaction_type', 'income')
-                                          ->sum('amount');
+        $agustusIncome = collect($transactions)->where('transaction_date', '>=', Carbon::create(2025, 8, 5))
+                                             ->where('transaction_date', '<=', Carbon::create(2025, 8, 31))
+                                             ->where('transaction_type', 'income')
+                                             ->where('status', 'approved') // Hanya yang approved
+                                             ->sum('amount');
         
-        $juniExpense = collect($transactions)->where('transaction_date', '>=', Carbon::create(2025, 6, 1))
-                                           ->where('transaction_date', '<=', Carbon::create(2025, 6, 30))
-                                           ->where('transaction_type', 'expense')
-                                           ->sum('amount');
-
-        $juliIncome = collect($transactions)->where('transaction_date', '>=', Carbon::create(2025, 7, 1))
-                                          ->where('transaction_date', '<=', Carbon::create(2025, 7, 31))
-                                          ->where('transaction_type', 'income')
-                                          ->sum('amount');
-        
-        $juliExpense = collect($transactions)->where('transaction_date', '>=', Carbon::create(2025, 7, 1))
-                                           ->where('transaction_date', '<=', Carbon::create(2025, 7, 31))
-                                           ->where('transaction_type', 'expense')
-                                           ->sum('amount');
+        $agustusExpense = collect($transactions)->where('transaction_date', '>=', Carbon::create(2025, 8, 5))
+                                              ->where('transaction_date', '<=', Carbon::create(2025, 8, 31))
+                                              ->where('transaction_type', 'expense')
+                                              ->where('status', 'approved') // Hanya yang approved
+                                              ->sum('amount');
 
         $this->command->info('Transaction seeder completed successfully!');
-        $this->command->info('=== JUNI 2025 ===');
-        $this->command->info('Pendapatan: Rp ' . number_format($juniIncome));
-        $this->command->info('Pengeluaran: Rp ' . number_format($juniExpense));
-        $this->command->info('Selisih: Rp ' . number_format($juniIncome - $juniExpense) . ' (Balance)');
-        $this->command->info('=== JULI 2025 ===');
-        $this->command->info('Pendapatan: Rp ' . number_format($juliIncome));
-        $this->command->info('Pengeluaran: Rp ' . number_format($juliExpense));
-        $this->command->info('Selisih: Rp ' . number_format($juliIncome - $juliExpense) . ' (Minus)');
+        $this->command->info('=== AGUSTUS 2025 (mulai 5 Agustus) ===');
+        $this->command->info('Pendapatan: Rp ' . number_format($agustusIncome));
+        $this->command->info('Pengeluaran: Rp ' . number_format($agustusExpense));
+        $this->command->info('Selisih: Rp ' . number_format($agustusIncome - $agustusExpense) . ' (Plus)');
+        $this->command->info('Total transaksi: ' . count($transactions));
     }
 }

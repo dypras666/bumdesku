@@ -18,6 +18,9 @@
                 <div class="card-header">
                     <h3 class="card-title">Daftar Transaksi</h3>
                     <div class="card-tools">
+                        <a href="{{ route('transactions.daily-closing.form') }}" class="btn btn-warning btn-sm mr-2">
+                            <i class="fas fa-calendar-check"></i> Closing Harian
+                        </a>
                         <a href="{{ route('transactions.create') }}" class="btn btn-primary btn-sm">
                             <i class="fas fa-plus"></i> Tambah Transaksi
                         </a>
@@ -96,18 +99,19 @@
                                 <th>Akun</th>
                                 <th>Jumlah</th>
                                 <th>Status</th>
+                                <th>Status Posting</th>
                                 <th>Dibuat Oleh</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-if="loading">
-                                <td colspan="9" class="text-center">
+                                <td colspan="10" class="text-center">
                                     <i class="fas fa-spinner fa-spin"></i> Memuat data...
                                 </td>
                             </tr>
                             <tr v-else-if="transactions.length === 0">
-                                <td colspan="9" class="text-center">Tidak ada data transaksi</td>
+                                <td colspan="10" class="text-center">Tidak ada data transaksi</td>
                             </tr>
                             <tr v-else v-for="transaction in transactions" :key="transaction.id">
                                 <td>@{{ transaction.transaction_code }}</td>
@@ -123,6 +127,11 @@
                                     <span v-if="transaction.status === 'pending'" class="badge badge-warning">Pending</span>
                                     <span v-else-if="transaction.status === 'approved'" class="badge badge-success">Disetujui</span>
                                     <span v-else class="badge badge-danger">Ditolak</span>
+                                </td>
+                                <td>
+                                    <span v-if="transaction.status !== 'approved'" class="badge badge-secondary">-</span>
+                                    <span v-else-if="transaction.is_posted" class="badge badge-info">Sudah Diposting</span>
+                                    <span v-else class="badge badge-warning">Belum Diposting</span>
                                 </td>
                                 <td>@{{ transaction.user ? transaction.user.name : '-' }}</td>
                                 <td>

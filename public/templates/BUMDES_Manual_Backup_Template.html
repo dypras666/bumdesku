@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>BUMDES Manual Backup Template</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .header { background-color: #2c3e50; color: white; padding: 15px; text-align: center; margin-bottom: 20px; }
+        .sheet-section { margin-bottom: 30px; border: 1px solid #ddd; }
+        .sheet-title { background-color: #3498db; color: white; padding: 10px; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f8f9fa; font-weight: bold; }
+        .number { text-align: right; }
+        .center { text-align: center; }
+        .formula { background-color: #fff3cd; font-style: italic; }
+        .balance-check { background-color: #d4edda; font-weight: bold; }
+        .instructions { background-color: #f8f9fa; padding: 15px; margin: 10px 0; }
+        .warning { background-color: #f8d7da; padding: 10px; margin: 10px 0; border-left: 4px solid #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>TEMPLATE MANUAL BACKUP SISTEM BUMDES</h1>
+        <p>Sistem Backup dan Input Manual Data BUMDES | Versi 1.0 | Tahun 2025</p>
+    </div>
+
+    <div class="warning">
+        <strong>PENTING:</strong> Template ini dirancang untuk dibuka di Microsoft Excel atau Google Sheets. 
+        Simpan sebagai file .xlsx untuk mempertahankan rumus dan formatting.
+    </div>
+
+    <!-- SHEET 1: CHART OF ACCOUNTS -->
+    <div class="sheet-section">
+        <div class="sheet-title">SHEET 1: CHART OF ACCOUNTS (COA)</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Kode Akun</th>
+                    <th>Nama Akun</th>
+                    <th>Kategori</th>
+                    <th>Deskripsi</th>
+                    <th>Saldo Awal</th>
+                    <th>Status</th>
+                    <th>Normal Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- ASET LANCAR -->
+                <tr><td colspan="7" style="background-color: #e9ecef; font-weight: bold;">ASET LANCAR</td></tr>
+                <tr><td>1-1001</td><td>Kas</td><td>Aset</td><td>Kas di tangan dan kas kecil</td><td class="number">150,000,000</td><td class="center">Aktif</td><td class="center">Debit</td></tr>
+                <tr><td>1-1002</td><td>Bank BRI</td><td>Aset</td><td>Rekening bank BRI BUMDES</td><td class="number">300,000,000</td><td class="center">Aktif</td><td class="center">Debit</td></tr>
+                <tr><td>1-1003</td><td>Bank Mandiri</td><td>Aset</td><td>Rekening bank Mandiri untuk operasional</td><td class="number">200,000,000</td><td class="center">Aktif</td><td class="center">Debit</td></tr>
+                <tr><td>1-1004</td><td>Piutang Usaha</td><td>Aset</td><td>Piutang dari pelanggan dan mitra</td><td class="number">50,000,000</td><td class="center">Aktif</td><td class="center">Debit</td></tr>
+                <tr><td>1-1005</td><td>Persediaan Bahan Baku</td><td>Aset</td><td>Persediaan bahan baku produksi</td><td class="number">80,000,000</td><td class="center">Aktif</td><td class="center">Debit</td></tr>
+                <tr><td>1-1006</td><td>Persediaan Barang Jadi</td><td>Aset</td><td>Persediaan produk siap jual</td><td class="number">120,000,000</td><td class="center">Aktif</td><td class="center">Debit</td></tr>
+                
+                <!-- ASET TETAP -->
+                <tr><td colspan="7" style="background-color: #e9ecef; font-weight: bold;">ASET TETAP</td></tr>
+                <tr><td>1-2001</td><td>Tanah</td><td>Aset</td><td>Tanah untuk operasional BUMDES</td><td class="number">500,000,000</td><td class="center">Aktif</td><td class="center">Debit</td></tr>
+                <tr><td>1-2002</td><td>Bangunan</td><td>Aset</td><td>Bangunan kantor dan gudang</td><td class="number">400,000,000</td><td class="center">Aktif</td><td class="center">Debit</td></tr>
+                <tr><td>1-2003</td><td>Peralatan Produksi</td><td>Aset</td><td>Mesin dan peralatan produksi</td><td class="number">250,000,000</td><td class="center">Aktif</td><td class="center">Debit</td></tr>
+                <tr><td>1-2004</td><td>Kendaraan</td><td>Aset</td><td>Kendaraan operasional dan distribusi</td><td class="number">180,000,000</td><td class="center">Aktif</td><td class="center">Debit</td></tr>
+                <tr><td>1-2005</td><td>Peralatan Kantor</td><td>Aset</td><td>Komputer, furniture, dan peralatan kantor</td><td class="number">75,000,000</td><td class="center">Aktif</td><td class="center">Debit</td></tr>
+                
+                <!-- KEWAJIBAN -->
+                <tr><td colspan="7" style="background-color: #e9ecef; font-weight: bold;">KEWAJIBAN LANCAR</td></tr>
+                <tr><td>2-1001</td><td>Hutang Usaha</td><td>Kewajiban</td><td>Hutang kepada supplier dan vendor</td><td class="number">60,000,000</td><td class="center">Aktif</td><td class="center">Kredit</td></tr>
+                <tr><td>2-1002</td><td>Hutang Gaji</td><td>Kewajiban</td><td>Hutang gaji karyawan</td><td class="number">15,000,000</td><td class="center">Aktif</td><td class="center">Kredit</td></tr>
+                <tr><td>2-1003</td><td>Hutang Pajak</td><td>Kewajiban</td><td>Hutang pajak penghasilan dan PPN</td><td class="number">25,000,000</td><td class="center">Aktif</td><td class="center">Kredit</td></tr>
+                
+                <tr><td colspan="7" style="background-color: #e9ecef; font-weight: bold;">KEWAJIBAN JANGKA PANJANG</td></tr>
+                <tr><td>2-2001</td><td>Hutang Bank Jangka Panjang</td><td>Kewajiban</td><td>Pinjaman bank untuk investasi</td><td class="number">200,000,000</td><td class="center">Aktif</td><td class="center">Kredit</td></tr>
+                <tr><td>2-2002</td><td>Hutang Pembiayaan Kendaraan</td><td>Kewajiban</td><td>Hutang leasing kendaraan</td><td class="number">80,000,000</td><td class="center">Aktif</td><td class="center">Kredit</td></tr>
+                
+                <!-- MODAL -->
+                <tr><td colspan="7" style="background-color: #e9ecef; font-weight: bold;">MODAL</td></tr>
+                <tr><td>3-1001</td><td>Modal Awal BUMDES</td><td>Modal</td><td>Modal awal dari dana desa</td><td class="number">1,000,000,000</td><td class="center">Aktif</td><td class="center">Kredit</td></tr>
+                <tr><td>3-1002</td><td>Modal Tambahan</td><td>Modal</td><td>Modal tambahan dari pemerintah dan investor</td><td class="number">500,000,000</td><td class="center">Aktif</td><td class="center">Kredit</td></tr>
+                <tr><td>3-1003</td><td>Laba Ditahan</td><td>Modal</td><td>Akumulasi laba yang ditahan</td><td class="number">235,000,000</td><td class="center">Aktif</td><td class="center">Kredit</td></tr>
+                
+                <!-- PENDAPATAN -->
+                <tr><td colspan="7" style="background-color: #e9ecef; font-weight: bold;">PENDAPATAN</td></tr>
+                <tr><td>4-1001</td><td>Pendapatan Penjualan Produk</td><td>Pendapatan</td><td>Pendapatan dari penjualan produk UMKM</td><td class="number">0</td><td class="center">Aktif</td><td class="center">Kredit</td></tr>
+                <tr><td>4-1002</td><td>Pendapatan Jasa</td><td>Pendapatan</td><td>Pendapatan dari jasa konsultasi dan pelatihan</td><td class="number">0</td><td class="center">Aktif</td><td class="center">Kredit</td></tr>
+                <tr><td>4-1003</td><td>Pendapatan Wisata Desa</td><td>Pendapatan</td><td>Pendapatan dari sektor pariwisata desa</td><td class="number">0</td><td class="center">Aktif</td><td class="center">Kredit</td></tr>
+                <tr><td>4-1004</td><td>Pendapatan Lain-lain</td><td>Pendapatan</td><td>Pendapatan di luar usaha utama</td><td class="number">0</td><td class="center">Aktif</td><td class="center">Kredit</td></tr>
+                
+                <!-- BEBAN -->
+                <tr><td colspan="7" style="background-color: #e9ecef; font-weight: bold;">BEBAN OPERASIONAL</td></tr>
+                <tr><td>5-1001</td><td>Beban Gaji dan Tunjangan</td><td>Beban</td><td>Beban gaji karyawan dan tunjangan</td><td class="number">0</td><td class="center">Aktif</td><td class="center">Debit</td></tr>
+                <tr><td>5-1002</td><td>Beban Bahan Baku</td><td>Beban</td><td>Beban pembelian bahan baku produksi</td><td class="number">0</td><td class="center">Aktif</td><td class="center">Debit</td></tr>
+                <tr><td>5-1003</td><td>Beban Listrik dan Air</td><td>Beban</td><td>Beban utilitas listrik dan air</td><td class="number">0</td><td class="center">Aktif</td><td class="center">Debit</td></tr>
+                <tr><td>5-1004</td><td>Beban Transportasi</td><td>Beban</td><td>Beban transportasi dan distribusi</td><td class="number">0</td><td class="center">Aktif</td><td class="center">Debit</td></tr>
+                <tr><td>5-1005</td><td>Beban Pemasaran</td><td>Beban</td><td>Beban promosi dan pemasaran</td><td class="number">0</td><td class="center">Aktif</td><td class="center">Debit</td></tr>
+                <tr><td>5-1006</td><td>Beban Administrasi</td><td>Beban</td><td>Beban administrasi dan operasional kantor</td><td class="number">0</td><td class="center">Aktif</td><td class="center">Debit</td></tr>
+                <tr><td>5-1007</td><td>Beban Penyusutan</td><td>Beban</td><td>Beban penyusutan aset tetap</td><td class="number">0</td><td class="center">Aktif</td><td class="center">Debit</td></tr>
+                <tr><td>5-1008</td><td>Beban Bunga</td><td>Beban</td><td>Beban bunga pinjaman bank</td><td class="number">0</td><td class="center">Aktif</td><td class="center">Debit</td></tr>
+                <tr><td>5-1009</td><td>Beban Lain-lain</td><td>Beban</td><td>Beban operasional lainnya</td><td class="number">0</td><td class="center">Aktif</td><td class="center">Debit</td></tr>
+            </tbody>
+        </table>
+        
+        <div class="balance-check">
+            <p><strong>BALANCE CHECK SALDO AWAL:</strong></p>
+            <p>Total Aset: Rp 2,355,000,000</p>
+            <p>Total Kewajiban: Rp 380,000,000</p>
+            <p>Total Modal: Rp 1,735,000,000</p>
+            <p>Status: BALANCE ✓ (Aset = Kewajiban + Modal)</p>
+        </div>
+    </div>
+
+    <!-- SHEET 2: TEMPLATE JURNAL UMUM -->
+    <div class="sheet-section">
+        <div class="sheet-title">SHEET 2: TEMPLATE JURNAL UMUM</div>
+        <div class="instructions">
+            <strong>Petunjuk:</strong> Gunakan template ini untuk mencatat transaksi harian. 
+            Pastikan setiap transaksi memiliki total debit = total kredit.
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Kode Transaksi</th>
+                    <th>Keterangan</th>
+                    <th>Kode Akun</th>
+                    <th>Nama Akun</th>
+                    <th>Debit</th>
+                    <th>Kredit</th>
+                    <th>Ref</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Contoh Transaksi 1: Setoran Modal -->
+                <tr><td colspan="8" style="background-color: #f8f9fa; font-weight: bold;">CONTOH TRANSAKSI 1: SETORAN MODAL AWAL</td></tr>
+                <tr><td>2025-01-01</td><td>IN202501010001</td><td>Setoran Modal Awal</td><td>1-1001</td><td>Kas</td><td class="number">50,000,000</td><td class="number">-</td><td>1</td></tr>
+                <tr><td>2025-01-01</td><td>IN202501010001</td><td>Setoran Modal Awal</td><td>3-1001</td><td>Modal Awal BUMDES</td><td class="number">-</td><td class="number">50,000,000</td><td>1</td></tr>
+                
+                <!-- Contoh Transaksi 2: Pembelian Bahan Baku -->
+                <tr><td colspan="8" style="background-color: #f8f9fa; font-weight: bold;">CONTOH TRANSAKSI 2: PEMBELIAN BAHAN BAKU</td></tr>
+                <tr><td>2025-01-02</td><td>OUT202501020001</td><td>Pembelian Bahan Baku</td><td>5-1002</td><td>Beban Bahan Baku</td><td class="number">5,000,000</td><td class="number">-</td><td>2</td></tr>
+                <tr><td>2025-01-02</td><td>OUT202501020001</td><td>Pembelian Bahan Baku</td><td>1-1001</td><td>Kas</td><td class="number">-</td><td class="number">5,000,000</td><td>2</td></tr>
+                
+                <!-- Contoh Transaksi 3: Penjualan Produk -->
+                <tr><td colspan="8" style="background-color: #f8f9fa; font-weight: bold;">CONTOH TRANSAKSI 3: PENJUALAN PRODUK</td></tr>
+                <tr><td>2025-01-03</td><td>IN202501030001</td><td>Penjualan Produk</td><td>1-1001</td><td>Kas</td><td class="number">10,000,000</td><td class="number">-</td><td>3</td></tr>
+                <tr><td>2025-01-03</td><td>IN202501030001</td><td>Penjualan Produk</td><td>4-1001</td><td>Pendapatan Penjualan Produk</td><td class="number">-</td><td class="number">10,000,000</td><td>3</td></tr>
+                
+                <!-- Template kosong untuk input -->
+                <tr><td colspan="8" style="background-color: #fff3cd; font-weight: bold;">TEMPLATE KOSONG UNTUK INPUT TRANSAKSI BARU</td></tr>
+                <tr><td></td><td></td><td></td><td></td><td></td><td class="number"></td><td class="number"></td><td></td></tr>
+                <tr><td></td><td></td><td></td><td></td><td></td><td class="number"></td><td class="number"></td><td></td></tr>
+                <tr><td></td><td></td><td></td><td></td><td></td><td class="number"></td><td class="number"></td><td></td></tr>
+                <tr><td></td><td></td><td></td><td></td><td></td><td class="number"></td><td class="number"></td><td></td></tr>
+            </tbody>
+        </table>
+        
+        <div class="instructions">
+            <strong>Format Kode Transaksi:</strong><br>
+            • IN = Pemasukan (Income)<br>
+            • OUT = Pengeluaran (Expense)<br>
+            • Format: IN/OUT + YYYYMMDD + 4 digit nomor urut<br>
+            • Contoh: IN202501010001 (Pemasukan tanggal 1 Jan 2025 nomor 1)
+        </div>
+    </div>
+
+    <!-- SHEET 3: BUKU BESAR -->
+    <div class="sheet-section">
+        <div class="sheet-title">SHEET 3: BUKU BESAR</div>
+        <div class="instructions">
+            <strong>Petunjuk:</strong> Salin setiap baris dari Jurnal Umum ke Buku Besar untuk posting. 
+            Setiap baris jurnal menjadi satu entry di buku besar.
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Kode Entry</th>
+                    <th>Tanggal Posting</th>
+                    <th>Kode Akun</th>
+                    <th>Nama Akun</th>
+                    <th>Debit</th>
+                    <th>Kredit</th>
+                    <th>Keterangan</th>
+                    <th>Kode Transaksi</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Contoh posting dari jurnal -->
+                <tr><td>GL-20250101-0001</td><td>2025-01-01</td><td>1-1001</td><td>Kas</td><td class="number">50,000,000</td><td class="number">0</td><td>Setoran Modal Awal</td><td>IN202501010001</td><td>Posted</td></tr>
+                <tr><td>GL-20250101-0002</td><td>2025-01-01</td><td>3-1001</td><td>Modal Awal BUMDES</td><td class="number">0</td><td class="number">50,000,000</td><td>Setoran Modal Awal</td><td>IN202501010001</td><td>Posted</td></tr>
+                <tr><td>GL-20250102-0003</td><td>2025-01-02</td><td>5-1002</td><td>Beban Bahan Baku</td><td class="number">5,000,000</td><td class="number">0</td><td>Pembelian Bahan Baku</td><td>OUT202501020001</td><td>Posted</td></tr>
+                <tr><td>GL-20250102-0004</td><td>2025-01-02</td><td>1-1001</td><td>Kas</td><td class="number">0</td><td class="number">5,000,000</td><td>Pembelian Bahan Baku</td><td>OUT202501020001</td><td>Posted</td></tr>
+                <tr><td>GL-20250103-0005</td><td>2025-01-03</td><td>1-1001</td><td>Kas</td><td class="number">10,000,000</td><td class="number">0</td><td>Penjualan Produk</td><td>IN202501030001</td><td>Posted</td></tr>
+                <tr><td>GL-20250103-0006</td><td>2025-01-03</td><td>4-1001</td><td>Pendapatan Penjualan Produk</td><td class="number">0</td><td class="number">10,000,000</td><td>Penjualan Produk</td><td>IN202501030001</td><td>Posted</td></tr>
+                
+                <!-- Template kosong -->
+                <tr><td colspan="9" style="background-color: #fff3cd; font-weight: bold;">TEMPLATE KOSONG UNTUK POSTING BARU</td></tr>
+                <tr><td></td><td></td><td></td><td></td><td class="number"></td><td class="number"></td><td></td><td></td><td></td></tr>
+                <tr><td></td><td></td><td></td><td></td><td class="number"></td><td class="number"></td><td></td><td></td><td></td></tr>
+            </tbody>
+        </table>
+        
+        <div class="instructions">
+            <strong>Format Kode Entry:</strong> GL-YYYYMMDD-4 digit nomor urut<br>
+            <strong>Contoh:</strong> GL-20250101-0001 (General Ledger tanggal 1 Jan 2025 entry nomor 1)
+        </div>
+    </div>
+
+    <!-- SHEET 4: NERACA SALDO -->
+    <div class="sheet-section">
+        <div class="sheet-title">SHEET 4: NERACA SALDO</div>
+        <div class="instructions">
+            <strong>Petunjuk:</strong> Neraca saldo otomatis menghitung dari buku besar. 
+            Gunakan rumus SUMIF untuk menghitung total debit dan kredit per akun.
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Kode Akun</th>
+                    <th>Nama Akun</th>
+                    <th>Saldo Awal Debit</th>
+                    <th>Saldo Awal Kredit</th>
+                    <th>Mutasi Debit</th>
+                    <th>Mutasi Kredit</th>
+                    <th>Saldo Akhir Debit</th>
+                    <th>Saldo Akhir Kredit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- ASET -->
+                <tr><td colspan="8" style="background-color: #e9ecef; font-weight: bold;">ASET</td></tr>
+                <tr><td>1-1001</td><td>Kas</td><td class="number">150,000,000</td><td class="number">0</td><td class="formula">SUMIF(Sheet3.C:C,"1-1001",Sheet3.E:E)</td><td class="formula">SUMIF(Sheet3.C:C,"1-1001",Sheet3.F:F)</td><td class="formula">C3+E3-F3</td><td class="number">0</td></tr>
+                <tr><td>1-1002</td><td>Bank BRI</td><td class="number">300,000,000</td><td class="number">0</td><td class="formula">SUMIF(Sheet3.C:C,"1-1002",Sheet3.E:E)</td><td class="formula">SUMIF(Sheet3.C:C,"1-1002",Sheet3.F:F)</td><td class="formula">C4+E4-F4</td><td class="number">0</td></tr>
+                <tr><td>1-1003</td><td>Bank Mandiri</td><td class="number">200,000,000</td><td class="number">0</td><td class="formula">SUMIF(Sheet3.C:C,"1-1003",Sheet3.E:E)</td><td class="formula">SUMIF(Sheet3.C:C,"1-1003",Sheet3.F:F)</td><td class="formula">C5+E5-F5</td><td class="number">0</td></tr>
+                
+                <!-- KEWAJIBAN -->
+                <tr><td colspan="8" style="background-color: #e9ecef; font-weight: bold;">KEWAJIBAN</td></tr>
+                <tr><td>2-1001</td><td>Hutang Usaha</td><td class="number">0</td><td class="number">60,000,000</td><td class="formula">SUMIF(Sheet3.C:C,"2-1001",Sheet3.E:E)</td><td class="formula">SUMIF(Sheet3.C:C,"2-1001",Sheet3.F:F)</td><td class="number">0</td><td class="formula">D7+F7-E7</td></tr>
+                
+                <!-- MODAL -->
+                <tr><td colspan="8" style="background-color: #e9ecef; font-weight: bold;">MODAL</td></tr>
+                <tr><td>3-1001</td><td>Modal Awal BUMDES</td><td class="number">0</td><td class="number">1,000,000,000</td><td class="formula">SUMIF(Sheet3.C:C,"3-1001",Sheet3.E:E)</td><td class="formula">SUMIF(Sheet3.C:C,"3-1001",Sheet3.F:F)</td><td class="number">0</td><td class="formula">D9+F9-E9</td></tr>
+                
+                <!-- PENDAPATAN -->
+                <tr><td colspan="8" style="background-color: #e9ecef; font-weight: bold;">PENDAPATAN</td></tr>
+                <tr><td>4-1001</td><td>Pendapatan Penjualan Produk</td><td class="number">0</td><td class="number">0</td><td class="formula">SUMIF(Sheet3.C:C,"4-1001",Sheet3.E:E)</td><td class="formula">SUMIF(Sheet3.C:C,"4-1001",Sheet3.F:F)</td><td class="number">0</td><td class="formula">D11+F11-E11</td></tr>
+                
+                <!-- BEBAN -->
+                <tr><td colspan="8" style="background-color: #e9ecef; font-weight: bold;">BEBAN</td></tr>
+                <tr><td>5-1002</td><td>Beban Bahan Baku</td><td class="number">0</td><td class="number">0</td><td class="formula">SUMIF(Sheet3.C:C,"5-1002",Sheet3.E:E)</td><td class="formula">SUMIF(Sheet3.C:C,"5-1002",Sheet3.F:F)</td><td class="formula">E13-F13</td><td class="number">0</td></tr>
+            </tbody>
+        </table>
+        
+        <div class="balance-check">
+            <table style="width: 50%; margin-top: 20px;">
+                <tr><td><strong>TOTAL DEBIT</strong></td><td class="formula number">SUM(G3:G13)</td></tr>
+                <tr><td><strong>TOTAL KREDIT</strong></td><td class="formula number">SUM(H3:H13)</td></tr>
+                <tr><td><strong>SELISIH</strong></td><td class="formula number">G15-H15</td></tr>
+                <tr><td><strong>STATUS BALANCE</strong></td><td class="formula">IF(G15=H15,"BALANCE","NOT BALANCE")</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- SHEET 5: LAPORAN LABA RUGI -->
+    <div class="sheet-section">
+        <div class="sheet-title">SHEET 5: LAPORAN LABA RUGI</div>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <h3>LAPORAN LABA RUGI</h3>
+            <h4>BUMDES [NAMA DESA]</h4>
+            <p>Periode: [BULAN TAHUN]</p>
+        </div>
+        <table style="width: 60%;">
+            <tbody>
+                <tr><td colspan="2" style="background-color: #e9ecef; font-weight: bold;">PENDAPATAN:</td></tr>
+                <tr><td>Pendapatan Penjualan Produk</td><td class="formula number">SUMIF(Sheet4.A:A,"4-1001",Sheet4.H:H)</td></tr>
+                <tr><td>Pendapatan Jasa</td><td class="formula number">SUMIF(Sheet4.A:A,"4-1002",Sheet4.H:H)</td></tr>
+                <tr><td>Pendapatan Wisata Desa</td><td class="formula number">SUMIF(Sheet4.A:A,"4-1003",Sheet4.H:H)</td></tr>
+                <tr><td>Pendapatan Lain-lain</td><td class="formula number">SUMIF(Sheet4.A:A,"4-1004",Sheet4.H:H)</td></tr>
+                <tr style="background-color: #f8f9fa; font-weight: bold;"><td>TOTAL PENDAPATAN</td><td class="formula number">SUM(B2:B5)</td></tr>
+                
+                <tr><td colspan="2" style="background-color: #e9ecef; font-weight: bold;">BEBAN:</td></tr>
+                <tr><td>Beban Gaji dan Tunjangan</td><td class="formula number">SUMIF(Sheet4.A:A,"5-1001",Sheet4.G:G)</td></tr>
+                <tr><td>Beban Bahan Baku</td><td class="formula number">SUMIF(Sheet4.A:A,"5-1002",Sheet4.G:G)</td></tr>
+                <tr><td>Beban Listrik dan Air</td><td class="formula number">SUMIF(Sheet4.A:A,"5-1003",Sheet4.G:G)</td></tr>
+                <tr><td>Beban Transportasi</td><td class="formula number">SUMIF(Sheet4.A:A,"5-1004",Sheet4.G:G)</td></tr>
+                <tr><td>Beban Pemasaran</td><td class="formula number">SUMIF(Sheet4.A:A,"5-1005",Sheet4.G:G)</td></tr>
+                <tr><td>Beban Administrasi</td><td class="formula number">SUMIF(Sheet4.A:A,"5-1006",Sheet4.G:G)</td></tr>
+                <tr><td>Beban Penyusutan</td><td class="formula number">SUMIF(Sheet4.A:A,"5-1007",Sheet4.G:G)</td></tr>
+                <tr><td>Beban Bunga</td><td class="formula number">SUMIF(Sheet4.A:A,"5-1008",Sheet4.G:G)</td></tr>
+                <tr><td>Beban Lain-lain</td><td class="formula number">SUMIF(Sheet4.A:A,"5-1009",Sheet4.G:G)</td></tr>
+                <tr style="background-color: #f8f9fa; font-weight: bold;"><td>TOTAL BEBAN</td><td class="formula number">SUM(B8:B16)</td></tr>
+                
+                <tr style="background-color: #d4edda; font-weight: bold; font-size: 1.1em;"><td>LABA BERSIH</td><td class="formula number">B6-B17</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- SHEET 6: NERACA -->
+    <div class="sheet-section">
+        <div class="sheet-title">SHEET 6: NERACA</div>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <h3>NERACA</h3>
+            <h4>BUMDES [NAMA DESA]</h4>
+            <p>Per: [TANGGAL]</p>
+        </div>
+        <table style="width: 80%;">
+            <tbody>
+                <tr><td colspan="2" style="background-color: #e9ecef; font-weight: bold;">ASET:</td></tr>
+                <tr><td colspan="2" style="background-color: #f8f9fa; font-weight: bold;">ASET LANCAR:</td></tr>
+                <tr><td>Kas</td><td class="formula number">SUMIF(Sheet4.A:A,"1-1001",Sheet4.G:G)</td></tr>
+                <tr><td>Bank BRI</td><td class="formula number">SUMIF(Sheet4.A:A,"1-1002",Sheet4.G:G)</td></tr>
+                <tr><td>Bank Mandiri</td><td class="formula number">SUMIF(Sheet4.A:A,"1-1003",Sheet4.G:G)</td></tr>
+                <tr><td>Piutang Usaha</td><td class="formula number">SUMIF(Sheet4.A:A,"1-1004",Sheet4.G:G)</td></tr>
+                <tr><td>Persediaan Bahan Baku</td><td class="formula number">SUMIF(Sheet4.A:A,"1-1005",Sheet4.G:G)</td></tr>
+                <tr><td>Persediaan Barang Jadi</td><td class="formula number">SUMIF(Sheet4.A:A,"1-1006",Sheet4.G:G)</td></tr>
+                <tr style="background-color: #f8f9fa; font-weight: bold;"><td>TOTAL ASET LANCAR</td><td class="formula number">SUM(B3:B8)</td></tr>
+                
+                <tr><td colspan="2" style="background-color: #f8f9fa; font-weight: bold;">ASET TETAP:</td></tr>
+                <tr><td>Tanah</td><td class="formula number">SUMIF(Sheet4.A:A,"1-2001",Sheet4.G:G)</td></tr>
+                <tr><td>Bangunan</td><td class="formula number">SUMIF(Sheet4.A:A,"1-2002",Sheet4.G:G)</td></tr>
+                <tr><td>Peralatan Produksi</td><td class="formula number">SUMIF(Sheet4.A:A,"1-2003",Sheet4.G:G)</td></tr>
+                <tr><td>Kendaraan</td><td class="formula number">SUMIF(Sheet4.A:A,"1-2004",Sheet4.G:G)</td></tr>
+                <tr><td>Peralatan Kantor</td><td class="formula number">SUMIF(Sheet4.A:A,"1-2005",Sheet4.G:G)</td></tr>
+                <tr style="background-color: #f8f9fa; font-weight: bold;"><td>TOTAL ASET TETAP</td><td class="formula number">SUM(B11:B15)</td></tr>
+                
+                <tr style="background-color: #e9ecef; font-weight: bold;"><td>TOTAL ASET</td><td class="formula number">B9+B16</td></tr>
+                
+                <tr><td colspan="2" style="background-color: #e9ecef; font-weight: bold;">KEWAJIBAN DAN MODAL:</td></tr>
+                <tr><td colspan="2" style="background-color: #f8f9fa; font-weight: bold;">KEWAJIBAN LANCAR:</td></tr>
+                <tr><td>Hutang Usaha</td><td class="formula number">SUMIF(Sheet4.A:A,"2-1001",Sheet4.H:H)</td></tr>
+                <tr><td>Hutang Gaji</td><td class="formula number">SUMIF(Sheet4.A:A,"2-1002",Sheet4.H:H)</td></tr>
+                <tr><td>Hutang Pajak</td><td class="formula number">SUMIF(Sheet4.A:A,"2-1003",Sheet4.H:H)</td></tr>
+                <tr style="background-color: #f8f9fa; font-weight: bold;"><td>TOTAL KEWAJIBAN LANCAR</td><td class="formula number">SUM(B20:B22)</td></tr>
+                
+                <tr><td colspan="2" style="background-color: #f8f9fa; font-weight: bold;">KEWAJIBAN JANGKA PANJANG:</td></tr>
+                <tr><td>Hutang Bank Jangka Panjang</td><td class="formula number">SUMIF(Sheet4.A:A,"2-2001",Sheet4.H:H)</td></tr>
+                <tr><td>Hutang Pembiayaan Kendaraan</td><td class="formula number">SUMIF(Sheet4.A:A,"2-2002",Sheet4.H:H)</td></tr>
+                <tr style="background-color: #f8f9fa; font-weight: bold;"><td>TOTAL KEWAJIBAN JANGKA PANJANG</td><td class="formula number">SUM(B25:B26)</td></tr>
+                
+                <tr style="background-color: #e9ecef; font-weight: bold;"><td>TOTAL KEWAJIBAN</td><td class="formula number">B23+B27</td></tr>
+                
+                <tr><td colspan="2" style="background-color: #f8f9fa; font-weight: bold;">MODAL:</td></tr>
+                <tr><td>Modal Awal BUMDES</td><td class="formula number">SUMIF(Sheet4.A:A,"3-1001",Sheet4.H:H)</td></tr>
+                <tr><td>Modal Tambahan</td><td class="formula number">SUMIF(Sheet4.A:A,"3-1002",Sheet4.H:H)</td></tr>
+                <tr><td>Laba Ditahan</td><td class="formula number">SUMIF(Sheet4.A:A,"3-1003",Sheet4.H:H)</td></tr>
+                <tr><td>Laba Tahun Berjalan</td><td class="formula number">Sheet5.B18</td></tr>
+                <tr style="background-color: #f8f9fa; font-weight: bold;"><td>TOTAL MODAL</td><td class="formula number">SUM(B30:B33)</td></tr>
+                
+                <tr style="background-color: #e9ecef; font-weight: bold;"><td>TOTAL KEWAJIBAN DAN MODAL</td><td class="formula number">B28+B34</td></tr>
+                
+                <tr style="background-color: #d4edda; font-weight: bold;"><td>BALANCE CHECK</td><td class="formula">IF(B17=B35,"BALANCE","NOT BALANCE")</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- SHEET 7: PANDUAN PENGGUNAAN -->
+    <div class="sheet-section">
+        <div class="sheet-title">SHEET 7: PANDUAN PENGGUNAAN</div>
+        
+        <div class="instructions">
+            <h3>PANDUAN PENGGUNAAN TEMPLATE MANUAL BACKUP BUMDES</h3>
+            
+            <h4>1. CHART OF ACCOUNTS (Sheet 1):</h4>
+            <ul>
+                <li>Berisi daftar lengkap akun sesuai sistem BUMDES</li>
+                <li>Jangan mengubah kode akun yang sudah ada</li>
+                <li>Untuk menambah akun baru, ikuti format kode yang sama</li>
+                <li>Pastikan saldo awal balance (Total Aset = Total Kewajiban + Modal)</li>
+            </ul>
+            
+            <h4>2. TEMPLATE JURNAL UMUM (Sheet 2):</h4>
+            <ul>
+                <li>Gunakan untuk mencatat transaksi harian</li>
+                <li>Pastikan setiap transaksi memiliki debit dan kredit yang seimbang</li>
+                <li>Format kode transaksi: IN/OUT + YYYYMMDD + 4 digit nomor urut</li>
+                <li>Contoh: IN202501010001 (Pemasukan tanggal 1 Jan 2025 nomor 1)</li>
+            </ul>
+            
+            <h4>3. BUKU BESAR (Sheet 3):</h4>
+            <ul>
+                <li>Salin data dari Sheet 2 ke Sheet 3 untuk posting</li>
+                <li>Setiap baris jurnal menjadi satu baris di buku besar</li>
+                <li>Gunakan kode entry format: GL-YYYYMMDD-4 digit nomor urut</li>
+                <li>Status posting: "Posted" untuk transaksi yang sudah final</li>
+            </ul>
+            
+            <h4>4. NERACA SALDO (Sheet 4):</h4>
+            <ul>
+                <li>Otomatis menghitung saldo dari buku besar menggunakan rumus SUMIF</li>
+                <li>Periksa balance: Total Debit harus sama dengan Total Kredit</li>
+                <li>Jika tidak balance, periksa kembali jurnal dan posting</li>
+                <li>Rumus otomatis menghitung saldo akhir berdasarkan normal balance akun</li>
+            </ul>
+            
+            <h4>5. LAPORAN LABA RUGI (Sheet 5):</h4>
+            <ul>
+                <li>Otomatis menghitung dari neraca saldo</li>
+                <li>Menampilkan pendapatan dikurangi beban</li>
+                <li>Hasil akhir adalah laba/rugi bersih periode berjalan</li>
+                <li>Update periode dan nama desa sesuai kebutuhan</li>
+            </ul>
+            
+            <h4>6. NERACA (Sheet 6):</h4>
+            <ul>
+                <li>Otomatis menghitung dari neraca saldo</li>
+                <li>Menampilkan posisi keuangan: Aset = Kewajiban + Modal</li>
+                <li>Periksa balance check di bagian bawah</li>
+                <li>Laba tahun berjalan otomatis diambil dari laporan laba rugi</li>
+            </ul>
+        </div>
+        
+        <div class="warning">
+            <h4>TIPS PENGGUNAAN:</h4>
+            <ul>
+                <li><strong>Backup file ini secara berkala</strong></li>
+                <li>Gunakan format tanggal YYYY-MM-DD untuk konsistensi</li>
+                <li>Selalu periksa balance setelah input transaksi</li>
+                <li>Simpan dalam format Excel (.xlsx) untuk mempertahankan rumus</li>
+                <li>Buat copy untuk setiap periode (bulanan/tahunan)</li>
+            </ul>
+        </div>
+        
+        <div class="instructions">
+            <h4>VALIDASI BALANCE:</h4>
+            <ol>
+                <li>Total Debit = Total Kredit di Jurnal Umum</li>
+                <li>Total Debit = Total Kredit di Neraca Saldo</li>
+                <li>Total Aset = Total Kewajiban + Modal di Neraca</li>
+            </ol>
+            
+            <h4>BACKUP BERKALA:</h4>
+            <ul>
+                <li><strong>Harian:</strong> Backup file setelah input transaksi</li>
+                <li><strong>Mingguan:</strong> Buat copy file dengan nama berbeda</li>
+                <li><strong>Bulanan:</strong> Arsipkan file bulan sebelumnya</li>
+                <li><strong>Tahunan:</strong> Buat file baru untuk tahun baru</li>
+            </ul>
+            
+            <h4>TROUBLESHOOTING:</h4>
+            <ul>
+                <li><strong>Balance tidak seimbang:</strong> Periksa jurnal dan pastikan setiap transaksi balance</li>
+                <li><strong>Rumus error:</strong> Pastikan referensi sheet dan cell benar</li>
+                <li><strong>Data hilang:</strong> Restore dari backup terakhir</li>
+            </ul>
+        </div>
+        
+        <div class="balance-check">
+            <p><strong>KONTAK SUPPORT:</strong><br>
+            Untuk bantuan teknis hubungi administrator sistem BUMDES</p>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 5px;">
+        <p><strong>Template Manual Backup Sistem BUMDES v1.0</strong></p>
+        <p>Dibuat untuk memastikan kontinuitas operasional dan backup data keuangan BUMDES</p>
+        <p><em>Simpan file ini dalam format Excel (.xlsx) untuk mempertahankan semua rumus dan formatting</em></p>
+    </div>
+</body>
+</html>

@@ -82,8 +82,23 @@
             border-bottom: 1px solid rgba(255,255,255,0.2);
         }
 
-        .steps-list li:last-child, .tips-list li:last-child {
+        .steps-list li:last-child, .tips-list li:last-child, .features-list li:last-child {
             border-bottom: none;
+        }
+
+        .features-list {
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0;
+            list-style: none;
+        }
+
+        .features-list li {
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
         }
 
         .navigation {
@@ -221,6 +236,14 @@
             <ul class="tips-list">
                 @foreach($slide['tips'] as $tip)
                 <li><i class="fas fa-lightbulb text-warning me-2"></i>{{ $tip }}</li>
+                @endforeach
+            </ul>
+            @endif
+
+            @if(isset($slide['features']))
+            <ul class="features-list">
+                @foreach($slide['features'] as $feature)
+                <li><i class="fas fa-star text-primary me-2"></i>{{ $feature }}</li>
                 @endforeach
             </ul>
             @endif

@@ -28,6 +28,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::post('/transactions/{transaction}/approve', [TransactionController::class, 'apiApprove'])->name('api.transactions.approve');
     Route::post('/transactions/{transaction}/reject', [TransactionController::class, 'apiReject'])->name('api.transactions.reject');
     Route::delete('/transactions/{transaction}', [TransactionController::class, 'apiDestroy'])->name('api.transactions.destroy');
+    Route::post('/transactions/daily-closing', [TransactionController::class, 'apiDailyClosing'])->name('api.transactions.daily-closing');
     
     // Account API routes
     Route::get('/accounts/search', [MasterAccountController::class, 'apiSearch'])->name('api.accounts.search');
